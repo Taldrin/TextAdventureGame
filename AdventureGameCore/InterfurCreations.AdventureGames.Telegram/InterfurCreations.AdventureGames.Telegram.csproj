@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Configurations>Debug;Release;TelegramDev</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.Core\InterfurCreations.AdventureGames.Core.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.Services\InterfurCreations.AdventureGames.Services.csproj" />
+  </ItemGroup>
+
+</Project>

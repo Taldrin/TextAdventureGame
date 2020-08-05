@@ -1,0 +1,73 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+    <Configurations>Debug;Release;TelegramDev;DiscordAlpha;TelegramTest;TelegramLive;DiscordLive;KikLive</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="5.2.0" />
+    <PackageReference Include="HangFire.Autofac" Version="2.3.1" />
+    <PackageReference Include="HangFire.SqlServer" Version="1.7.6" />
+    <PackageReference Include="Microsoft.AspNetCore.WebHooks.Receivers" Version="1.0.0-preview2-final" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="3.2.26">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.Configuration\InterfurCreations.AdventureGames.Configuration.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.Discord\InterfurCreations.AdventureGames.Discord.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.HeartbeatMonitor\InterfurCreations.AdventureGames.HeartbeatMonitor.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.Kik\InterfurCreations.AdventureGames.Kik.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.Services\InterfurCreations.AdventureGames.Services.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.SlackReporter\InterfurCreations.AdventureGames.SlackReporter.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.Telegram\InterfurCreations.AdventureGames.Telegram.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="App.config">
+      <TransformOnBuild>true</TransformOnBuild>
+    </None>
+    <None Update="App.Debug.config">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Update="App.DiscordAlpha.config">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Update="App.DiscordLive.config">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Update="App.KikLive.config">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Update="App.Release.config">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Update="App.TelegramDev.config">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Update="App.TelegramLive.config">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Update="App.TelegramTest.config">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+  </ItemGroup>
+
+</Project>

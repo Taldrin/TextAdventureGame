@@ -1,0 +1,10 @@
+﻿@model BotAdminSite.Models.ViewModelGamesList
+
+<h2>
+    <div class="list-group">
+        @foreach (var game in Model.Games)
+        {
+            <button type="button" class="list-group-item list-group-item-action">@game.Name</button>
+        }
+    </div>
+</h2>

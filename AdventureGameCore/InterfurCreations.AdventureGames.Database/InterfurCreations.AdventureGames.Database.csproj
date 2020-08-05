@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Configurations>Debug;Release;TelegramDev</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20191013115825_AddedPlayerSavedData.cs" />
+    <Compile Remove="Migrations\20191013115825_AddedPlayerSavedData.Designer.cs" />
+    <Compile Remove="Migrations\20191013115938_AddedPlayerSavedData.cs" />
+    <Compile Remove="Migrations\20191013115938_AddedPlayerSavedData.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.Configuration\InterfurCreations.AdventureGames.Configuration.csproj" />
+  </ItemGroup>
+
+</Project>

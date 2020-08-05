@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Configurations>Debug;Release;TelegramDev</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Humanizer.Core.uk" Version="2.7.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.Core.DataObjects\InterfurCreations.AdventureGames.Core.DataObjects.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.DatabaseServices\InterfurCreations.AdventureGames.DatabaseServices.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.Exceptions\InterfurCreations.AdventureGames.Exceptions.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.GameLanguage\InterfurCreations.AdventureGames.GameLanguage.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.Graph.Store\InterfurCreations.AdventureGames.Graph.Store.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.Services\InterfurCreations.AdventureGames.Services.csproj" />
+  </ItemGroup>
+
+</Project>

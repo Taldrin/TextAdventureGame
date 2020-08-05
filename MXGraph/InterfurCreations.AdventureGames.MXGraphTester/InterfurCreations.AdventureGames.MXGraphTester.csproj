@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.DatabaseServices\InterfurCreations.AdventureGames.DatabaseServices.csproj" />
+    <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.GraphServices\InterfurCreations.AdventureGames.GraphServices.csproj" />
+    <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Graph\InterfurCreations.AdventureGames.Graph.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.MXGraphDrawServices\InterfurCreations.AdventureGames.MXGraphDrawServices.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.MXGraph\InterfurCreations.AdventureGames.MXVisualGraph.csproj" />
+  </ItemGroup>
+
+</Project>

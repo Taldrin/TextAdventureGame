@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.Database\InterfurCreations.AdventureGames.Database.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.Graph.Store\InterfurCreations.AdventureGames.Graph.Store.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.Graph\InterfurCreations.AdventureGames.Graph.csproj" />
+  </ItemGroup>
+
+</Project>

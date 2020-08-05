@@ -1,0 +1,93 @@
+﻿@model InterfurCreations.AdminSite.Models.PlayerDetailsModel
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Player: @Model.name</h1>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-6">
+                <div>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <span style="font-weight:bolder">Action Count:</span> @Model.actionCount
+                        </li>
+                        <li class="list-group-item">
+                            <span style="font-weight:bolder">Last Action:</span> @Model.lastAction
+                        </li>
+                        <li class="list-group-item">
+                            <span style="font-weight:bolder">Platform:</span> @Model.platform
+                        </li>
+                        <li class="list-group-item">
+                            <span style="font-weight:bolder">Id:</span> @Model.id
+                        </li>
+                    </ul>
+                </div>
+                <br />
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#GameSaves" aria-expanded="false">
+                                Game Saves
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="GameSaves" class="collapse">
+                        <div class="card-body">
+                            @foreach (var save in Model.gameSaves)
+                            {
+                                <ul class="list-group">
+
+                                    <li class="list-group-item">
+                                        <span style="font-weight:bolder">Game:</span> @save.gameName
+                                    </li>
+                                    <li class="list-group-item">
+                                        <a asp-controller="GameSave" asp-action="Details" asp-route-saveId="@save.saveId" asp-route-playerId="@Model.id"><span style="font-weight:bolder">Save ID:</span> @save.saveId</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span style="font-weight:bolder">Created:</span> @save.dateCreated
+                                    </li>
+                                </ul>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#RecentActions">
+                                Recent Actions
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="RecentActions" class="collapse">
+                        <div class="card-body">
+                            @foreach (var action in Model.recentActions)
+                            {
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <span style="font-weight:bolder">Game:</span> @action.gameName
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span style="font-weight:bolder">Option Taken:</span> @action.lastOptionText
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span style="font-weight:bolder">Result State:</span> @action.currentStateText
+                                    </li>
+                                </ul>
+                                <br />
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+

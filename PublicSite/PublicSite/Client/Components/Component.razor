@@ -1,0 +1,51 @@
+﻿<div class="blazor-modal @(IsVisible ? "blazor-modal-active" : string.Empty)">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="bm-title">@Title</h3>
+                @if (CanUserClose)
+                {
+                <button type="button" class="close" @onclick="@CloseModal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                }
+            </div>
+            <div class="modal-body">
+                @ChildContent
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    protected bool IsVisible { get; set; }
+    protected string Title { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public bool CanUserClose { get; set; }
+
+    protected override void OnInitialized()
+    {
+    }
+
+    public void ShowModal(string title)
+    {
+        Title = title;
+        IsVisible = true;
+
+        StateHasChanged();
+    }
+
+    public void CloseModal()
+    {
+        IsVisible = false;
+        Title = "";
+        ChildContent = null;
+
+        StateHasChanged();
+    }
+}

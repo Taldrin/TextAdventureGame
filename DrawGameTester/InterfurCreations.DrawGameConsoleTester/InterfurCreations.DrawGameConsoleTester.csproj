@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="5.2.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Core\InterfurCreations.AdventureGames.Core.csproj" />
+    <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.GameLanguage\InterfurCreations.AdventureGames.GameLanguage.csproj" />
+    <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Graph\InterfurCreations.AdventureGames.Graph.csproj" />
+    <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.SlackReporter\InterfurCreations.AdventureGames.SlackReporter.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.GameTesting\InterfurCreations.AdventureGames.GameTesting.csproj" />
+  </ItemGroup>
+
+</Project>

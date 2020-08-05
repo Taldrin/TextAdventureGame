@@ -1,0 +1,38 @@
+﻿@model InterfurCreations.AdminSite.Models.ViewModelAlphaAccessList
+
+@{
+    ViewData["Title"] = "Alpha Access";
+}
+
+<h1>Alpha Access List</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Token</th>
+            <th>Player Name</th>
+            <th>Hours Allowed</th>
+            <th>Last Activated</th>
+            <th>Platform</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.AccessDescriptors)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.AccessCode</td>
+                <td>@item.PlayerName</td>
+                <td>@item.HoursAllowed</td>
+                <td>@item.LastActivated</td>
+                <td>@item.PlayerPlatform</td>
+                <td><a asp-action="Delete" asp-route-id="@item.Id">Delete</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

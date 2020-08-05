@@ -1,0 +1,85 @@
+﻿@model BotAdminSite.Models.ViewModelPlayerList
+
+<h2>There are @Model.TotalPlayersCount unique players</h2>
+
+<div class="card">
+    <div class="card-header">
+        Filters
+    </div>
+    <div class="card-body">
+        <form class="form" asp-action="List" role="form">
+            <div class="form-row">
+                <div class="col">
+                    <label>Platform</label>
+                    <select class="form-control" asp-for=PlayerPlatformFilter>
+                        <option value="NONE">Any</option>
+                        <option value="Discord">Discord</option>
+                        <option value="Telegram">Telegram</option>
+                        <option value="Kik">Kik</option>
+                        <option value="Web">Web</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label>Player Name</label>
+                    <input type="text" class="form-control" asp-for="PlayerNameFilter" />
+                </div>
+            </div>
+            <br />
+            <input class="btn btn-primary" type="submit" value="Search" />
+        </form>
+    </div>
+</div>
+
+
+<table class="table table-striped table-hover">
+    <tr>
+        <th>Name</th>
+        <th>Action Count</th>
+        <th>Platform</th>
+        <th>Last Action</th>
+        <th></th>
+    </tr>
+
+@foreach (var player in Model.Players) {
+<tr>
+    <td>@player.name</td>
+    <td>@player.actionCount </td>
+    <td>@player.platform</td>
+    <td>@player.lastAction</td>
+    <td><a asp-action="Details" asp-route-playerId="@player.id">Details</a></td>
+
+</tr>
+}
+
+</table>
+
+<div>
+    <ul class="pagination justify-content-center" style="display:flex; flex-flow:row wrap">
+        <li class="page-item">
+            <a class="page-link" asp-controller="Player" asp-action="List" asp-route-pageNumber="@(1)" asp-route-pageSize="@Model.PageSize" asp-route-playerPlatformFilter="@Model.PlayerPlatformFilter"
+               asp-route-playerNameFilter="@Model.PlayerNameFilter">&larr; First</a>
+        </li>
+        @for (int i = 1; i < Model.NumberOfPages + 2; i++)
+        {
+            if (Model.PageNumber == i)
+            {
+                <li class="page-item active">
+                    <a class="page-link" asp-controller="Player" asp-action="List" asp-route-pageNumber="@(i)" asp-route-pageSize="@Model.PageSize" asp-route-playerPlatformFilter="@Model.PlayerPlatformFilter"
+               asp-route-playerNameFilter="@Model.PlayerNameFilter">@(i)</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-controller="Player" asp-action="List" asp-route-pageNumber="@(i)" asp-route-pageSize="@Model.PageSize" asp-route-playerPlatformFilter="@Model.PlayerPlatformFilter"
+               asp-route-playerNameFilter="@Model.PlayerNameFilter">@(i)</a>
+                </li>
+            }
+        }
+        <li class="page-item">
+            <a class="page-link" asp-controller="Player" asp-action="List" asp-route-pageNumber="@(Model.NumberOfPages + 1)" asp-route-pageSize="@Model.PageSize" asp-route-playerPlatformFilter="@Model.PlayerPlatformFilter"
+               asp-route-playerNameFilter="@Model.PlayerNameFilter">Last &rarr;</a>
+        </li>
+    </ul>
+    <p class="text-center">@(Model.PageNumber)</p>
+</div>

@@ -1,0 +1,47 @@
+﻿@inject PublicSite.Client.Components.IMenuService MenuService
+
+<nav class="navbar navbar-expand navbar-dark bg-primary px-3 flex-shrink-0">
+    <label class="navbar-brand">Furventure Games</label>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse order-1">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                    <span class="oi oi-home" aria-hidden="true"></span> Home
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link" href="play">
+                    <span class="oi oi-plus" aria-hidden="true"></span> Play
+                </NavLink>
+            </li>
+        </ul>
+    </div>
+    <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        <ul class="navbar-nav ml-auto">
+            @if (MenuService.ShouldShowAccountButton())
+            {
+                <li class="nav-item">
+                    <a class="nav-link" @onclick="OpenAccount">Account</a>
+                </li>
+            }
+        </ul>
+    </div>
+</nav>
+
+@code{
+    protected override async Task OnInitializedAsync()
+    {
+        base.OnInitializedAsync();
+
+        MenuService.OnChange += StateHasChanged;
+    }
+
+    private void OpenAccount()
+    {
+        MenuService.OpenAccountModal();
+    }
+}

@@ -1,0 +1,20 @@
+﻿@model BotAdminSite.Models.ViewModelPlayerList
+
+<h2>There are @Model.Players.Count unique players and @Model.TotalActionsCount total actions</h2>
+
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Action Count </th>
+        <th>Last Action </th>
+    </tr>
+
+@foreach (var player in Model.Players) {
+    <tr>
+        <td>@player.name</td>
+        <td>@player.actionCount </td>
+        <td>@player.lastAction</td>
+    </tr>
+}
+
+</table>

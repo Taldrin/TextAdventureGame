@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <ApplicationIcon />
+    <StartupObject />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Core\InterfurCreations.AdventureGames.Core.csproj" />
+    <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Database\InterfurCreations.AdventureGames.Database.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Interop.Microsoft.Office.Interop.Word">
+      <HintPath>..\InterfurCreations.DrawGameConsoleTester\obj\Debug\netcoreapp3.1\Interop.Microsoft.Office.Interop.Word.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

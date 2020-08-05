@@ -1,0 +1,13 @@
+﻿{
+  "compilationOptions": {
+    "emitEntryPoint": true
+  },
+  "profiles": {
+    "InterfurCreations.AdventureGames.WorkerService": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

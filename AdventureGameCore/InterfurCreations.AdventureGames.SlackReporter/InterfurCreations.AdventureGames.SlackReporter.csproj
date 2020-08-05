@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Configurations>Debug;Release;TelegramDev</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HangFire.SqlServer" Version="1.7.6" />
+    <PackageReference Include="SlackAPI" Version="1.1.2" />
+    <PackageReference Include="Slacker" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.DatabaseServices\InterfurCreations.AdventureGames.DatabaseServices.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.Logging\InterfurCreations.AdventureGames.Logging.csproj" />
+  </ItemGroup>
+
+</Project>

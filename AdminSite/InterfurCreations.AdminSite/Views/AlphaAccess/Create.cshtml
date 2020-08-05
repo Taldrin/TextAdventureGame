@@ -1,0 +1,33 @@
+﻿@model InterfurCreations.AdminSite.Models.AccessTokenCreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create New Alpha Access Code</h1>
+<br />
+
+@using (Html.BeginForm("CreateAccessToken", "AlphaAccess", FormMethod.Post))
+{
+    <div class="card">
+        <div class="card-body">
+            <div class="form-row">
+                <div class="col">
+                    <label>Type</label>
+                    <input class="form-control" type="text" readonly asp-for="TokenType" value="AlphaAccess" />
+                </div>
+                <div class="col">
+                    <label>Hours Allowed Before Refresh</label>
+                    <input class="form-control" type="number" value="6" asp-for="HoursAllowed">
+                </div>
+            </div>
+            <br />
+            <input class="btn btn-primary" type="submit" value="Create Token" />
+        </div>
+    </div>
+    <br />
+}
+
+<div>
+    <a asp-action="List">Back to List</a>
+</div>
