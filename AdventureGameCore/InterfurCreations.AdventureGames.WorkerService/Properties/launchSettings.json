@@ -1,4 +1,4 @@
-﻿{
+{
   "compilationOptions": {
     "emitEntryPoint": true
   },
@@ -6,7 +6,7 @@
     "InterfurCreations.AdventureGames.WorkerService": {
       "commandName": "Project",
       "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development"
+        "DOTNET_ENVIRONMENT": "TelegramDev"
       }
     }
   }

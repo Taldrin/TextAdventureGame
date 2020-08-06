@@ -22,7 +22,7 @@ namespace InterfurCreations.AdventureGames.DatabaseServices
 
         public bool DoesPlayerHaveAccess(Player player)
         {
-            var accessRequired = _configService.GetConfigOrDefault(ConfigEntries.AccessRequired.ToString(), "None");
+            var accessRequired = _configService.GetConfigOrDefault(ConfigEntries.AccessRequired.ToString(), "None", true);
             if (accessRequired == "None") return true;
             else
             {

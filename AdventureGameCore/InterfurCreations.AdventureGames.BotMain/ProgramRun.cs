@@ -21,6 +21,7 @@ using InterfurCreations.AdventureGames.HeartbeatMonitor;
 using Autofac;
 using InterfurCreations.AdventureGames.Logging;
 using InterfurCreations.AdventureGames.Graph.Store;
+using Microsoft.Extensions.Configuration;
 
 namespace InterfurCreations.AdventureGames.BotMain
 {
@@ -39,14 +40,22 @@ namespace InterfurCreations.AdventureGames.BotMain
 
             IsInConsoleMode = true;
 
-            Run();
+            Run(null);
         }
 
-        public static void Run()
+        public static void Run(IConfiguration config)
         {
-            RegisterAutofac();
+            string buildTypeName = null;
+#if TelegramDev
+            buildTypeName = "Telegram Dev";
+#endif
+            ConfigSetting.DynamicApplicationName = buildTypeName;
+            var configSetupService = new AppSettingsConfigurationService(config);
+            configSetupService.SetConfig("TypeName", buildTypeName);
 
-            var connectionString = new ConfigurationService().GetConfig("DatabaseConnectionString");
+            RegisterAutofac(config, buildTypeName);
+
+            var connectionString = configSetupService.GetConfig("DatabaseConnectionString");
 
             GlobalConfiguration.Configuration.UseSqlServerStorage(connectionString);
             LogProvider.SetCurrentLogProvider(new ColouredConsoleLogProvider());
@@ -67,7 +76,7 @@ namespace InterfurCreations.AdventureGames.BotMain
                     var inputController = scope.Resolve<IInputController>();
                     inputController.Setup();
 
-                    scope.Resolve<IHeartbeatMonitor>().BeginMonitor(configService.GetConfigOrDefault("HeartbeatUrl", null));
+                    scope.Resolve<IHeartbeatMonitor>().BeginMonitor(configService.GetConfigOrDefault("HeartbeatUrl", null, true));
 
                     if(IsInConsoleMode)
                         _quitEvent.WaitOne();
@@ -75,10 +84,12 @@ namespace InterfurCreations.AdventureGames.BotMain
             }
         }
 
-        public static void RegisterAutofac()
+        public static void RegisterAutofac(IConfiguration config, string buildTypeName)
         {
             var builder = new ContainerBuilder();
-            builder.RegisterType<ConfigurationService>().As<IConfigurationService>().SingleInstance();
+            builder.RegisterInstance<IConfiguration>(config);
+
+            builder.RegisterType<AppSettingsConfigurationService>().As<IConfigurationService>().SingleInstance();
             builder.RegisterType<InputController>().As<IInputController>().SingleInstance();
             builder.RegisterType<SlackReport>().As<IReporter>().SingleInstance();
             builder.RegisterType<SlackReportGenerator>().As<ISlackReportGenerator>().SingleInstance();
@@ -100,7 +111,6 @@ namespace InterfurCreations.AdventureGames.BotMain
             builder.RegisterType<AccountController>().As<IAccountController>().InstancePerLifetimeScope();
             builder.RegisterType<GameSaveService>().As<IGameSaveService>().InstancePerLifetimeScope();
 
-
             builder.RegisterType<DrawStore>().As<IGameStore>().SingleInstance();
 
             builder.RegisterAssemblyTypes(typeof(IMessageHandler).Assembly)
@@ -109,11 +119,11 @@ namespace InterfurCreations.AdventureGames.BotMain
 
             var type = new ConfigurationService().GetConfig("TypeName");
 
-            if (type.ToLower().Contains("telegram"))
+            if (buildTypeName.ToLower().StartsWith("telegram"))
                 RegisterTelegram(builder);
-            else if (type.ToLower().Contains("discord"))
+            else if (buildTypeName.ToLower().StartsWith("discord"))
                 RegisterDiscord(builder);
-            else if(type.ToLower().Contains("kik"))
+            else if(buildTypeName.ToLower().StartsWith("kik"))
                 RegisterKik(builder);
             Container = builder.Build();
         }

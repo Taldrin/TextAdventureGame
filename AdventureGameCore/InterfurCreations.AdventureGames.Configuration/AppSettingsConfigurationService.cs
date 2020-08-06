@@ -15,30 +15,38 @@ namespace InterfurCreations.AdventureGames.Configuration
             _config = config;
         }
 
-        public string GetConfig(string configKey)
+        public string GetConfig(string configKey, bool dynamicConfig = false)
         {
-            var value = GetConfigValue(configKey);
+            var value = GetConfigValue(configKey, dynamicConfig);
             if (value == null)
                 throw new Exception("Error - config was null for key: " + configKey);
             return value;
         }
 
-        public string GetConfigOrDefault(string configKey, string def)
+        public string GetConfigOrDefault(string configKey, string def, bool dynamicConfig = false)
         {
-            var value = GetConfigValue(configKey);
+            var value = GetConfigValue(configKey, dynamicConfig);
             if (value == null)
                 return def;
             return value;
         }
 
-        private string GetConfigValue(string config)
+        public void SetConfig(string configKey, string value)
         {
-            var value = _config.GetSection("InterfurSettings").GetSection(config).Value;
-            if (value == null)
+            _config[$"Furventure:TextAdventures:{configKey}"] = value;
+        }
+
+        private string GetConfigValue(string config, bool dynamicConfig)
+        {
+            if(dynamicConfig)
             {
-                value = Environment.GetEnvironmentVariable(config);
+                var value = _config.GetSection($"Furventure:TextAdventures:{ConfigSetting.DynamicApplicationName}")[config];
+                return value;
+            } else
+            {
+                var value = _config.GetSection("Furventure:TextAdventures")[config];
+                return value;
             }
-            return value;
         }
     }
 }

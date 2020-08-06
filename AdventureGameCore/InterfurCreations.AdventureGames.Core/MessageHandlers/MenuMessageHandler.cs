@@ -128,7 +128,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
 
             };
 
-            var testFeatures = _configService.GetConfigOrDefault("TestFeatures", "false");
+            var testFeatures = _configService.GetConfigOrDefault("TestFeatures", "false", true);
             if(bool.TryParse(testFeatures, out var enableTestFeatures) && enableTestFeatures)
             {
                 list.Add(Messages.ShowData);

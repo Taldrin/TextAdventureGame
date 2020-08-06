@@ -8,7 +8,8 @@ namespace InterfurCreations.AdventureGames.Configuration
 {
     public interface IConfigurationService
     {
-        string GetConfig(string configKey);
-        string GetConfigOrDefault(string configKey, string def);
+        string GetConfig(string configKey, bool dynamicConfig = false);
+        string GetConfigOrDefault(string configKey, string def, bool dynamicConfig = false);
+        void SetConfig(string configKey, string value);
     }
 }

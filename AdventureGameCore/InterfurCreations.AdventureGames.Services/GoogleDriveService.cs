@@ -24,7 +24,7 @@ namespace InterfurCreations.AdventureGames.Services
         {
             if (gDriveService == null)
                 gDriveService = _authenticator.AuthenticateService(_configService);
-            string folderName = _configService.GetConfig("GoogleFolder");
+            string folderName = _configService.GetConfig("GoogleFolder", true);
             FilesResource.ListRequest listRequest = gDriveService.Files.List();
             listRequest.Fields = "nextPageToken, files(id, name, owners, parents, modifiedTime)";
             listRequest.PageSize = 1000;

@@ -20,7 +20,7 @@ namespace InterfurCreations.AdventureGames.Telegram
         public TelegramCommunicator(IConfigurationService configService, IPlayerDatabaseController playerDatabaseController,
             IReporter reporter, IAccountController accountController, IGoogleDriveService gdriveService, IGameExecutor gameExecutor)
         {
-            _service = new TelegramService(configService.GetConfig("TelegramUrl"), configService.GetConfig("TelegramApiKey"));
+            _service = new TelegramService(configService.GetConfig("TelegramUrl"), configService.GetConfig("TelegramApiKey", true));
             _reporter = reporter;
         }
 

@@ -13,7 +13,7 @@ namespace InterfurCreations.AdventureGames.Configuration
         {
         }
 
-        public string GetConfig(string configKey)
+        public string GetConfig(string configKey, bool dynamicConfig = false)
         {
             try
             {
@@ -27,7 +27,7 @@ namespace InterfurCreations.AdventureGames.Configuration
             }
         }
 
-        public string GetConfigOrDefault(string configKey, string def)
+        public string GetConfigOrDefault(string configKey, string def, bool dynamicConfig = false)
         {
             try
             {
@@ -39,6 +39,11 @@ namespace InterfurCreations.AdventureGames.Configuration
             {
                 throw e;
             }
+        }
+
+        public void SetConfig(string configKey, string value)
+        {
+            ConfigurationManager.AppSettings[configKey] = value;
         }
     }
 }

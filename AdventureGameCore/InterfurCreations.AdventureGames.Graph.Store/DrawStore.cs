@@ -38,7 +38,7 @@ namespace InterfurCreations.AdventureGames.Graph.Store
 
         public List<DrawGame> ListGames()
         {
-            var minutesBetweenChecks = int.Parse(_configService.GetConfigOrDefault("MaxMinutesBetweenGameCheck", "10"));
+            var minutesBetweenChecks = int.Parse(_configService.GetConfigOrDefault("MaxMinutesBetweenGameCheck", "10", true));
             if (LastChecked.Add(TimeSpan.FromMinutes(minutesBetweenChecks)) < DateTime.UtcNow)
                 CheckForOutOfDate();
             return TimeRetrievedGame.Keys.ToList();
