@@ -19,16 +19,18 @@ namespace InterfurCreations.AdventureGames.Discord
         private readonly IAccountController _accountController;
         private readonly IPlayerDatabaseController _playerDatabaseController;
         private readonly IGameExecutor _gameExecutor;
+        private readonly IConfigurationService _configService;
 
         private DiscordSocketClient socketClient;
 
         public DiscordBotCommunicator(IReporter reporter, IGoogleDriveService gdriveService, IAccountController accountController, IPlayerDatabaseController playerDatabaseController,
-            IGameExecutor gameExecutor)
+            IGameExecutor gameExecutor, IConfigurationService configurationService)
         {
             _reporter = reporter;
             _accountController = accountController;
             _playerDatabaseController = playerDatabaseController;
             _gameExecutor = gameExecutor;
+            _configService = configurationService;
 
             _reporter.Initialise();
         }
@@ -38,7 +40,7 @@ namespace InterfurCreations.AdventureGames.Discord
             socketClient = new DiscordSocketClient();
             socketClient.Log += SocketClient_Log;
 
-            var token = new ConfigurationService().GetConfig("DiscordApiToken", true);
+            var token = _configService.GetConfig("DiscordApiToken", true);
 
             await socketClient.LoginAsync(TokenType.Bot, token);
             await socketClient.StartAsync();
