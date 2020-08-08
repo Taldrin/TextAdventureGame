@@ -17,9 +17,40 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.301
+
+    - name: Azure App Configuration Sync
+      uses: Azure/AppConfiguration-Sync@v1.1.0
+      with:
+        # Path to the configuration file in the repo, relative to the repo root. Also supports glob patterns and multiple files
+        configurationFile: AdventureGameCore/InterfurCreations.AdventureGames.WorkerService/appsettings.json
+        # Format of the configuration file. Valid values are: json, yaml, properties
+        format: json
+        # Connection string for the App Configuration instance
+        connectionString: ${{ secrets.AZURE_CONFIG_CONNECTION_STRING }}
+        # Separator used when flattening the configuration file to key-value pairs
+        separator: ":"
+        # Specifies whether to use a strict sync which will make the App Configuration instance exactly match the configuration file (deleting key-values not in the configuration file). Defaults to false
+        strict: false
+      
     - name: Install dependencies
       run: dotnet restore InterfurCreations.AdventureGames.WorkerService
       working-directory: ./AdventureGameCore
     - name: Build
       run: dotnet build InterfurCreations.AdventureGames.WorkerService --configuration TelegramDev --no-restore
       working-directory: ./AdventureGameCore
+    
+    - name: SFTP Deploy
+      uses: wlixcc/SFTP-Deploy-Action@v1.0
+      with:
+        # username
+        username: sftpuser
+        # your sftp server
+        server: 3.10.170.240
+        # your sftp server port, default to 22
+        port: 22
+        # you can copy private_key from your *.pem file, keep format
+        ssh_private_key: ${{ secrets.SERVER_PRIVATE_KEY }}
+        # will put all file under this path
+        local_path: AdventureGameCore/InterfurCreations.AdventureGames.WorkerService/bin/TelegramDev/netcoreapp3.1/*
+        # files will copy to under remote_path
+        remote_path: /home/sftpuser/telegramdev
