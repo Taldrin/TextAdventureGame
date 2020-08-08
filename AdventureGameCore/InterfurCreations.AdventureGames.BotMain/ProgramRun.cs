@@ -94,7 +94,7 @@ namespace InterfurCreations.AdventureGames.BotMain
             builder.RegisterType<SlackReport>().As<IReporter>().SingleInstance();
             builder.RegisterType<SlackReportGenerator>().As<ISlackReportGenerator>().SingleInstance();
             builder.RegisterType<TelegramCredentialsProvider>().As<ICredentialsPathProvider>().SingleInstance();
-            builder.RegisterType<ConsoleAppGoogleDriveAuthenticator>().As<IGoogleDriveAuthenticator>().SingleInstance();
+            builder.RegisterType<ConfigSettingsGoogleDriveAuthenticator>().As<IGoogleDriveAuthenticator>().SingleInstance();
             builder.RegisterType<GoogleDriveService>().As<IGoogleDriveService>().SingleInstance();
             builder.RegisterType<GameExecutor>().As<IGameExecutor>().InstancePerLifetimeScope();
             builder.RegisterType<GameProcessor>().As<IGameProcessor>().InstancePerLifetimeScope();
