@@ -2,9 +2,9 @@ name: TelegramDevDeploy
 
 on:
   push:
-    branches:
-	  - /refs/heads/*
-	  - !master
+    branches: 
+        - '*'
+        - '!master'
 
 jobs:
   build:
