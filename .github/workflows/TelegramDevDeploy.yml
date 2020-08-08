@@ -2,9 +2,15 @@ name: TelegramDevDeploy
 
 on:
   push:
-    branches:
-	  - /refs/heads/*
-	  - !master
+    branches: 
+        - '*'
+        - '!master'
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: true
+        default: 'warning'
 
 jobs:
   build:
