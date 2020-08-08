@@ -17,20 +17,6 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.301
-
-    - name: Azure App Configuration Sync
-      uses: Azure/AppConfiguration-Sync@v1.1.0
-      with:
-        # Path to the configuration file in the repo, relative to the repo root. Also supports glob patterns and multiple files
-        configurationFile: AdventureGameCore/InterfurCreations.AdventureGames.WorkerService/appsettings.json
-        # Format of the configuration file. Valid values are: json, yaml, properties
-        format: json
-        # Connection string for the App Configuration instance
-        connectionString: ${{ secrets.AZURE_CONFIG_CONNECTION_STRING }}
-        # Separator used when flattening the configuration file to key-value pairs
-        separator: ":"
-        # Specifies whether to use a strict sync which will make the App Configuration instance exactly match the configuration file (deleting key-values not in the configuration file). Defaults to false
-        strict: false
       
     - name: Install dependencies
       run: dotnet restore InterfurCreations.AdventureGames.WorkerService
@@ -54,3 +40,17 @@ jobs:
         local_path: AdventureGameCore/InterfurCreations.AdventureGames.WorkerService/bin/TelegramDev/netcoreapp3.1/*
         # files will copy to under remote_path
         remote_path: /home/sftpuser/telegramdev
+    - name: SSH Reload system service
+      uses: fifsky/ssh-action@v0.0.4
+      with:
+        command: | 
+                 sudo systemctl daemon-reload
+                 sudo systemctl restart telegramdev.service
+        # Hostname or IP address of the server.
+        host: 3.10.170.240
+        # Username for authentication.
+        user: admin
+        # Port number of the server.
+        port: 22
+        # File Location or string that contains a private key for either key-based or hostbased user authentication (OpenSSH format)
+        key: ${{ secrets.SERVER_PRIVATE_KEY }}
