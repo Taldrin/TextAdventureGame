@@ -8,48 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\InterfurCreations.AdventureGames.BotMain\App.config" Link="App.config">
-      <TransformOnBuild>true</TransformOnBuild>
-    </None>
-    <None Include="..\InterfurCreations.AdventureGames.BotMain\App.Debug.config" Link="App.Debug.config">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>App.config</DependentUpon>
-    </None>
-    <None Include="..\InterfurCreations.AdventureGames.BotMain\App.DiscordAlpha.config" Link="App.DiscordAlpha.config">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>App.config</DependentUpon>
-    </None>
-    <None Include="..\InterfurCreations.AdventureGames.BotMain\App.DiscordLive.config" Link="App.DiscordLive.config">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>App.config</DependentUpon>
-    </None>
-    <None Include="..\InterfurCreations.AdventureGames.BotMain\App.FolderProfile.config" Link="App.FolderProfile.config">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>App.config</DependentUpon>
-    </None>
-    <None Include="..\InterfurCreations.AdventureGames.BotMain\App.KikLive.config" Link="App.KikLive.config">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>App.config</DependentUpon>
-    </None>
-    <None Include="..\InterfurCreations.AdventureGames.BotMain\App.Release.config" Link="App.Release.config">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>App.config</DependentUpon>
-    </None>
-    <None Include="..\InterfurCreations.AdventureGames.BotMain\App.TelegramDev.config" Link="App.TelegramDev.config">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>App.config</DependentUpon>
-    </None>
-    <None Include="..\InterfurCreations.AdventureGames.BotMain\App.TelegramLive.config" Link="App.TelegramLive.config">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>App.config</DependentUpon>
-    </None>
-    <None Include="..\InterfurCreations.AdventureGames.BotMain\App.TelegramTest.config" Link="App.TelegramTest.config">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>App.config</DependentUpon>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.Configuration.ConfigurationBuilders.AzureAppConfiguration" Version="1.0.0" />
     <PackageReference Include="Microsoft.Configuration.ConfigurationBuilders.Environment" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.AzureAppConfiguration" Version="3.0.2" />

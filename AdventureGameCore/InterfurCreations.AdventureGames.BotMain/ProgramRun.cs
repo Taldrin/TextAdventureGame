@@ -117,8 +117,6 @@ namespace InterfurCreations.AdventureGames.BotMain
                 .AssignableTo<IMessageHandler>()
                 .AsImplementedInterfaces();
 
-            var type = new ConfigurationService().GetConfig("TypeName");
-
             if (buildTypeName.ToLower().StartsWith("telegram"))
                 RegisterTelegram(builder);
             else if (buildTypeName.ToLower().StartsWith("discord"))

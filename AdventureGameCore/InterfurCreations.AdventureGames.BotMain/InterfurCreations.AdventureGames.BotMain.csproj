@@ -37,42 +37,4 @@
     <ProjectReference Include="..\InterfurCreations.AdventureGames.Telegram\InterfurCreations.AdventureGames.Telegram.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="App.config">
-      <TransformOnBuild>true</TransformOnBuild>
-    </None>
-    <None Update="App.Debug.config">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>App.config</DependentUpon>
-    </None>
-    <None Update="App.DiscordAlpha.config">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>App.config</DependentUpon>
-    </None>
-    <None Update="App.DiscordLive.config">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>App.config</DependentUpon>
-    </None>
-    <None Update="App.KikLive.config">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>App.config</DependentUpon>
-    </None>
-    <None Update="App.Release.config">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>App.config</DependentUpon>
-    </None>
-    <None Update="App.TelegramDev.config">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>App.config</DependentUpon>
-    </None>
-    <None Update="App.TelegramLive.config">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>App.config</DependentUpon>
-    </None>
-    <None Update="App.TelegramTest.config">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>App.config</DependentUpon>
-    </None>
-  </ItemGroup>
-
 </Project>
