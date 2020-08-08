@@ -62,13 +62,6 @@ namespace PublicSite.Server
 
             services.AddHttpContextAccessor();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
-            services.AddAuthentication().AddGoogle(options =>
-            {
-                options.ClientId = Configuration["Google:ClientId"];
-                options.ClientSecret = Configuration["Google:ClientSecret"];
-                options.ClaimActions.MapJsonKey("urn:google:profile", "link");
-                options.ClaimActions.MapJsonKey("urn:google:image", "picture");
-            });
 
             //services.Configure<IISServerOptions>(options =>
             //{
@@ -78,7 +71,7 @@ namespace PublicSite.Server
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IGameStore gameStore)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IGameStore gameStore, IConfigurationService configService)
         {
             //app.UseResponseCompression();
 
@@ -107,9 +100,9 @@ namespace PublicSite.Server
                 endpoints.MapControllers();
                 endpoints.MapFallbackToFile("index.html");
             });
-
             Log.LogMessage("Finished configuration");
             Log.LogMessage("Retrieving games");
+
             gameStore.ListGames();
         }
 
@@ -125,7 +118,7 @@ namespace PublicSite.Server
             builder.RegisterType<DatabaseContextProvider>().As<IDatabaseContextProvider>().InstancePerLifetimeScope();
             builder.RegisterType<AccountController>().As<IAccountController>().InstancePerLifetimeScope();
             builder.RegisterType<PlayerDatabaseController>().As<IPlayerDatabaseController>().InstancePerLifetimeScope();
-            builder.RegisterType<ConsoleAppGoogleDriveAuthenticator>().As<IGoogleDriveAuthenticator>().InstancePerLifetimeScope();
+            builder.RegisterType<ConfigSettingsGoogleDriveAuthenticator>().As<IGoogleDriveAuthenticator>().InstancePerLifetimeScope();
             builder.RegisterType<GoogleDriveService>().As<IGoogleDriveService>().InstancePerLifetimeScope();
             builder.RegisterType<AccessTokenService>().As<IAccessTokenService>().InstancePerLifetimeScope();
             builder.RegisterType<TokenGenerator>().As<ITokenGenerator>().InstancePerLifetimeScope();

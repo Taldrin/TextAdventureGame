@@ -1,8 +1,10 @@
 ﻿using Autofac.Extensions.DependencyInjection;
+using InterfurCreations.AdventureGames.Configuration;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace PublicSite.Server
 {
@@ -10,11 +12,17 @@ namespace PublicSite.Server
     {
         public static void Main(string[] args)
         {
+            ConfigSetting.DynamicApplicationName = "PublicSite";
             CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration(config =>
+            {
+                var connection = Environment.GetEnvironmentVariable("ConnectionString");
+                config.AddAzureAppConfiguration(connection);
+            })
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
