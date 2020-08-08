@@ -38,7 +38,7 @@ namespace InterfurCreations.AdventureGames.Discord
             socketClient = new DiscordSocketClient();
             socketClient.Log += SocketClient_Log;
 
-            var token = new ConfigurationService().GetConfig("DiscordApiToken");
+            var token = new ConfigurationService().GetConfig("DiscordApiToken", true);
 
             await socketClient.LoginAsync(TokenType.Bot, token);
             await socketClient.StartAsync();
