@@ -6,16 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="credentials.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="credentials.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Autofac" Version="5.2.0" />
     <PackageReference Include="Google.Apis.Drive.v3" Version="1.40.3.1694" />
     <PackageReference Include="Microsoft.Azure.CognitiveServices.Language.SpellCheck" Version="4.0.0" />
@@ -26,14 +16,6 @@
     <ProjectReference Include="..\InterfurCreations.AdventureGames.Configuration\InterfurCreations.AdventureGames.Configuration.csproj" />
     <ProjectReference Include="..\InterfurCreations.AdventureGames.Database\InterfurCreations.AdventureGames.Database.csproj" />
     <ProjectReference Include="..\InterfurCreations.AdventureGames.Logging\InterfurCreations.AdventureGames.Logging.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Interop.Microsoft.Office.Interop.Word">
-      <HintPath>..\..\DrawGameTester\InterfurCreations.DrawGameConsoleTester\obj\Debug\netcoreapp3.1\Interop.Microsoft.Office.Interop.Word.dll</HintPath>
-      <Private>true</Private>
-      <EmbedInteropTypes>true</EmbedInteropTypes>
-    </Reference>
   </ItemGroup>
 
 </Project>
