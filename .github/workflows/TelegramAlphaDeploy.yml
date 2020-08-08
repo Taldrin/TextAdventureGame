@@ -29,7 +29,7 @@ jobs:
       uses: wlixcc/SFTP-Deploy-Action@v1.0
       with:
         username: sftpuser
-        server: 3.10.170.240
+        server: 18.133.6.112
         port: 22
         ssh_private_key: ${{ secrets.SERVER_PRIVATE_KEY }}
         local_path: AdventureGameCore/InterfurCreations.AdventureGames.WorkerService/bin/TelegramTest/netcoreapp3.1/*
@@ -40,7 +40,7 @@ jobs:
         command: | 
                  sudo systemctl daemon-reload
                  sudo systemctl restart telegramalpha.service
-        host: 3.10.170.240
+        host: 18.133.6.112
         user: admin
         port: 22
         key: ${{ secrets.SERVER_PRIVATE_KEY }}

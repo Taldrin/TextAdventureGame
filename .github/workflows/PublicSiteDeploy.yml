@@ -29,7 +29,7 @@ jobs:
       uses: wlixcc/SFTP-Deploy-Action@v1.0
       with:
         username: sftpuser
-        server: 3.10.170.240
+        server: 18.133.6.112
         port: 22
         ssh_private_key: ${{ secrets.SERVER_PRIVATE_KEY }}
         local_path: PublicSite/PublicSite/Server/bin/Release/netcoreapp3.1/*
@@ -41,7 +41,7 @@ jobs:
                  mv /home/sftp/user/publicsite/* /var/www/furventure_public/
                  sudo systemctl restart kestrel-furventure-public.service
                  sudo systemctl restart nginx
-        host: 3.10.170.240
+        host: 18.133.6.112
         user: admin
         port: 22
         key: ${{ secrets.SERVER_PRIVATE_KEY }}
