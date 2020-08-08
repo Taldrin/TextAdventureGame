@@ -1,4 +1,4 @@
-name: .NET Core
+name: TelegramDevDeploy
 
 on:
   push:
@@ -28,17 +28,11 @@ jobs:
     - name: SFTP Deploy
       uses: wlixcc/SFTP-Deploy-Action@v1.0
       with:
-        # username
         username: sftpuser
-        # your sftp server
         server: 3.10.170.240
-        # your sftp server port, default to 22
         port: 22
-        # you can copy private_key from your *.pem file, keep format
         ssh_private_key: ${{ secrets.SERVER_PRIVATE_KEY }}
-        # will put all file under this path
         local_path: AdventureGameCore/InterfurCreations.AdventureGames.WorkerService/bin/TelegramDev/netcoreapp3.1/*
-        # files will copy to under remote_path
         remote_path: /home/sftpuser/telegramdev
     - name: SSH Reload system service
       uses: fifsky/ssh-action@v0.0.4
@@ -46,11 +40,7 @@ jobs:
         command: | 
                  sudo systemctl daemon-reload
                  sudo systemctl restart telegramdev.service
-        # Hostname or IP address of the server.
         host: 3.10.170.240
-        # Username for authentication.
         user: admin
-        # Port number of the server.
         port: 22
-        # File Location or string that contains a private key for either key-based or hostbased user authentication (OpenSSH format)
         key: ${{ secrets.SERVER_PRIVATE_KEY }}
