@@ -7,8 +7,20 @@
     <Configurations>Debug;Release;TelegramDev;DiscordAlpha;TelegramTest;TelegramLive;DiscordLive;KikLive</Configurations>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='TelegramLive|AnyCPU'">
+    <DefineConstants>TRACE;TelegramLive</DefineConstants>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='TelegramDev|AnyCPU'">
     <DefineConstants>TRACE;TelegramDev</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='TelegramTest|AnyCPU'">
+    <DefineConstants>TRACE;TelegramAlpha</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DiscordAlpha|AnyCPU'">
+    <DefineConstants>TRACE;DiscordAlpha</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DiscordLive|AnyCPU'">
+    <DefineConstants>TRACE;DiscordLive</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

@@ -48,6 +48,14 @@ namespace InterfurCreations.AdventureGames.BotMain
             string buildTypeName = null;
 #if TelegramDev
             buildTypeName = "Telegram Dev";
+#elif TelegramAlpha
+            buildTypeName = "Telegram Alpha";
+#elif TelegramLive
+            buildTypeName = "Telegram Live";
+#elif DiscordAlpha
+            buildTypeName = "Discord Alpha";
+#elif DiscordLive
+            buildTypeName = "Discord Live";
 #endif
             ConfigSetting.DynamicApplicationName = buildTypeName;
             var configSetupService = new AppSettingsConfigurationService(config);
