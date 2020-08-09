@@ -118,7 +118,7 @@ namespace InterfurCreations.AdventureGames.BotMain
             builder.RegisterType<AccountController>().As<IAccountController>().InstancePerLifetimeScope();
             builder.RegisterType<GameSaveService>().As<IGameSaveService>().InstancePerLifetimeScope();
 
-            builder.RegisterType<PlayerDatabaseController>().As<IPlayerDatabaseController>().SingleInstance();
+            builder.RegisterType<PlayerDatabaseController>().As<IPlayerDatabaseController>().InstancePerLifetimeScope();
             builder.RegisterType<DrawStore>().As<IGameStore>().SingleInstance();
 
             builder.RegisterAssemblyTypes(typeof(IMessageHandler).Assembly)
