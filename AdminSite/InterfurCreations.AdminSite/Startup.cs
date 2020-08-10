@@ -10,6 +10,8 @@ using InterfurCreations.AdventureGames.Configuration;
 using InterfurCreations.AdventureGames.DatabaseServices;
 using InterfurCreations.AdventureGames.DatabaseServices.Interfaces;
 using InterfurCreations.AdventureGames.Graph;
+using InterfurCreations.AdventureGames.Graph.Store;
+using InterfurCreations.AdventureGames.Logging;
 using InterfurCreations.AdventureGames.Services;
 using InterfurCreations.AdventureGames.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -26,6 +28,7 @@ namespace InterfurCreations.AdminSite
     {
         public Startup(IConfiguration configuration)
         {
+            ConfigSetting.DynamicApplicationName = "AdminSite";
             Configuration = configuration;
         }
 
@@ -41,7 +44,7 @@ namespace InterfurCreations.AdminSite
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddControllersWithViews();
 
             RegisterAutofac(services);
 
@@ -57,7 +60,7 @@ namespace InterfurCreations.AdminSite
             builder.RegisterType<DatabaseContextProvider>().As<IDatabaseContextProvider>().InstancePerLifetimeScope();
             builder.RegisterType<AccountController>().As<IAccountController>().InstancePerLifetimeScope();
             builder.RegisterType<PlayerDatabaseController>().As<IPlayerDatabaseController>().InstancePerLifetimeScope();
-            builder.RegisterType<ConsoleAppGoogleDriveAuthenticator>().As<IGoogleDriveAuthenticator>().InstancePerLifetimeScope();
+            builder.RegisterType<ConfigSettingsGoogleDriveAuthenticator>().As<IGoogleDriveAuthenticator>().InstancePerLifetimeScope();
             builder.RegisterType<GoogleDriveService>().As<IGoogleDriveService>().InstancePerLifetimeScope();
             builder.RegisterType<AccessTokenService>().As<IAccessTokenService>().InstancePerLifetimeScope();
             builder.RegisterType<TokenGenerator>().As<ITokenGenerator>().InstancePerLifetimeScope();
@@ -89,12 +92,15 @@ namespace InterfurCreations.AdminSite
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseRouting();
 
-            app.UseMvc(routes =>
+            app.UseEndpoints(routes =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapControllerRoute("defalt", "{controller=Home}/{action=Index}/{id?}");
+
+                //routes.MapRoute(
+                //    name: "default",
+                //    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

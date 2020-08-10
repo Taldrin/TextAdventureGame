@@ -1,16 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="4.9.4" />
+    <PackageReference Include="Autofac" Version="5.2.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Configuration.ConfigurationBuilders.AzureAppConfiguration" Version="1.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.AzureAppConfiguration" Version="3.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
   </ItemGroup>
 
@@ -21,6 +22,13 @@
     <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Graph\InterfurCreations.AdventureGames.Graph.csproj" />
     <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Services\InterfurCreations.AdventureGames.Services.csproj" />
     <ProjectReference Include="..\InterfurCreations.AdminSite.Core\InterfurCreations.AdminSite.Core.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Reference Include="InterfurCreations.AdventureGames.Graph.Store">
+      <HintPath>..\..\AdventureGameCore\InterfurCreations.AdventureGames.Graph.Store\bin\Debug\netcoreapp3.1\InterfurCreations.AdventureGames.Graph.Store.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

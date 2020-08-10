@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Autofac.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using System;
 
 namespace InterfurCreations.AdminSite
 {
@@ -13,7 +15,13 @@ namespace InterfurCreations.AdminSite
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
-            return WebHost.CreateDefaultBuilder(args).ConfigureServices(services => services.AddAutofac())
+            return WebHost.CreateDefaultBuilder(args)
+                            .ConfigureAppConfiguration(config =>
+                            {
+                                var connection = Environment.GetEnvironmentVariable("ConnectionString");
+                                config.AddAzureAppConfiguration(connection);
+                            })
+                .ConfigureServices(services => services.AddAutofac())
                 .UseStartup<Startup>();
         }
     }
