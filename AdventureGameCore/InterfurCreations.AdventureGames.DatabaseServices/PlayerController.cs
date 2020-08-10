@@ -70,11 +70,13 @@ namespace InterfurCreations.AdventureGames.DatabaseServices
             var player = _context.TelegramPlayers.Include(a => a.Player).ThenInclude(a => a.ActiveGameSave).ThenInclude(a => a.GameSaveData).Include(a => a.Player)
                 .ThenInclude(a => a.AccessTokens).Include(a => a.Player).ThenInclude(a => a.PermanentData).FirstOrDefault(a => a.ChatId == chatId);
 
-            var gameSaves = _context.GameSaves.Where(a => a.PlayerId == player.PlayerId)
-                .Include(a => a.PlayerGameSave).ThenInclude(a => a.GameSaveData).OrderByDescending(a => a.CreatedDate).Take(10).ToList();
-            telegramPlayer = player.Player;
-            telegramPlayer.GameSaves = gameSaves;
-
+            if (player != null)
+            {
+                var gameSaves = _context.GameSaves.Where(a => a.PlayerId == player.PlayerId)
+                    .Include(a => a.PlayerGameSave).ThenInclude(a => a.GameSaveData).OrderByDescending(a => a.CreatedDate).Take(10).ToList();
+                telegramPlayer = player.Player;
+                telegramPlayer.GameSaves = gameSaves;
+            }
             if (telegramPlayer == null) return null;
             TelegramPlayerCache.Add(chatId, (DateTime.Now, telegramPlayer));
             return telegramPlayer;
