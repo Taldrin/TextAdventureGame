@@ -10,6 +10,7 @@ using InterfurCreations.AdventureGames.Core.Interface;
 using Autofac;
 using System.Threading;
 using InterfurCreations.AdventureGames.Logging;
+using System.Net.Sockets;
 
 namespace InterfurCreations.AdventureGames.Discord
 {
@@ -55,8 +56,9 @@ namespace InterfurCreations.AdventureGames.Discord
         {
             try
             {
+                await socketClient.LogoutAsync();
                 await socketClient.LoginAsync(TokenType.Bot, _configService.GetConfig("DiscordApiToken", true));
-                socketClient.StartAsync();
+                await socketClient.StartAsync();
             }
             catch (Exception e)
             {
@@ -74,7 +76,6 @@ namespace InterfurCreations.AdventureGames.Discord
             try
             {
                 if (arg.Author.IsBot) return;
-
 
                 // Filter out any messages that don't start with 'ft.'
                 if (!arg.Content.StartsWith("ft.") && !(arg.Channel is SocketDMChannel)) return;
