@@ -85,6 +85,7 @@ namespace InterfurCreations.AdventureGames.BotMain
                     inputController.Setup();
 
                     scope.Resolve<IHeartbeatMonitor>().BeginMonitor(configService.GetConfigOrDefault("HeartbeatUrl", null, true));
+                    scope.Resolve<IGameStore>().ListGames();
 
                     if(IsInConsoleMode)
                         _quitEvent.WaitOne();

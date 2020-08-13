@@ -55,6 +55,7 @@ namespace InterfurCreations.AdventureGames.Discord
         {
             try
             {
+                await socketClient.LoginAsync(TokenType.Bot, _configService.GetConfig("DiscordApiToken", true);
                 socketClient.StartAsync();
             }
             catch (Exception e)
