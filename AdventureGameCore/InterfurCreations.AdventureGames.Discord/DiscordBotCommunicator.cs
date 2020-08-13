@@ -55,16 +55,11 @@ namespace InterfurCreations.AdventureGames.Discord
         {
             try
             {
-                await socketClient.StopAsync();
-                await socketClient.LogoutAsync();
+                socketClient.StartAsync();
             }
             catch (Exception e)
             {
                 _reporter.ReportError("Error trying to logout: " + e.Message);
-            }
-            finally
-            {
-                SetupAsync();
             }
         }
 

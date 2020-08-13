@@ -133,8 +133,18 @@ namespace InterfurCreations.AdventureGames.DatabaseServices
                     WebPlayerCache.Remove(webKey);
             }
 
-            var webPlayer = _context.WebPlayers.Include(a => a.Player).ThenInclude(a => a.GameSaves).ThenInclude(a => a.PlayerGameSave).ThenInclude(a => a.GameSaveData).Include(a => a.Player).ThenInclude(a => a.ActiveGameSave)
-            .ThenInclude(a => a.GameSaveData).Include(a => a.Player).ThenInclude(a => a.AccessTokens).Include(a => a.Player).ThenInclude(a => a.PermanentData).Where(a => a.AccessKey == webKey).Select(a => a.Player).SingleOrDefault();
+            Player webPlayer = null;
+            var player = _context.WebPlayers.Include(a => a.Player).ThenInclude(a => a.ActiveGameSave).ThenInclude(a => a.GameSaveData).Include(a => a.Player)
+                .ThenInclude(a => a.AccessTokens).Include(a => a.Player).ThenInclude(a => a.PermanentData).FirstOrDefault(a => a.AccessKey == webKey);
+
+            if (player != null)
+            {
+                var gameSaves = _context.GameSaves.Where(a => a.PlayerId == player.PlayerId)
+                    .Include(a => a.PlayerGameSave).ThenInclude(a => a.GameSaveData).OrderByDescending(a => a.CreatedDate).Take(10).ToList();
+                webPlayer = player.Player;
+                webPlayer.GameSaves = gameSaves;
+            }
+            if (webPlayer == null) return null;
 
             if (webPlayer == null) throw new Exception("Could not found player with key: " + webKey);
             WebPlayerCache.Add(webKey, (DateTime.Now, webPlayer));
