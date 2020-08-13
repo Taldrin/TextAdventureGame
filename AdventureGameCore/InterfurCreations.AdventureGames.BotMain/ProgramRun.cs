@@ -85,6 +85,8 @@ namespace InterfurCreations.AdventureGames.BotMain
                     inputController.Setup();
 
                     scope.Resolve<IHeartbeatMonitor>().BeginMonitor(configService.GetConfigOrDefault("HeartbeatUrl", null, true));
+
+                    // List games straight away, so there is no long delay when the first person sends a message
                     scope.Resolve<IGameStore>().ListGames();
 
                     if(IsInConsoleMode)
