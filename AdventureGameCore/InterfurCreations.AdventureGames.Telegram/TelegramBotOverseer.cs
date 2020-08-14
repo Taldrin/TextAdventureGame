@@ -27,9 +27,8 @@ namespace InterfurCreations.AdventureGames.Telegram
 
         public async void RecieveNewMessage(Message message, TelegramService service)
         {
+            if (message == null || message.text == null) return;
             Log.LogMessage("Recivied new message: " + message.text, LogType.General);
-
-            if (message.text == null) return;
 
             string chatName = message.chat.username;
             if (string.IsNullOrWhiteSpace(chatName))
