@@ -67,6 +67,7 @@ namespace InterfurCreations.AdminSite
             builder.RegisterType<ActionResolver>().As<IActionResolver>().InstancePerLifetimeScope();
             builder.RegisterType<EmptyReporterService>().As<IReporter>().InstancePerLifetimeScope();
             builder.RegisterType<ActionResolver>().As<IActionResolver>().InstancePerLifetimeScope();
+            builder.RegisterType<ReportsService>().As<IReportsService>().InstancePerLifetimeScope();
 
             builder.RegisterType<DrawStore>().As<IGameStore>().SingleInstance();
 
