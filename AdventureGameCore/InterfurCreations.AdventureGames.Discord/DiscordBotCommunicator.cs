@@ -56,13 +56,19 @@ namespace InterfurCreations.AdventureGames.Discord
         {
             try
             {
+                await socketClient.StopAsync();
                 await socketClient.LogoutAsync();
-                await socketClient.LoginAsync(TokenType.Bot, _configService.GetConfig("DiscordApiToken", true));
-                await socketClient.StartAsync();
+
+                socketClient.MessageReceived -= MessageExecutor;
+                socketClient.Disconnected -= SocketClient_Disconnected;
             }
             catch (Exception e)
             {
                 _reporter.ReportError("Error trying to logout: " + e.Message);
+            }
+            finally
+            {
+                SetupAsync();
             }
         }
 
