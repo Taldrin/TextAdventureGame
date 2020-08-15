@@ -62,14 +62,14 @@ namespace InterfurCreations.AdventureGames.Core
             List<MessageResult> messages = new List<MessageResult>();
             var message = _textParsing.ParseText(gameSave, currentState.StateText);
 
-            if (message.Trim().ToLower().StartsWith("#function"))
+            if (message != null &&  message.Trim().ToLower().StartsWith("#function"))
             {
                 if (ignoreFrameShift)
                     message = "";
                 else
                     return HandleFunction(message, currentState, gameSave, player, game, withDataChanges);
             }
-            if (message.Trim().ToLower().Equals("#return"))
+            if (message != null && message.Trim().ToLower().Equals("#return"))
                 return HandleFunctionReturn(message, currentState, gameSave, player, game, withDataChanges);
 
             if (!string.IsNullOrEmpty(message))
