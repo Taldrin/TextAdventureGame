@@ -13,6 +13,7 @@ namespace InterfurCreations.AdventureGames.Database
         public PlayerGameSave()
         {
             GameSaveData = new List<PlayerGameSaveData>();
+            FrameStack = new List<PlayerFrameStack>();
         }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -21,5 +22,6 @@ namespace InterfurCreations.AdventureGames.Database
         public string StateId { get; set; }
         public string SaveName { get; set; }
         public List<PlayerGameSaveData> GameSaveData { get; set; }
+        public List<PlayerFrameStack> FrameStack { get; set; }
     }
 }

@@ -19,13 +19,59 @@ namespace InterfurCreations.AdventureGames.Core
             _textParsing = textParsing;
         }
 
-        public (List<MessageResult> Messages, DrawState EndingState, List<string> StatesVisited) RecursivelyHandleStates(DrawState currentState, PlayerGameSave gameSave, Player player, bool withDataChanges = true)
+        private (List<MessageResult> Messages, DrawState EndingState, List<string> StatesVisited) HandleFunction(string message, DrawState currentState, PlayerGameSave gameSave, Player player, DrawGame game, bool withDataChanges = true)
+        {
+            var functionName = message.Trim().ToLower().Split("#function")[1].Trim();
+            var foundFunctions = game.GameFunctions.Where(a => a.FunctionName.ToLower() == functionName);
+            if (foundFunctions.Count() > 1)
+                throw new AdventureGameException($"Found more than 1 function matching name {functionName}!", true);
+            var function = foundFunctions.FirstOrDefault();
+            if(foundFunctions == null)
+                throw new AdventureGameException($"Found no function matching name {functionName}!", true);
+
+            gameSave.FrameStack.Add(new PlayerFrameStack
+            {
+                CreatedDate = DateTime.UtcNow,
+                ReturnStateId = currentState.Id,
+                Save = gameSave
+            });
+            gameSave.StateId = function.StartState.Id;
+
+            return RecursivelyHandleStates(function.StartState, gameSave, player, game, withDataChanges);
+        }
+
+        private (List<MessageResult> Messages, DrawState EndingState, List<string> StatesVisited) HandleFunctionReturn(string message, DrawState currentState, PlayerGameSave gameSave, Player player, DrawGame game, bool withDataChanges = true)
+        {
+            var topStackItem = gameSave.FrameStack.OrderByDescending(a => a.Id).FirstOrDefault();
+            if(topStackItem == null)
+                throw new AdventureGameException($"No items on frame stack, but encountered a 'Return' statement", true);
+            var returnState = game.FindStateById(topStackItem.ReturnStateId);
+
+            gameSave.FrameStack.Remove(topStackItem);
+
+            gameSave.StateId = returnState.Id;
+            return RecursivelyHandleStates(returnState, gameSave, player, game, withDataChanges, true);
+        }
+
+
+        public (List<MessageResult> Messages, DrawState EndingState, List<string> StatesVisited) RecursivelyHandleStates(DrawState currentState, PlayerGameSave gameSave, Player player, DrawGame game, bool withDataChanges = true, bool ignoreFrameShift = false)
         {
             if (withDataChanges)
                 HandleAnyAttachments(currentState, gameSave, player, false);
 
             List<MessageResult> messages = new List<MessageResult>();
             var message = _textParsing.ParseText(gameSave, currentState.StateText);
+
+            if (message.Trim().ToLower().StartsWith("#function"))
+            {
+                if (ignoreFrameShift)
+                    message = "";
+                else
+                    return HandleFunction(message, currentState, gameSave, player, game, withDataChanges);
+            }
+            if (message.Trim().ToLower().Equals("#return"))
+                return HandleFunctionReturn(message, currentState, gameSave, player, game, withDataChanges);
+
             if (!string.IsNullOrEmpty(message))
                 messages.Add(new MessageResult
                 {
@@ -65,7 +111,7 @@ namespace InterfurCreations.AdventureGames.Core
             if (newState == null)
                 return (messages, currentState, new List<string> {currentState.Id});
 
-            var r = RecursivelyHandleStates(newState, gameSave, player, withDataChanges);
+            var r = RecursivelyHandleStates(newState, gameSave, player, game, withDataChanges);
             r.Messages.AddRange(messages);
             r.StatesVisited.Add(currentState.Id);
             return r;
@@ -99,7 +145,7 @@ namespace InterfurCreations.AdventureGames.Core
 
             player.Actions.Add(new PlayerAction { ActionName = resultOption.optionObject.Id, GameName = game.GameName, Player = player, Time = DateTime.UtcNow });
 
-            var result = RecursivelyHandleStates(resultOption.resultState, playerGameData, player);
+            var result = RecursivelyHandleStates(resultOption.resultState, playerGameData, player, game);
             result.Messages.Reverse();
 
             var newOptions = GetCurrentOptions(playerGameData, game, result.EndingState);
