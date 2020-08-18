@@ -44,7 +44,7 @@ jobs:
       uses: fifsky/ssh-action@v0.0.4
       with:
         command: |
-                 mv /home/sftp/user/publicsite/* /var/www/furventure_public/
+                 cp -R /home/sftpuser/publicsite/* /var/www/furventure_public/
                  sudo systemctl restart kestrel-furventure-public.service
                  sudo systemctl restart nginx
         host: 18.133.6.112
