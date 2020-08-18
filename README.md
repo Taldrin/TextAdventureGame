@@ -10,6 +10,6 @@ The AdminSite project runs an asp.net MVC web app to display reports in daily us
 
 The public site uses asp.net blazor WebAssembly to display the games output on the browser.
 
-The DrawGameTester rapidly executes a game, and returns any end states or other errors that it finds. It can also user azure spell checking to check for basic grammer and spelling mistakes.
+The DrawGameTester rapidly executes a game, and returns any end states or other errors that it finds. It can also use azure spell checking to check for basic grammer and spelling mistakes.
 
 This software currently runs on .net core 3.1
