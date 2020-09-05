@@ -79,8 +79,8 @@ body {
 .fadeInUp {
     -webkit-animation-name: fadeInUp;
     animation-name: fadeInUp;
-    -webkit-animation-duration: 1s;
-    animation-duration: 1s;
+    -webkit-animation-duration: 250ms;
+    animation-duration: 250ms;
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
 }
@@ -88,8 +88,8 @@ body {
 .fadeInRight {
     -webkit-animation-name: fadeInRight;
     animation-name: fadeInRight;
-    -webkit-animation-duration: 1s;
-    animation-duration: 1s;
+    -webkit-animation-duration: 250ms;
+    animation-duration: 250ms;
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
 }

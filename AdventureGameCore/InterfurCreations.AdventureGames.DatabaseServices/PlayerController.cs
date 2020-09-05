@@ -28,7 +28,7 @@ namespace InterfurCreations.AdventureGames.DatabaseServices
 
         public Player GetPlayerById(string id)
         {
-            return _context.Players.Where(a => a.PlayerId == id).LoadPlayerData().Include(a => a.Actions).Include(a => a.TelegramPlayer).Include(a => a.DiscordPlayer).Include(a => a.KikPlayer).Include(a => a.WebPlayer).SingleOrDefault();
+            return _context.Players.Where(a => a.PlayerId == id).LoadPlayerData().Include(a => a.TelegramPlayer).Include(a => a.DiscordPlayer).Include(a => a.KikPlayer).Include(a => a.WebPlayer).SingleOrDefault();
         }
 
         public (List<Player> Players, int PageCount) ListPlayers(PlatformType platform, string playerName, int pageNumber, int pageSize)

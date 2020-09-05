@@ -81,12 +81,21 @@ namespace InterfurCreations.AdventureGames.Core
             {
                 if (e.ShouldReset)
                 {
-                    _reporter.ReportError(ErrorMessageHelper.MakeMessage(e, state, "Handling message: " + message));
-                    var result = TryResetState(state);
-                    _dataStore.SaveChanges();
-                    result.MessagesToShow.Add(new MessageResult { Message = "Your game was reset due to an error: " + e.Message });
-                    return result;
-                } else
+                    try
+                    {
+                        _reporter.ReportError(ErrorMessageHelper.MakeMessage(e, state, "Handling message: " + message));
+                        var result = TryResetState(state);
+                        _dataStore.SaveChanges();
+                        result.MessagesToShow.Add(new MessageResult { Message = "Your game was reset due to an error: " + e.Message });
+                        return result;
+                    }
+                    catch (Exception exc)
+                    {
+                        return ExecutionResultHelper.SingleMessage("An error has been encountered and automatically reported. Apologies! We usually fix any errors within 24 hours. If you are in" +
+                    " a stuck state on Telegram or Discord, try typing '-Menu-'. If you are in browser, try refreshing. \n\nError message: " + exc.Message, null);
+                    }
+                }
+                else
                 {
                     _reporter.ReportError(ErrorMessageHelper.MakeMessage(e, state, "Game was NOT reset. Handling message: " + message));
                     return ExecutionResultHelper.SingleMessage("An error has been encountered and automatically reported. Apologies! We usually fix any errors within 24 hours. If you are in" +
@@ -102,7 +111,6 @@ namespace InterfurCreations.AdventureGames.Core
                 return result;
             }
 
-            return new ExecutionResult();
         }
 
         private ExecutionResult HandleNoAccess(string message, Player player)
