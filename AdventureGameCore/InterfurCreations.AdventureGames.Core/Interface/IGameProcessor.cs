@@ -9,6 +9,6 @@ namespace InterfurCreations.AdventureGames.Core.Interface
         System.Collections.Generic.List<string> GetCurrentOptions(PlayerGameSave playerGameData, Graph.DrawGame game, DrawState currentDrawGameState = null);
         List<(string option, StateOption optionData)> GetCurrentOptionsFullDrawData(PlayerGameSave playerGameData, DrawGame game, DrawState currentDrawGameState = null);
         DataObjects.ExecutionResult ProcessMessage(string message, PlayerGameSave playerGameData, Graph.DrawGame game, Player player);
-        (System.Collections.Generic.List<DataObjects.MessageResult> Messages, DrawState EndingState, List<string> StatesVisited) RecursivelyHandleStates(DrawState currentState, PlayerGameSave gameSave, Player player, bool withDataChanges = true);
+        (System.Collections.Generic.List<DataObjects.MessageResult> Messages, DrawState EndingState, List<string> StatesVisited) RecursivelyHandleStates(DrawState currentState, PlayerGameSave gameSave, Player player, DrawGame game, bool withDataChanges = true, bool ignoreFrameShift = false);
     }
 }

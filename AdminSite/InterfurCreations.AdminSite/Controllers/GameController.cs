@@ -31,14 +31,14 @@ namespace BotAdminSite.Controllers
         {
             var games = _gameStore.ListGames();
             var viewModel = new ViewModelGamesList();
-            viewModel.Games = games.Select(a => new GameItem { Name = a.GameName, Id = a.startState.Id }).ToList();
+            viewModel.Games = games.Select(a => new GameItem { Name = a.GameName, Id = a.StartState.Id }).ToList();
             return View(viewModel);
         }
 
         public ActionResult Details(string gameId)
         {
             var games = _gameStore.ListGames();
-            var game = games.Find(a => a.startState.Id == gameId);
+            var game = games.Find(a => a.StartState.Id == gameId);
 
             var vm = new ViewModelGameDetails
             {

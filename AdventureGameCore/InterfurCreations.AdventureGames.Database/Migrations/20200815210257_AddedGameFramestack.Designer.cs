@@ -4,14 +4,16 @@ using InterfurCreations.AdventureGames.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InterfurCreations.AdventureGames.Database.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20200815210257_AddedGameFramestack")]
+    partial class AddedGameFramestack
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -164,7 +166,7 @@ namespace InterfurCreations.AdventureGames.Database.Migrations
                     b.Property<string>("ReturnStateId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SaveId")
+                    b.Property<int?>("SaveId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -328,9 +330,7 @@ namespace InterfurCreations.AdventureGames.Database.Migrations
                 {
                     b.HasOne("InterfurCreations.AdventureGames.Database.PlayerGameSave", "Save")
                         .WithMany("FrameStack")
-                        .HasForeignKey("SaveId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SaveId");
                 });
 
             modelBuilder.Entity("InterfurCreations.AdventureGames.Database.PlayerGameSaveData", b =>

@@ -10,7 +10,8 @@ namespace InterfurCreations.AdventureGames.Graph
     public class DrawGame
     {
         public string GameName;
-        public DrawState startState;
+        public DrawState StartState;
+        public List<DrawGameFunction> GameFunctions;
         public GameStats Stats;
         public DrawMetadata Metadata;
     }

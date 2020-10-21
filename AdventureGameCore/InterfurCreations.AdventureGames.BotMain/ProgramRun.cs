@@ -81,13 +81,15 @@ namespace InterfurCreations.AdventureGames.BotMain
                     Log.EnableReporting(scope.Resolve<IReporter>());
                     HangfireReporter report = new HangfireReporter();
                     report.SetupJobs(scope.Resolve<IDatabaseContextProvider>(), scope.Resolve<IReporter>());
+
+                    scope.Resolve<IGameStore>().ListGames();
+
                     var inputController = scope.Resolve<IInputController>();
                     inputController.Setup();
 
                     scope.Resolve<IHeartbeatMonitor>().BeginMonitor(configService.GetConfigOrDefault("HeartbeatUrl", null, true));
 
                     // List games straight away, so there is no long delay when the first person sends a message
-                    scope.Resolve<IGameStore>().ListGames();
 
                     if(IsInConsoleMode)
                         _quitEvent.WaitOne();

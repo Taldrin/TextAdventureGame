@@ -94,7 +94,7 @@ namespace InterfurCreations.AdventureGames.Graph.Store
             try
             {
                 var parsedGame = _parser.ParseGameFromBytes(xmlBytes);
-                var newGame = new DrawGame { GameName = file.FileName, startState = parsedGame.game, Metadata = parsedGame.metadata };
+                var newGame = new DrawGame { GameName = file.FileName, StartState = parsedGame.game, Metadata = parsedGame.metadata, GameFunctions = parsedGame.functions};
                 var stats = OptionsCountTool.Run(newGame);
                 newGame.Stats = stats;
                 if (_reporter != null)

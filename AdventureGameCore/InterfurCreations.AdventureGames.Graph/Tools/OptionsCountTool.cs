@@ -14,7 +14,8 @@ namespace InterfurCreations.AdventureGames.BotMain.Tools
             var decisions = new HashSet<StateOption>();
             var states = new HashSet<DrawState>();
             GameStats stats = new GameStats();
-            CountStates(game.startState, decisions, states, stats);
+            CountStates(game.StartState, decisions, states, stats);
+            game.GameFunctions.ForEach(a => CountStates(a.StartState, decisions, states, stats));
 
             return new GameStats
             {

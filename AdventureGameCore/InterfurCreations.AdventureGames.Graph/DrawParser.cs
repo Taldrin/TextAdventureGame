@@ -9,14 +9,14 @@ namespace InterfurCreations.AdventureGames.Graph
 {
     public class DrawParser
     {
-        public (DrawState game, DrawMetadata metadata) ParseGameFromPath(string path)
+        public (DrawState game, DrawMetadata metadata, List<DrawGameFunction> functions) ParseGameFromPath(string path)
         {
             // string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"DrawFiles\" + "DrawIoTest" + ".xml");
             var bytes = File.ReadAllBytes(path);
             return ParseGameFromBytes(bytes);
         }
 
-        public (DrawState game, DrawMetadata metadata) ParseGameFromBytes(byte[] xml)
+        public (DrawState game, DrawMetadata metadata, List<DrawGameFunction> functions) ParseGameFromBytes(byte[] xml)
         {
             // string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"DrawFiles\" + "DrawIoTest" + ".xml");
             XElement rootElement = null;
@@ -29,7 +29,7 @@ namespace InterfurCreations.AdventureGames.Graph
                         rootElement = XElement.Load(sr);
                     }
                 }
-            } catch (Exception e) { Log.LogMessage("Error converting XML bytes to XElement!"); return (null, null); }
+            } catch (Exception e) { Log.LogMessage("Error converting XML bytes to XElement!"); return default; }
 
             var elements = FindRootElement(rootElement).Elements();
 
@@ -37,11 +37,13 @@ namespace InterfurCreations.AdventureGames.Graph
 
             var startingElement = GetStart(elements);
 
-            var finishedDiagram = Parse(startingElement, elements, new List<DrawState>());
+            var existingStates = new List<DrawState>();
+            var finishedDiagram = Parse(startingElement, elements, existingStates);
+            var functions = ParseFunctions(elements, existingStates);
 
             var metaData = GetMetadata(elements);
 
-            return (finishedDiagram, metaData);
+            return (finishedDiagram, metaData, functions);
         }
 
         private XElement FindRootElement(XElement startElement)
@@ -57,6 +59,25 @@ namespace InterfurCreations.AdventureGames.Graph
             }
             Log.LogMessage("Error finding the root element in he XML file");
             throw new Exception("Error finding the root element in he XML file");
+        }
+
+        private List<DrawGameFunction> ParseFunctions(IEnumerable<XElement> elementStore, List<DrawState> existingStates)
+        {
+            var functionStartStates = elementStore.Where(a => !string.IsNullOrEmpty(a.Attribute("Function")?.Value)).ToList();
+
+            List<DrawGameFunction> completedFunctions = new List<DrawGameFunction>();
+            foreach(var functionStart in functionStartStates)
+            {
+                var completedFunction = Parse(functionStart, elementStore, existingStates);
+                var name = functionStart.Attribute("Function").Value;
+                completedFunctions.Add(new DrawGameFunction
+                {
+                    StartState = completedFunction,
+                    FunctionName = name
+                });
+            }
+
+            return completedFunctions;
         }
 
         private DrawState Parse(XElement element, IEnumerable<XElement> elementStore, List<DrawState> existingStates)
@@ -90,7 +111,6 @@ namespace InterfurCreations.AdventureGames.Graph
                 newState.StateOptions = new List<StateOption>() { new StateOption { IsDirectTransition = true, ResultState = Parse(destination, elementStore, existingStates), StateText = null } };
                 new StateOption { ResultState = Parse(destination, elementStore, existingStates), StateText = null, IsDirectTransition = true };
             }
-
             newState.StateOptions.AddRange(stateLinks.Select(a =>
             {
                 if (a.Attribute("target") == null)

@@ -15,10 +15,10 @@ namespace InterfurCreations.AdventureGames.Core
             player.ActiveGameSave = new PlayerGameSave
             {
                 GameName = game.GameName,
-                StateId = game.startState.Id,
+                StateId = game.StartState.Id,
             };
 
-            var messages = gameProcessor.RecursivelyHandleStates(game.startState, player.ActiveGameSave, player, true);
+            var messages = gameProcessor.RecursivelyHandleStates(game.StartState, player.ActiveGameSave, player, game, true);
             messages.Messages.Reverse();
 
             player.ActiveGameSave = new PlayerGameSave

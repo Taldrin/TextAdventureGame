@@ -28,7 +28,7 @@ namespace InterfurCreations.AdventureGames.DatabaseServices
 
         public Player GetPlayerById(string id)
         {
-            return _context.Players.Where(a => a.PlayerId == id).LoadPlayerData().Include(a => a.Actions).Include(a => a.TelegramPlayer).Include(a => a.DiscordPlayer).Include(a => a.KikPlayer).Include(a => a.WebPlayer).SingleOrDefault();
+            return _context.Players.Where(a => a.PlayerId == id).LoadPlayerData().Include(a => a.TelegramPlayer).Include(a => a.DiscordPlayer).Include(a => a.KikPlayer).Include(a => a.WebPlayer).SingleOrDefault();
         }
 
         public (List<Player> Players, int PageCount) ListPlayers(PlatformType platform, string playerName, int pageNumber, int pageSize)
@@ -68,18 +68,25 @@ namespace InterfurCreations.AdventureGames.DatabaseServices
             }
             Player telegramPlayer = null;
             var player = _context.TelegramPlayers.Include(a => a.Player).ThenInclude(a => a.ActiveGameSave).ThenInclude(a => a.GameSaveData).Include(a => a.Player)
-                .ThenInclude(a => a.AccessTokens).Include(a => a.Player).ThenInclude(a => a.PermanentData).FirstOrDefault(a => a.ChatId == chatId);
+                .ThenInclude(a => a.AccessTokens).Include(a => a.Player).ThenInclude(a => a.PermanentData).Include(a => a.Player).ThenInclude(a => a.ActiveGameSave).ThenInclude(a => a.FrameStack).FirstOrDefault(a => a.ChatId == chatId);
 
             if (player != null)
             {
-                var gameSaves = _context.GameSaves.Where(a => a.PlayerId == player.PlayerId)
-                    .Include(a => a.PlayerGameSave).ThenInclude(a => a.GameSaveData).OrderByDescending(a => a.CreatedDate).Take(10).ToList();
+                var gameSaves = GetGameSaves(player.PlayerId);
                 telegramPlayer = player.Player;
                 telegramPlayer.GameSaves = gameSaves;
             }
             if (telegramPlayer == null) return null;
             TelegramPlayerCache.Add(chatId, (DateTime.Now, telegramPlayer));
             return telegramPlayer;
+        }
+
+        public List<GameSaves> GetGameSaves(string playerId)
+        {
+            var gameSaves = _context.GameSaves.Where(a => a.PlayerId == playerId)
+                .Include(a => a.PlayerGameSave).ThenInclude(a => a.GameSaveData).OrderByDescending(a => a.CreatedDate).Take(10).ToList();
+
+            return gameSaves;
         }
 
         public GameSaves GetSaveById(int saveId, string playerId)

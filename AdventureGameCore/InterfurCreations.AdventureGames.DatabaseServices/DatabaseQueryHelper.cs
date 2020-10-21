@@ -11,7 +11,7 @@ namespace InterfurCreations.AdventureGames.DatabaseServices
     {
         public static IQueryable<Player> LoadPlayerData(this IQueryable<Player> query)
         {
-            return query.Include(a => a.GameSaves).ThenInclude(a => a.PlayerGameSave).ThenInclude(a => a.GameSaveData).Include(a => a.ActiveGameSave)
+            return query.Include(a => a.GameSaves).ThenInclude(a => a.PlayerGameSave).ThenInclude(a => a.GameSaveData).Take(10).Include(a => a.ActiveGameSave)
                 .ThenInclude(a => a.GameSaveData).Include(a => a.AccessTokens).Include(a => a.PermanentData);
         }
     }
