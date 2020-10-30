@@ -1,6 +1,8 @@
 ﻿using Amazon;
+using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
+using InterfurCreations.AdventureGames.Configuration;
 using InterfurCreations.AdventureGames.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -14,11 +16,14 @@ namespace InterfurCreations.AdventureGames.Services.ImageStore
     public class AwsImageStore : IImageStore
     {
         private readonly IAmazonS3 _client;
+        private readonly IConfigurationService _configService;
         private const string BucketName = "furventure-games";
 
-        public AwsImageStore()
+        public AwsImageStore(IConfigurationService configService)
         {
-            _client = new AmazonS3Client(RegionEndpoint.EUWest2);
+            _configService = configService;
+            _client = new AmazonS3Client(new BasicAWSCredentials(_configService.GetConfig("AwsAccessKey"), _configService.GetConfig("AwsSecretKey")),
+                RegionEndpoint.EUWest2);
         }
 
         public async Task<StoredImage> SaveImageAsync(Stream imageStream)
