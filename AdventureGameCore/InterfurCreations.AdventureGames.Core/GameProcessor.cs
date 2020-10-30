@@ -4,6 +4,7 @@ using InterfurCreations.AdventureGames.Database;
 using InterfurCreations.AdventureGames.Exceptions;
 using InterfurCreations.AdventureGames.GameLanguage;
 using InterfurCreations.AdventureGames.Graph;
+using InterfurCreations.AdventureGames.Services.ImageStore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,14 @@ namespace InterfurCreations.AdventureGames.Core
     public class GameProcessor : IGameProcessor
     {
         private readonly ITextParsing _textParsing;
+        private readonly IImagingService _imageService;
+        private readonly ImageBuildDataTracker _imageBuildDataTracker;
 
-        public GameProcessor(ITextParsing textParsing)
+        public GameProcessor(ITextParsing textParsing, IImagingService imageService, ImageBuildDataTracker imageBuildDataTracker)
         {
             _textParsing = textParsing;
+            _imageService = imageService;
+            _imageBuildDataTracker = imageBuildDataTracker;
         }
 
         private (List<MessageResult> Messages, DrawState EndingState, List<string> StatesVisited) HandleFunction(string message, DrawState currentState, PlayerGameSave gameSave, Player player, DrawGame game, bool withDataChanges = true)
@@ -62,6 +67,15 @@ namespace InterfurCreations.AdventureGames.Core
             List<MessageResult> messages = new List<MessageResult>();
             var message = _textParsing.ParseText(gameSave, currentState.StateText);
 
+            if(message != null && message.Trim().ToLower().StartsWith("#showbuiltimage"))
+            {
+                var imageUrl =  _imageService.CreateImageAsync(_imageBuildDataTracker.GetParams()).Result;
+                messages.Add(new MessageResult
+                {
+                    ImageUrl = imageUrl
+                });
+                message = "";
+            }
             if (message != null &&  message.Trim().ToLower().StartsWith("#function"))
             {
                 if (ignoreFrameShift)

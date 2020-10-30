@@ -22,6 +22,8 @@ using Autofac;
 using InterfurCreations.AdventureGames.Logging;
 using InterfurCreations.AdventureGames.Graph.Store;
 using Microsoft.Extensions.Configuration;
+using InterfurCreations.AdventureGames.Services.ImageStore;
+using System.Collections.Generic;
 
 namespace InterfurCreations.AdventureGames.BotMain
 {
@@ -78,10 +80,15 @@ namespace InterfurCreations.AdventureGames.BotMain
                 using (var server = new BackgroundJobServer())
                 {
                     var configService = scope.Resolve<IConfigurationService>();
+
+                #if !TelegramDev
                     Log.EnableReporting(scope.Resolve<IReporter>());
+                #endif
+
                     HangfireReporter report = new HangfireReporter();
                     report.SetupJobs(scope.Resolve<IDatabaseContextProvider>(), scope.Resolve<IReporter>());
 
+                    // List games straight away, so there is no long delay when the first person sends a message
                     scope.Resolve<IGameStore>().ListGames();
 
                     var inputController = scope.Resolve<IInputController>();
@@ -89,9 +96,8 @@ namespace InterfurCreations.AdventureGames.BotMain
 
                     scope.Resolve<IHeartbeatMonitor>().BeginMonitor(configService.GetConfigOrDefault("HeartbeatUrl", null, true));
 
-                    // List games straight away, so there is no long delay when the first person sends a message
 
-                    if(IsInConsoleMode)
+                    if (IsInConsoleMode)
                         _quitEvent.WaitOne();
                 }
             }
@@ -118,6 +124,9 @@ namespace InterfurCreations.AdventureGames.BotMain
             builder.RegisterType<AccessTokenService>().As<IAccessTokenService>().InstancePerLifetimeScope();
             builder.RegisterType<TokenGenerator>().As<ITokenGenerator>().InstancePerLifetimeScope();
             builder.RegisterType<HeartbeatMonitorService>().As<IHeartbeatMonitor>().InstancePerLifetimeScope();
+            builder.RegisterType<ImagingService>().As<IImagingService>().SingleInstance();
+            builder.RegisterType<AwsImageStore>().As<IImageStore>().InstancePerLifetimeScope();
+            builder.RegisterType<ImageBuildDataTracker>().InstancePerLifetimeScope();
 
             builder.RegisterType<DatabaseContextProvider>().As<IDatabaseContextProvider>().InstancePerLifetimeScope();
             builder.RegisterType<AccountController>().As<IAccountController>().InstancePerLifetimeScope();

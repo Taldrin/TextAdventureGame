@@ -2,10 +2,12 @@
 using InterfurCreations.AdventureGames.Database;
 using InterfurCreations.AdventureGames.Graph;
 using InterfurCreations.AdventureGames.Logging;
+using InterfurCreations.AdventureGames.Services.ImageStore;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -16,10 +18,12 @@ namespace InterfurCreations.AdventureGames.GameLanguage
     public class TextParsing : ITextParsing
     {
         private readonly IGameDataService _gameDataService;
+        private readonly ImageBuildDataTracker _imageBuildTracker;
 
-        public TextParsing(IGameDataService gameDataService)
+        public TextParsing(IGameDataService gameDataService, ImageBuildDataTracker imageBuildTracker)
         {
             _gameDataService = gameDataService;
+            _imageBuildTracker = imageBuildTracker;
         }
 
         public string ParseText(PlayerGameSave gameSave, string text)
@@ -133,7 +137,11 @@ namespace InterfurCreations.AdventureGames.GameLanguage
         {
             command = CleanText(command);
             var commandSplit = command.Split(' ');
-            if (command.StartsWith("save"))
+            if(command.StartsWith("imageBuild"))
+            {
+                ResolveImageBuildCommand(commandSplit);
+            }
+            else if (command.StartsWith("save"))
             {
                 var dataName = commandSplit[1];
                 _gameDataService.SaveData(gameSave, dataName);
@@ -160,6 +168,53 @@ namespace InterfurCreations.AdventureGames.GameLanguage
                 var dataValue = command.Substring(11, command.Length - 11).Trim();
                 _gameDataService.SavePermanentData(player, gameSave.GameName, dataValue, PlayerSaveDataType.ACHIEVEMENT);
             }
+        }
+
+        private void ResolveImageBuildCommand(string[] commandSplit)
+        {
+            commandSplit = commandSplit.Where(a => !string.IsNullOrEmpty(a)).ToArray();
+            var imageUrl = commandSplit[1].Trim();
+            string coordinates;
+            string opacity;
+
+            var imageParam = new ImageBuildParameter();
+
+            if (commandSplit.Length > 2)
+            {
+                coordinates = commandSplit[2];
+                var coordParams = coordinates.Trim().Trim('(', ')').Split(',');
+                if (coordParams.Length != 2)
+                    throw new ApplicationException($"Supplied coordinates for image building are an incorrect format '{coordinates}' from command string '{string.Join(" ", commandSplit)}'");
+                if(!int.TryParse(coordParams[0], out var xCord))
+                    throw new ApplicationException($"Supplied coordinates for image building are an incorrect format. Could not parse int '{coordParams[0]}' from command string '{string.Join(" ", commandSplit)}'");
+                if(!int.TryParse(coordParams[1], out var yCord))
+                    throw new ApplicationException($"Supplied coordinates for image building are an incorrect format. Could not parse int '{coordParams[1]}' from command string '{string.Join(" ", commandSplit)}'");
+                imageParam.Location = new Vector2(xCord, yCord);
+            }
+            if (commandSplit.Length > 3)
+            {
+                opacity = commandSplit[3];
+                if(!float.TryParse(opacity, out var parsedOpacity))
+                    throw new ApplicationException($"Supplied opacity for image build failed. Could not parse float '{opacity}' from command string '{string.Join(" ", commandSplit)}'");
+
+                imageParam.Opacity = parsedOpacity;
+            }
+            if(commandSplit.Length > 4)
+            {
+                string size = commandSplit[4];
+                var sizeParams = size.Trim().Trim('(', ')').Split(',');
+                if (sizeParams.Length != 2)
+                    throw new ApplicationException($"Supplied size for image building are an incorrect format '{size}' from command string '{string.Join(" ", commandSplit)}'");
+                if (!int.TryParse(sizeParams[0], out var xCord))
+                    throw new ApplicationException($"Supplied size for image building are an incorrect format. Could not parse int '{sizeParams[0]}' from command string '{string.Join(" ", commandSplit)}'");
+                if (!int.TryParse(sizeParams[1], out var yCord))
+                    throw new ApplicationException($"Supplied size for image building are an incorrect format. Could not parse int '{sizeParams[1]}' from command string '{string.Join(" ", commandSplit)}'");
+                imageParam.Size = new Vector2(xCord, yCord);
+            }
+
+            imageParam.Image = imageUrl;
+
+            _imageBuildTracker.AddParam(imageParam);
         }
 
         private string ParseLine(PlayerGameSave gameSave, string line)
