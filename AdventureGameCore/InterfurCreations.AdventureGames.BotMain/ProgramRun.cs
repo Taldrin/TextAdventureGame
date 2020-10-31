@@ -22,6 +22,8 @@ using Autofac;
 using InterfurCreations.AdventureGames.Logging;
 using InterfurCreations.AdventureGames.Graph.Store;
 using Microsoft.Extensions.Configuration;
+using InterfurCreations.AdventureGames.Services.ImageStore;
+using System.Collections.Generic;
 
 namespace InterfurCreations.AdventureGames.BotMain
 {
@@ -65,9 +67,13 @@ namespace InterfurCreations.AdventureGames.BotMain
 
             var connectionString = configSetupService.GetConfig("DatabaseConnectionString");
 
-            GlobalConfiguration.Configuration.UseSqlServerStorage(connectionString);
-            LogProvider.SetCurrentLogProvider(new ColouredConsoleLogProvider());
-            GlobalConfiguration.Configuration.UseAutofacActivator(Container);
+            bool shouldRunBackgroundJobs = configSetupService.GetConfig("RunBackgroundJobs", true).ToLower() == "true";
+            if (shouldRunBackgroundJobs)
+            {
+                GlobalConfiguration.Configuration.UseSqlServerStorage(connectionString);
+                LogProvider.SetCurrentLogProvider(new ColouredConsoleLogProvider());
+                GlobalConfiguration.Configuration.UseAutofacActivator(Container);
+            }
 
             ContainerStore.Container = Container;
 
@@ -78,10 +84,20 @@ namespace InterfurCreations.AdventureGames.BotMain
                 using (var server = new BackgroundJobServer())
                 {
                     var configService = scope.Resolve<IConfigurationService>();
-                    Log.EnableReporting(scope.Resolve<IReporter>());
-                    HangfireReporter report = new HangfireReporter();
-                    report.SetupJobs(scope.Resolve<IDatabaseContextProvider>(), scope.Resolve<IReporter>());
 
+#if !TelegramDev
+                    Log.EnableReporting(scope.Resolve<IReporter>());
+#endif
+
+                    if (shouldRunBackgroundJobs)
+                    {
+                        HangfireReporter report = new HangfireReporter();
+                        report.SetupJobs(scope.Resolve<IDatabaseContextProvider>(), scope.Resolve<IReporter>());
+
+                        SetupBackgroundJobs();
+                    }
+
+                    // List games straight away, so there is no long delay when the first person sends a message
                     scope.Resolve<IGameStore>().ListGames();
 
                     var inputController = scope.Resolve<IInputController>();
@@ -89,9 +105,8 @@ namespace InterfurCreations.AdventureGames.BotMain
 
                     scope.Resolve<IHeartbeatMonitor>().BeginMonitor(configService.GetConfigOrDefault("HeartbeatUrl", null, true));
 
-                    // List games straight away, so there is no long delay when the first person sends a message
 
-                    if(IsInConsoleMode)
+                    if (IsInConsoleMode)
                         _quitEvent.WaitOne();
                 }
             }
@@ -118,6 +133,9 @@ namespace InterfurCreations.AdventureGames.BotMain
             builder.RegisterType<AccessTokenService>().As<IAccessTokenService>().InstancePerLifetimeScope();
             builder.RegisterType<TokenGenerator>().As<ITokenGenerator>().InstancePerLifetimeScope();
             builder.RegisterType<HeartbeatMonitorService>().As<IHeartbeatMonitor>().InstancePerLifetimeScope();
+            builder.RegisterType<ImagingService>().As<IImagingService>().SingleInstance();
+            builder.RegisterType<AwsImageStore>().As<IImageStore>().InstancePerLifetimeScope();
+            builder.RegisterType<ImageBuildDataTracker>().InstancePerLifetimeScope();
 
             builder.RegisterType<DatabaseContextProvider>().As<IDatabaseContextProvider>().InstancePerLifetimeScope();
             builder.RegisterType<AccountController>().As<IAccountController>().InstancePerLifetimeScope();
@@ -125,6 +143,8 @@ namespace InterfurCreations.AdventureGames.BotMain
 
             builder.RegisterType<PlayerDatabaseController>().As<IPlayerDatabaseController>().InstancePerLifetimeScope();
             builder.RegisterType<DrawStore>().As<IGameStore>().SingleInstance();
+
+            builder.RegisterType<ImageStoreCleanupTask>().InstancePerLifetimeScope();
 
             builder.RegisterAssemblyTypes(typeof(IMessageHandler).Assembly)
                 .AssignableTo<IMessageHandler>()
@@ -165,6 +185,11 @@ namespace InterfurCreations.AdventureGames.BotMain
             var repoAssembly = Assembly.GetAssembly(typeof(KikService));
             builder.RegisterAssemblyTypes(webAssembly, repoAssembly)
                         .AsImplementedInterfaces();
+        }
+
+        private static void SetupBackgroundJobs()
+        {
+            RecurringJob.AddOrUpdate<ImageStoreCleanupTask>("ImageBuilderCleanup", a => a.ClearImages(), Cron.Minutely);
         }
     }
 }
