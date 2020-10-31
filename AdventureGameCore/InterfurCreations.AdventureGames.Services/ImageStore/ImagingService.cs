@@ -42,7 +42,8 @@ namespace InterfurCreations.AdventureGames.Services.ImageStore
                 _imageCache.Add(new CachedImage
                 {
                     Url = stored.id,
-                    Params = imageLayers
+                    Params = imageLayers,
+                    Added = DateTime.Now
                 });
                 imageUrl = stored.id;
             } else
@@ -64,6 +65,8 @@ namespace InterfurCreations.AdventureGames.Services.ImageStore
         {
             cachedImage = null;
 
+            _imageCache = _imageCache.Where(a => DateTime.Now < a.Added.AddDays(IImageStore.MaxCacheTimeDays)).ToHashSet();
+
             foreach (var image in _imageCache)
             {
                 if (image.Params.Count != imageRequest.Count) continue;
@@ -84,5 +87,6 @@ namespace InterfurCreations.AdventureGames.Services.ImageStore
     {
         public string Url;
         public List<ImageBuildParameter> Params;
+        public DateTime Added;
     }
 }
