@@ -68,12 +68,9 @@ namespace InterfurCreations.AdventureGames.BotMain
             var connectionString = configSetupService.GetConfig("DatabaseConnectionString");
 
             bool shouldRunBackgroundJobs = configSetupService.GetConfig("RunBackgroundJobs", true).ToLower() == "true";
-            if (shouldRunBackgroundJobs)
-            {
-                GlobalConfiguration.Configuration.UseSqlServerStorage(connectionString);
-                LogProvider.SetCurrentLogProvider(new ColouredConsoleLogProvider());
-                GlobalConfiguration.Configuration.UseAutofacActivator(Container);
-            }
+            GlobalConfiguration.Configuration.UseSqlServerStorage(connectionString);
+            LogProvider.SetCurrentLogProvider(new ColouredConsoleLogProvider());
+            GlobalConfiguration.Configuration.UseAutofacActivator(Container);
 
             ContainerStore.Container = Container;
 
@@ -93,7 +90,6 @@ namespace InterfurCreations.AdventureGames.BotMain
                     {
                         HangfireReporter report = new HangfireReporter();
                         report.SetupJobs(scope.Resolve<IDatabaseContextProvider>(), scope.Resolve<IReporter>());
-
                         SetupBackgroundJobs();
                     }
 
