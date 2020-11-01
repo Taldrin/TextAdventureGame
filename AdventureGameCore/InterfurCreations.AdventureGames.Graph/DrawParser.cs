@@ -41,7 +41,7 @@ namespace InterfurCreations.AdventureGames.Graph
             var finishedDiagram = Parse(startingElement, elements, existingStates);
             var functions = ParseFunctions(elements, existingStates);
 
-            var metaData = GetMetadata(elements);
+            var metaData = GetMetadata(elements, functions);
 
             return (finishedDiagram, metaData, functions);
         }
@@ -166,7 +166,7 @@ namespace InterfurCreations.AdventureGames.Graph
             return listOfStartObjects.First();
         }
 
-        public DrawMetadata GetMetadata(IEnumerable<XElement> elements)
+        public DrawMetadata GetMetadata(IEnumerable<XElement> elements, List<DrawGameFunction> functions)
         {
             var listOfMetadata = elements.Where(a => a.Name.LocalName == "object" && (a.Attribute("Metadata") != null || a.Attribute("metadata") != null)).ToList();
             if(listOfMetadata.Count > 1)
@@ -198,14 +198,26 @@ namespace InterfurCreations.AdventureGames.Graph
                 if (command.ToLower().StartsWith("category"))
                 {
                     metadata.Category = GetStringFromCommand(command);
-                } 
-                if(command.ToLower().StartsWith("achievement"))
+                }
+                if (command.ToLower().StartsWith("achievement"))
                 {
                     var nameValue = GetStringNameValueFromCommand(command.Substring(11, command.Length - 11));
                     metadata.Achievements.Add(new DrawAchievement
                     {
                         Description = nameValue.value,
                         Name = nameValue.name
+                    });
+                }
+                if (command.ToLower().StartsWith("button"))
+                {
+                    var nameValue = GetStringNameValueFromCommand(command.Substring(7, command.Length - 7));
+                    var foundFunction = functions.FirstOrDefault(a => a.FunctionName == nameValue.value);
+                    if (foundFunction == null)
+                        throw new ApplicationException($"Failed to parse metadata in drawgame. Could not find function {nameValue.value} for permanent button {nameValue.name}.");
+                    metadata.PermanentButtons.Add(new DrawPermanentButton
+                    {
+                        ButtonText = nameValue.name,
+                        Function = foundFunction
                     });
                 }
             }
