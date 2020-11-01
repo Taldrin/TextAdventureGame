@@ -24,6 +24,27 @@ namespace InterfurCreations.AdventureGames.Core
             _imageBuildDataTracker = imageBuildDataTracker;
         }
 
+        private (DrawState resultState, string optionText, StateOption optionObject) HandlePermanentButtons(DrawGame game, DrawState state, PlayerGameSave save, Player player, string message)
+        {
+            foreach (var button in game.Metadata.PermanentButtons)
+            {
+                if (message.ToLower() == button.ButtonText.ToLower())
+                {
+                    save.FrameStack.Add(new PlayerFrameStack
+                    {
+                        CreatedDate = DateTime.UtcNow,
+                        ReturnStateId = state.Id,
+                        FunctionName = button.Function.FunctionName,
+                        Save = save
+                    });
+                    save.StateId = button.Function.StartState.Id;
+                    return (button.Function.StartState, button.ButtonText, new StateOption {Id = $"PERMANENT#{button.ButtonText}", ResultState = button.Function.StartState });
+                }
+            }
+
+            return (null, null, null);
+        }
+
         private (List<MessageResult> Messages, DrawState EndingState, List<string> StatesVisited) HandleFunction(string message, DrawState currentState, PlayerGameSave gameSave, Player player, DrawGame game, bool withDataChanges = true)
         {
             var functionName = message.Trim().ToLower().Split("#function")[1].Trim();
@@ -38,6 +59,7 @@ namespace InterfurCreations.AdventureGames.Core
             {
                 CreatedDate = DateTime.UtcNow,
                 ReturnStateId = currentState.Id,
+                FunctionName = function.FunctionName,
                 Save = gameSave
             });
             gameSave.StateId = function.StartState.Id;
@@ -55,7 +77,7 @@ namespace InterfurCreations.AdventureGames.Core
             gameSave.FrameStack.Remove(topStackItem);
 
             gameSave.StateId = returnState.Id;
-            return RecursivelyHandleStates(returnState, gameSave, player, game, withDataChanges, true);
+            return RecursivelyHandleStates(returnState, gameSave, player, game, false, true);
         }
 
 
@@ -152,9 +174,16 @@ namespace InterfurCreations.AdventureGames.Core
             // If it's null, it's invalid. Send the current state.
             if (resultOption.resultState == null)
             {
-                var execResult = ExecutionResultHelper.SingleMessage(_textParsing.ParseText(playerGameData, currentDrawGameState.StateText), GetCurrentOptions(playerGameData, game, currentDrawGameState));
-                execResult.IsInvalidInput = true;
-                return execResult;
+                var funcReturn = HandlePermanentButtons(game, currentDrawGameState, playerGameData, player, message);
+                if (funcReturn.resultState == null)
+                {
+                    var execResult = ExecutionResultHelper.SingleMessage(_textParsing.ParseText(playerGameData, currentDrawGameState.StateText), GetCurrentOptions(playerGameData, game, currentDrawGameState));
+                    execResult.IsInvalidInput = true;
+                    return execResult;
+                } else
+                {
+                    resultOption = funcReturn;
+                }
             }
 
             player.Actions.Add(new PlayerAction { ActionName = resultOption.optionObject.Id, GameName = game.GameName, Player = player, Time = DateTime.UtcNow });
@@ -184,6 +213,13 @@ namespace InterfurCreations.AdventureGames.Core
                     return (a.resultState, a.option, a.stateOption);
                 }
             };
+            foreach(var button in game.Metadata.PermanentButtons)
+            {
+                if(button.ButtonText.ToLower() == message.ToLower())
+                {
+
+                }
+            }
             return (null, null, null);
         }
 
@@ -251,7 +287,18 @@ namespace InterfurCreations.AdventureGames.Core
             {
                 parsedOptions = parsedOptions.Where(a => a.messageResult.OptionType != OptionType.Fallback);
             }
-            return parsedOptions.Select(a => (a.messageResult.text, a.resultState.ResultState, a.resultState)).ToList();
+
+            var returnList = parsedOptions.Select(a => (a.messageResult.text, a.resultState.ResultState, a.resultState)).ToList();
+
+            // Return before adding permanent buttons, otherwise the GameMessageHandler won't add the Restart and MainMenu buttons
+            if (returnList.Count == 0) return new List<(string option, DrawState resultState, StateOption stateOption)>();
+
+            var currentFunction = playerGameData.FrameStack?.OrderByDescending(a => a.Id).LastOrDefault()?.FunctionName;
+            if (game.Metadata.PermanentButtons != null)
+                returnList.AddRange(game.Metadata.PermanentButtons?.Where(a => a.Function.FunctionName != currentFunction).Select(
+                    a => (a.ButtonText, (DrawState)null, new StateOption {Id = a.ButtonText }) ));
+
+            return returnList;
         }
     }
 }

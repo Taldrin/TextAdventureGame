@@ -12,6 +12,7 @@ namespace InterfurCreations.AdventureGames.Database
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string ReturnStateId { get; set; }
+        public string FunctionName { get; set; }
         [Required]
         public PlayerGameSave Save { get; set; }
         public DateTime CreatedDate { get; set; }

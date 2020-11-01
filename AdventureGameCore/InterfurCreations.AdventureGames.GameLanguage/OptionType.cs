@@ -8,6 +8,6 @@ namespace InterfurCreations.AdventureGames.GameLanguage
 {
     public enum OptionType
     {
-        Fallback, Normal
+        Fallback, Normal, PermanentButton
     }
 }
