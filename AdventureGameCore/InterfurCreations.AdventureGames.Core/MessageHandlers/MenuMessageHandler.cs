@@ -5,6 +5,7 @@ using InterfurCreations.AdventureGames.Database;
 using InterfurCreations.AdventureGames.GameLanguage;
 using InterfurCreations.AdventureGames.Graph;
 using InterfurCreations.AdventureGames.Graph.Store;
+using InterfurCreations.AdventureGames.Logging;
 using InterfurCreations.AdventureGames.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -24,9 +25,10 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
         private readonly ITextParsing _textParsing;
         private readonly IGameSaveService _gameSaveService;
         private readonly IConfigurationService _configService;
+        private readonly IReporter _reporter;
 
         public MenuMessageHandler(IGameStore gameStore, IGameProcessor gameProcessor, ITextParsing textParsing, IGameSaveService gameSaveService,
-            IConfigurationService configService)
+            IConfigurationService configService, IReporter reporter)
         {
             _mainMenuMessageHandler = new MainMenuMessageHandler(gameStore, gameProcessor, textParsing);
             _gameStore = gameStore;
@@ -34,6 +36,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
             _gameProcessor = gameProcessor;
             _gameSaveService = gameSaveService;
             _configService = configService;
+            _reporter = reporter;
         }
 
         public ExecutionResult HandleMessage(string message, Player player)
@@ -42,7 +45,17 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
             List<MessageResult> messages = new List<MessageResult>();
 
             var activeGame = _gameStore.ListGames().FirstOrDefault(a => a.GameName == player.ActiveGameSave.GameName);
-            var achievementList = AchievementService.HasPlayerDoneAchievements(activeGame, player);
+            var achievementList = new List<(bool hasAchieved, DrawAchievement achievement)>();
+            if(activeGame != null)
+            {
+                try
+                {
+                    achievementList = AchievementService.HasPlayerDoneAchievements(activeGame, player);
+                } catch (Exception e)
+                {
+                    _reporter.ReportError($"Error when finding achievements for player: {player?.Name}. Game was: {activeGame?.GameName}, player achievs: {player?.PermanentData?.Count}");
+                }
+            }
 
             if (message == Messages.ShowData)
             {

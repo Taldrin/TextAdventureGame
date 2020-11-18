@@ -114,17 +114,27 @@ namespace InterfurCreations.AdventureGames.DatabaseServices
 
         public Player GetPlayerByDiscordAuthor(long authorId)
         {
-            if(DiscordPlayerCache.TryGetValue(authorId, out var cacheValue)) {
+            if (DiscordPlayerCache.TryGetValue(authorId, out var cacheValue))
+            {
                 if (cacheValue.LastRetrieved > DateTime.Now.Subtract(CacheTime))
                 {
                     return cacheValue.DatabaseObject;
-                } else
+                }
+                else
                     DiscordPlayerCache.Remove(authorId);
-
             }
 
-            var discordPlayer = _context.DiscordPlayers.Include(a => a.Player).ThenInclude(a => a.GameSaves).ThenInclude(a => a.PlayerGameSave).ThenInclude(a => a.GameSaveData).Include(a => a.Player).ThenInclude(a => a.ActiveGameSave)
-                .ThenInclude(a => a.GameSaveData).Include(a => a.Player).ThenInclude(a => a.AccessTokens).Include(a => a.Player).ThenInclude(a => a.PermanentData).Where(a => a.ChatId == authorId).Select(a => a.Player).SingleOrDefault();
+            Player discordPlayer = null;
+            var player = _context.DiscordPlayers.Include(a => a.Player).ThenInclude(a => a.ActiveGameSave).ThenInclude(a => a.GameSaveData).Include(a => a.Player)
+                .ThenInclude(a => a.AccessTokens).Include(a => a.Player).ThenInclude(a => a.PermanentData).Include(a => a.Player).ThenInclude(a => a.ActiveGameSave).ThenInclude(a => a.FrameStack).FirstOrDefault(a => a.ChatId == authorId);
+
+            if (player != null)
+            {
+                var gameSaves = GetGameSaves(player.PlayerId);
+                discordPlayer = player.Player;
+                discordPlayer.GameSaves = gameSaves;
+            }
+
             if (discordPlayer == null) return null;
             DiscordPlayerCache.Add(authorId, (DateTime.Now, discordPlayer));
             return discordPlayer;
