@@ -65,6 +65,13 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
                 player.ActiveGameSave.GameName = gameSave.GameName;
                 player.ActiveGameSave.GameSaveData = gameSave.GameSaveData.Select(a => new PlayerGameSaveData {Name = a.Name, Value = a.Value }).ToList();
                 player.ActiveGameSave.StateId = gameSave.StateId;
+                player.ActiveGameSave.FrameStack = gameSave.FrameStack.Select(a => new PlayerFrameStack
+                {
+                    CreatedDate = a.CreatedDate,
+                    FunctionName = a.FunctionName,
+                    ReturnStateId = a.ReturnStateId,
+                    Save = player.ActiveGameSave
+                }).ToList();
 
                 player.PlayerFlag = PlayerFlag.IN_GAME.ToString();
                 var games = _gameStore.ListGames();

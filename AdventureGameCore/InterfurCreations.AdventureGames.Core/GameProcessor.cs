@@ -69,7 +69,7 @@ namespace InterfurCreations.AdventureGames.Core
 
         private (List<MessageResult> Messages, DrawState EndingState, List<string> StatesVisited) HandleFunctionReturn(string message, DrawState currentState, PlayerGameSave gameSave, Player player, DrawGame game, bool withDataChanges = true)
         {
-            var topStackItem = gameSave.FrameStack.OrderByDescending(a => a.Id).FirstOrDefault();
+            var topStackItem = gameSave.FrameStack.OrderByDescending(a => a.CreatedDate).FirstOrDefault();
             if(topStackItem == null)
                 throw new AdventureGameException($"No items on frame stack, but encountered a 'Return' statement", true);
             var returnState = game.FindStateById(topStackItem.ReturnStateId);

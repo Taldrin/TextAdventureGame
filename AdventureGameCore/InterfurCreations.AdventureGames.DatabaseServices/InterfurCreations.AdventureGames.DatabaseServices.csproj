@@ -14,4 +14,8 @@
     <Folder Include="DataObjects\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.5" />
+  </ItemGroup>
+
 </Project>
