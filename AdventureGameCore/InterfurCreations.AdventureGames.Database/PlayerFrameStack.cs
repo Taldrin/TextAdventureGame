@@ -15,6 +15,8 @@ namespace InterfurCreations.AdventureGames.Database
         public string FunctionName { get; set; }
         [Required]
         public PlayerGameSave Save { get; set; }
+        [ForeignKey("PlayerGameSave")]
+        public int SaveId { get; set; }
         public DateTime CreatedDate { get; set; }
 
     }

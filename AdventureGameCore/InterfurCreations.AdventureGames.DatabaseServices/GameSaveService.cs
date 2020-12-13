@@ -38,7 +38,8 @@ namespace InterfurCreations.AdventureGames.DatabaseServices
                 CreatedDate = a.CreatedDate,
                 FunctionName = a.FunctionName,
                 ReturnStateId = a.ReturnStateId,
-                Save = addedSave.Entity
+                Save = addedSave.Entity,
+                SaveId = addedSave.Entity.SaveId,
             }).ToList();
 
             player.GameSaves.Add(new GameSaves { PlayerGameSave = addedSave.Entity, Name = ""});

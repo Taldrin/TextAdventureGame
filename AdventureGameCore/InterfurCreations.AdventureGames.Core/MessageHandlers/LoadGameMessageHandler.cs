@@ -70,7 +70,8 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
                     CreatedDate = a.CreatedDate,
                     FunctionName = a.FunctionName,
                     ReturnStateId = a.ReturnStateId,
-                    Save = player.ActiveGameSave
+                    Save = player.ActiveGameSave,
+                    SaveId = player.ActiveGameSave.SaveId
                 }).ToList();
 
                 player.PlayerFlag = PlayerFlag.IN_GAME.ToString();
