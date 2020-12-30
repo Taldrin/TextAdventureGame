@@ -18,6 +18,8 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
         private readonly ITextParsing _textParsing;
         private readonly IGameSaveService _gameSaveService;
 
+        private const int PageSize = 8;
+
         public LoadGameMessageHandler(IGameStore gameStore, IGameProcessor gameProcessor, ITextParsing textParsing, IGameSaveService gameSaveService)
         {
             _gameStore = gameStore;
@@ -30,7 +32,21 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
 
         public List<string> GetOptions(Player player)
         {
-            var options = player.GameSaves.OrderByDescending(a => a.CreatedDate).Take(10).Select(a => $"{a.PlayerGameSaveId} - {a.PlayerGameSave.GameName} - {a.CreatedDate.Humanize()}").ToList();
+            int pageNumber = 0;
+            if (!string.IsNullOrEmpty(player.PlayerMenuContext2))
+            {
+                int.TryParse(player.PlayerMenuContext2, out pageNumber);
+            }
+            if (pageNumber < 0) pageNumber = 0;
+            var gameSaves = _gameSaveService.ListGameSaves(PageSize, pageNumber, player.PlayerId);
+
+            var options = gameSaves.Select(a => 
+                string.IsNullOrEmpty(a.Name) ? $"{a.PlayerGameSaveId} - {a.PlayerGameSave.GameName} - {a.CreatedDate.Humanize()}" 
+                                             : $"{a.PlayerGameSaveId} - {a.Name} - {a.PlayerGameSave.GameName} - {a.CreatedDate.Humanize()}").ToList();
+            if (pageNumber > 0)
+                options.Add($"< Page {pageNumber}");
+            if (gameSaves.Count != 0)
+                options.Add($"> Page {pageNumber + 2}");
             options.Add(Messages.Return);
             return options;
         }
@@ -44,11 +60,34 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
                 return ExecutionResultHelper.SingleMessage("Select a game save to load", GetOptions(player));
             } else if(message == Messages.Return)
             {
+                player.PlayerMenuContext2 = "0";
                 if(player.PlayerMenuContext == PlayerFlag.GAME_MENU.ToString())
                 {
                     return MessageHandlerHelpers.ReturnToGameMenu(player, "");
                 }
                 return MessageHandlerHelpers.ReturnToMainMenu(player);
+            } else if(message.StartsWith("<"))
+            {
+                if (int.TryParse(player.PlayerMenuContext2, out int pageNumber))
+                {
+                    if (pageNumber <= 0)
+                        pageNumber = 1;
+                    player.PlayerMenuContext2 = "" + (pageNumber - 1);
+                }
+                else
+                    player.PlayerMenuContext2 = "0";
+                return ExecutionResultHelper.SingleMessage("Select a game save to load", GetOptions(player));
+            }else if(message.StartsWith(">"))
+            {
+                if (int.TryParse(player.PlayerMenuContext2, out int pageNumber))
+                {
+                    if (pageNumber < 0)
+                        pageNumber = 0;
+                    player.PlayerMenuContext2 = "" + (pageNumber + 1);
+                }
+                else
+                    player.PlayerMenuContext2 = "" + player.GameSaves.Count / PageSize;
+                return ExecutionResultHelper.SingleMessage("Select a game save to load", GetOptions(player));
             }
             else
             {
@@ -62,6 +101,9 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
                 {
                     return ExecutionResultHelper.SingleMessage($"Save with ID {saveId} is invalid. Either it doesn't exist, or it doesn't belong to you!", GetOptions(player));
                 }
+
+                player.PlayerMenuContext2 = "0";
+
                 player.ActiveGameSave.GameName = gameSave.GameName;
                 player.ActiveGameSave.GameSaveData = gameSave.GameSaveData.Select(a => new PlayerGameSaveData {Name = a.Name, Value = a.Value }).ToList();
                 player.ActiveGameSave.StateId = gameSave.StateId;
@@ -84,6 +126,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
                     MessagesToShow = new List<MessageResult> { new MessageResult { Message = _textParsing.ParseText(playerState, state.StateText) } },
                     OptionsToShow = _gameProcessor.GetCurrentOptions(playerState, gameFound, state)
                 };
+
                 execResult.OptionsToShow.Add("-Menu-");
                 return execResult;
 

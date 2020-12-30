@@ -8,6 +8,6 @@ namespace InterfurCreations.AdventureGames.Database
 {
     public enum PlayerFlag
     {
-        IN_GAME, MAIN_MENU, MICRO_GAMES_MENU, GAME_MENU, SEND_US_MESSAGE, LOAD_GAME, ACHIEVEMENTS,
+        IN_GAME, MAIN_MENU, MICRO_GAMES_MENU, GAME_MENU, SEND_US_MESSAGE, LOAD_GAME, ACHIEVEMENTS, SAVE_GAME
     }
 }

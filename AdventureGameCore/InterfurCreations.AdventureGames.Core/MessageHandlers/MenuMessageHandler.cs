@@ -88,11 +88,8 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
             if(message == "Return to Game")
             {
                 return MessageHandlerHelpers.ReturnToGame(player, _gameStore, _textParsing, _gameProcessor);
-            } if(message == Messages.SaveGame)
-            {
-                _gameSaveService.SaveCurrentGame(player);
-                messages.Add(new MessageResult { Message = "Your game has been successfully saved!" });
-            } if(message.StartsWith(Messages.Achievements))
+            }
+            if(message.StartsWith(Messages.Achievements))
             {
                 var achievmentListString = achievementList.OrderBy(a => a.hasAchieved).Select(a => $"{(a.hasAchieved ? "UNLOCKED! " : "")}{a.achievement.Name} - {a.achievement.Description}").ToList();
                 var responseMessage = string.Join("\n\n", achievmentListString);

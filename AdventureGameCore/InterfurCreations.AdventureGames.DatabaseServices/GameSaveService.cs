@@ -19,7 +19,7 @@ namespace InterfurCreations.AdventureGames.DatabaseServices
             _context = contextProvider.GetContext();
         }
 
-        public void SaveCurrentGame(Player player)
+        public void SaveCurrentGame(Player player, string name = "")
         {
             PlayerGameSave gameSave = new PlayerGameSave
             {
@@ -42,12 +42,17 @@ namespace InterfurCreations.AdventureGames.DatabaseServices
                 SaveId = addedSave.Entity.SaveId,
             }).ToList();
 
-            player.GameSaves.Add(new GameSaves { PlayerGameSave = addedSave.Entity, Name = ""});
+            player.GameSaves.Add(new GameSaves { PlayerGameSave = addedSave.Entity, Name = name});
         }
 
         public GameSaves GetGameSaveById(int saveId, string playerId)
         {
             return _context.GameSaves.Include(a => a.PlayerGameSave).ThenInclude(a => a.FrameStack).SingleOrDefault(a => a.PlayerGameSaveId == saveId && a.PlayerId == playerId);
+        }
+
+        public List<GameSaves> ListGameSaves(int pageSize, int pageNumber, string playerId)
+        {
+            return _context.GameSaves.Include(a => a.PlayerGameSave).Where(a => a.PlayerId == playerId).OrderByDescending(a => a.CreatedDate).Skip(pageSize * pageNumber).Take(pageSize).ToList();
         }
     }
 }
