@@ -1,6 +1,8 @@
 name: PublicSiteDeploy
 
 on:
+  push:
+    branches: [ master ]
   workflow_dispatch:
     inputs:
       logLevel:

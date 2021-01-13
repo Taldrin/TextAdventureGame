@@ -65,7 +65,7 @@ namespace InterfurCreations.AdventureGames.Telegram
             }
         }
 
-        public Player CreateNewGame(int chatId, string name)
+        public Player CreateNewGame(long chatId, string name)
         {
             return _accountController.GetOrCreateNewTelegramAccount(chatId, name);
         }
