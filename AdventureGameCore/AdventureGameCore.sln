@@ -43,9 +43,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfurCreations.Adventure
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfurCreations.AdventureGames.WorkerService", "InterfurCreations.AdventureGames.WorkerService\InterfurCreations.AdventureGames.WorkerService.csproj", "{FC15C455-2E48-40D1-94FE-47E3D96C7CCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterfurCreations.AdventureGames.Logging", "InterfurCreations.AdventureGames.Logging\InterfurCreations.AdventureGames.Logging.csproj", "{102F598E-068D-46C0-ADE5-D734BC53B6EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfurCreations.AdventureGames.Logging", "InterfurCreations.AdventureGames.Logging\InterfurCreations.AdventureGames.Logging.csproj", "{102F598E-068D-46C0-ADE5-D734BC53B6EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterfurCreations.AdventureGames.Graph.Store", "InterfurCreations.AdventureGames.Graph.Store\InterfurCreations.AdventureGames.Graph.Store.csproj", "{8C6D0B24-65E4-4FE9-979A-E86B0C2F223D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfurCreations.AdventureGames.Graph.Store", "InterfurCreations.AdventureGames.Graph.Store\InterfurCreations.AdventureGames.Graph.Store.csproj", "{8C6D0B24-65E4-4FE9-979A-E86B0C2F223D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -344,8 +344,8 @@ Global
 		{3AFF9D42-F0F3-4D3A-9B64-4966BE133096}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3AFF9D42-F0F3-4D3A-9B64-4966BE133096}.TelegramDev|Any CPU.ActiveCfg = TelegramDev|Any CPU
 		{3AFF9D42-F0F3-4D3A-9B64-4966BE133096}.TelegramDev|Any CPU.Build.0 = TelegramDev|Any CPU
-		{3AFF9D42-F0F3-4D3A-9B64-4966BE133096}.TelegramLive|Any CPU.ActiveCfg = Release|Any CPU
-		{3AFF9D42-F0F3-4D3A-9B64-4966BE133096}.TelegramLive|Any CPU.Build.0 = Release|Any CPU
+		{3AFF9D42-F0F3-4D3A-9B64-4966BE133096}.TelegramLive|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AFF9D42-F0F3-4D3A-9B64-4966BE133096}.TelegramLive|Any CPU.Build.0 = Debug|Any CPU
 		{3AFF9D42-F0F3-4D3A-9B64-4966BE133096}.TelegramTest|Any CPU.ActiveCfg = TelegramDev|Any CPU
 		{3AFF9D42-F0F3-4D3A-9B64-4966BE133096}.TelegramTest|Any CPU.Build.0 = TelegramDev|Any CPU
 		{C158D6D0-F5B6-49A8-A798-B6B7FFB1CEDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
