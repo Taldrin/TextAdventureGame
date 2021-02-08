@@ -44,7 +44,7 @@ namespace InterfurCreations.AdventureGames.GameLanguage
             try
             {
                 optionText = CleanText(optionText);
-                optionText = optionText.Trim(' ');
+                optionText = optionText.Trim(' ', '\n');
                 if (optionText.StartsWith("#if"))
                 {
                     var result = ParseLine(gameSave, ParseOptionCommand(gameSave, optionText));

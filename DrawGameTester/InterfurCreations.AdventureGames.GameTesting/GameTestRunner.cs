@@ -35,6 +35,9 @@ namespace InterfurCreations.AdventureGames.Tester.DrawIOTest
 
         public async Task<(List<string> errors, List<string> warnings, List<string> allText, int totalActionsDone)> RunTestAsync(DrawGame game, DateTime runUntil, int actionsPerRun, string startingStateId = null)
         {
+            if (actionsPerRun == 0)
+                actionsPerRun = int.MaxValue;
+
             if(!string.IsNullOrEmpty(startingStateId))
             {
                 startingState = game.FindStateById(startingStateId);
@@ -42,7 +45,7 @@ namespace InterfurCreations.AdventureGames.Tester.DrawIOTest
                     throw new ArgumentException($"Could not find state '{startingStateId}' in game '{game.GameName}");
             } else
             {
-                startingState = game.startState;
+                startingState = game.StartState;
             }
 
             data = new GameTestData();
