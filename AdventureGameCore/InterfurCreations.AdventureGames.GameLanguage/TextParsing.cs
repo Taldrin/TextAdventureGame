@@ -295,7 +295,7 @@ namespace InterfurCreations.AdventureGames.GameLanguage
 
         private bool ResolveIf(PlayerGameSave gameSave, string command)
         {
-            var split = command.Split(' ');
+            var split = command.Split(null);
             split = split.Where(a => !string.IsNullOrEmpty(a)).ToArray();
             bool andMore = false;
             bool orMore = false;
