@@ -29,10 +29,10 @@ namespace InterfurCreations.AdventureGames.Core
             return mainMenuHandler.HandleMessage("", player);
         }
 
-        public static ExecutionResult ReturnToGame(Player player, IGameStore _gameStore, ITextParsing textParsing, IGameProcessor gameProcessor)
+        public static ExecutionResult ReturnToGame(Player player, IGameRetrieverService _gameStoreService, ITextParsing textParsing, IGameProcessor gameProcessor)
         {
             player.PlayerFlag = PlayerFlag.IN_GAME.ToString();
-            var games = _gameStore.ListGames();
+            var games = _gameStoreService.ListGames();
             var playerState = player.ActiveGameSave;
             var gameFound = games.Where(a => a.GameName == playerState.GameName).FirstOrDefault();
             var state = gameFound.FindStateById(playerState.StateId);

@@ -19,6 +19,7 @@ namespace InterfurCreations.AdventureGames.Services
     {
         public string original;
         public string suggestion;
+        public string message;
         public int wordLocation;
     }
 }

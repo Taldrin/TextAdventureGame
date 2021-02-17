@@ -21,13 +21,13 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
 
         private readonly MainMenuMessageHandler _mainMenuMessageHandler;
         private readonly IGameProcessor _gameProcessor;
-        private readonly IGameStore _gameStore;
+        private readonly IGameRetrieverService _gameStore;
         private readonly ITextParsing _textParsing;
         private readonly IGameSaveService _gameSaveService;
         private readonly IConfigurationService _configService;
         private readonly IReporter _reporter;
 
-        public MenuMessageHandler(IGameStore gameStore, IGameProcessor gameProcessor, ITextParsing textParsing, IGameSaveService gameSaveService,
+        public MenuMessageHandler(IGameRetrieverService gameStore, IGameProcessor gameProcessor, ITextParsing textParsing, IGameSaveService gameSaveService,
             IConfigurationService configService, IReporter reporter)
         {
             _mainMenuMessageHandler = new MainMenuMessageHandler(gameStore, gameProcessor, textParsing);

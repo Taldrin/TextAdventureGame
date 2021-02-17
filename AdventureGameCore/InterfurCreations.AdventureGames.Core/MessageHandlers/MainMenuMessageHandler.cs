@@ -13,13 +13,13 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
 {
     public class MainMenuMessageHandler : IMessageHandler
     {
-        private readonly IGameStore _gameStore;
+        private readonly IGameRetrieverService _gameStore;
         private readonly IGameProcessor _gameProcessor;
         private readonly ITextParsing _textParsing;
 
         public int Priorioty => 2;
 
-        public MainMenuMessageHandler(IGameStore gameStore, IGameProcessor gameProcessor, ITextParsing textParsing)
+        public MainMenuMessageHandler(IGameRetrieverService gameStore, IGameProcessor gameProcessor, ITextParsing textParsing)
         {
             _gameStore = gameStore;
             _gameProcessor = gameProcessor;

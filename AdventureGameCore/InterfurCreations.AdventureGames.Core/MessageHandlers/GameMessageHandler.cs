@@ -11,10 +11,10 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
 {
     public class GameMessageHandler : IMessageHandler
     {
-        private readonly IGameStore _gameStore;
+        private readonly IGameRetrieverService _gameStore;
         private readonly IGameProcessor _gameProcessor;
         
-        public GameMessageHandler(IGameStore gameStore, IGameProcessor gameProcessor)
+        public GameMessageHandler(IGameRetrieverService gameStore, IGameProcessor gameProcessor)
         {
             _gameStore = gameStore;
             _gameProcessor = gameProcessor;
