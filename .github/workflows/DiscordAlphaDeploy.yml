@@ -36,7 +36,7 @@ jobs:
         server: 18.133.6.112
         port: 22
         ssh_private_key: ${{ secrets.SERVER_PRIVATE_KEY }}
-        local_path: AdventureGameCore/InterfurCreations.AdventureGames.WorkerService/bin/DiscordAlpha/netcoreapp3.1/*
+        local_path: AdventureGameCore/InterfurCreations.AdventureGames.WorkerService/bin/DiscordAlpha/net5.0/*
         remote_path: /home/sftpuser/discordalpha
     - name: SSH Reload system service
       uses: fifsky/ssh-action@v0.0.4
