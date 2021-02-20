@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Configuration\InterfurCreations.AdventureGames.Configuration.csproj" />
     <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Database\InterfurCreations.AdventureGames.Database.csproj" />
+    <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Graph.Store\InterfurCreations.AdventureGames.Graph.Store.csproj" />
     <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Graph\InterfurCreations.AdventureGames.Graph.csproj" />
     <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Services\InterfurCreations.AdventureGames.Services.csproj" />
   </ItemGroup>
