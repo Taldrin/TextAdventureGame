@@ -13,14 +13,14 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
 {
     public class LoadGameMessageHandler : IMessageHandler
     {
-        private readonly IGameStore _gameStore;
+        private readonly IGameRetrieverService _gameStore;
         private readonly IGameProcessor _gameProcessor;
         private readonly ITextParsing _textParsing;
         private readonly IGameSaveService _gameSaveService;
 
         private const int PageSize = 8;
 
-        public LoadGameMessageHandler(IGameStore gameStore, IGameProcessor gameProcessor, ITextParsing textParsing, IGameSaveService gameSaveService)
+        public LoadGameMessageHandler(IGameRetrieverService gameStore, IGameProcessor gameProcessor, ITextParsing textParsing, IGameSaveService gameSaveService)
         {
             _gameStore = gameStore;
             _gameProcessor = gameProcessor;

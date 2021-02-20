@@ -15,11 +15,11 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
     {
         public int Priorioty => 10;
 
-        private readonly IGameStore _gameStore;
+        private readonly IGameRetrieverService _gameStore;
         private readonly IGameProcessor _gameProcessor;
         private readonly ITextParsing _textParsing;
 
-        public AchievementMessageHandler(IGameStore gameStore, IGameProcessor gameProcessor, ITextParsing textParsing)
+        public AchievementMessageHandler(IGameRetrieverService gameStore, IGameProcessor gameProcessor, ITextParsing textParsing)
         {
             _gameStore = gameStore;
             _gameProcessor = gameProcessor;
