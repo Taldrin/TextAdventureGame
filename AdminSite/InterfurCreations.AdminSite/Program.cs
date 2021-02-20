@@ -22,6 +22,8 @@ namespace InterfurCreations.AdminSite
                                 config.AddAzureAppConfiguration(connection);
                             })
                 .ConfigureServices(services => services.AddAutofac())
+                .UseUrls("http://localhost:5200")
+                .UseUrls("https://localhost:5201")
                 .UseStartup<Startup>();
         }
     }
