@@ -23,7 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfurCreations.Adventure
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfurCreations.AdventureGames.Core", "..\AdventureGameCore\InterfurCreations.AdventureGames.Core\InterfurCreations.AdventureGames.Core.csproj", "{BC703AF7-D622-4E0D-AA6B-552398DBB9DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterfurCreations.AdventureGames.GameTesting.DataObjects", "InterfurCreations.AdventureGames.GameTesting.DataObjects\InterfurCreations.AdventureGames.GameTesting.DataObjects.csproj", "{FCD3B84C-6B5F-4E75-B37B-B9D79910F78E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfurCreations.AdventureGames.GameTesting.DataObjects", "InterfurCreations.AdventureGames.GameTesting.DataObjects\InterfurCreations.AdventureGames.GameTesting.DataObjects.csproj", "{FCD3B84C-6B5F-4E75-B37B-B9D79910F78E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfurCreations.AdventureGames.LanguageTool", "..\AdventureGameCore\InterfurCreations.AdventureGames.LanguageTool\InterfurCreations.AdventureGames.LanguageTool.csproj", "{F30C4A19-D487-46D4-B4C8-141AAA8608ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -236,6 +238,24 @@ Global
 		{FCD3B84C-6B5F-4E75-B37B-B9D79910F78E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FCD3B84C-6B5F-4E75-B37B-B9D79910F78E}.TelegramDev|Any CPU.ActiveCfg = Debug|Any CPU
 		{FCD3B84C-6B5F-4E75-B37B-B9D79910F78E}.TelegramDev|Any CPU.Build.0 = Debug|Any CPU
+		{F30C4A19-D487-46D4-B4C8-141AAA8608ED}.AdminSite|Any CPU.ActiveCfg = Debug|Any CPU
+		{F30C4A19-D487-46D4-B4C8-141AAA8608ED}.AdminSite|Any CPU.Build.0 = Debug|Any CPU
+		{F30C4A19-D487-46D4-B4C8-141AAA8608ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F30C4A19-D487-46D4-B4C8-141AAA8608ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F30C4A19-D487-46D4-B4C8-141AAA8608ED}.DebugLive|Any CPU.ActiveCfg = Debug|Any CPU
+		{F30C4A19-D487-46D4-B4C8-141AAA8608ED}.DebugLive|Any CPU.Build.0 = Debug|Any CPU
+		{F30C4A19-D487-46D4-B4C8-141AAA8608ED}.DebugTest|Any CPU.ActiveCfg = Debug|Any CPU
+		{F30C4A19-D487-46D4-B4C8-141AAA8608ED}.DebugTest|Any CPU.Build.0 = Debug|Any CPU
+		{F30C4A19-D487-46D4-B4C8-141AAA8608ED}.DiscordAlpha|Any CPU.ActiveCfg = Debug|Any CPU
+		{F30C4A19-D487-46D4-B4C8-141AAA8608ED}.DiscordAlpha|Any CPU.Build.0 = Debug|Any CPU
+		{F30C4A19-D487-46D4-B4C8-141AAA8608ED}.DiscordLive|Any CPU.ActiveCfg = Debug|Any CPU
+		{F30C4A19-D487-46D4-B4C8-141AAA8608ED}.DiscordLive|Any CPU.Build.0 = Debug|Any CPU
+		{F30C4A19-D487-46D4-B4C8-141AAA8608ED}.KikLive|Any CPU.ActiveCfg = Debug|Any CPU
+		{F30C4A19-D487-46D4-B4C8-141AAA8608ED}.KikLive|Any CPU.Build.0 = Debug|Any CPU
+		{F30C4A19-D487-46D4-B4C8-141AAA8608ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F30C4A19-D487-46D4-B4C8-141AAA8608ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F30C4A19-D487-46D4-B4C8-141AAA8608ED}.TelegramDev|Any CPU.ActiveCfg = Debug|Any CPU
+		{F30C4A19-D487-46D4-B4C8-141AAA8608ED}.TelegramDev|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
