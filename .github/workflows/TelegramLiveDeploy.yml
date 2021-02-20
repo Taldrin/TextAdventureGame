@@ -20,7 +20,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.301
+        dotnet-version: 5.0.103
       
     - name: Install dependencies
       run: dotnet restore InterfurCreations.AdventureGames.WorkerService
@@ -36,7 +36,7 @@ jobs:
         server: 18.133.6.112
         port: 22
         ssh_private_key: ${{ secrets.SERVER_PRIVATE_KEY }}
-        local_path: AdventureGameCore/InterfurCreations.AdventureGames.WorkerService/bin/TelegramLive/netcoreapp3.1/*
+        local_path: AdventureGameCore/InterfurCreations.AdventureGames.WorkerService/bin/TelegramLive/net5.0/*
         remote_path: /home/sftpuser/telegramlive
     - name: SSH Reload system service
       uses: fifsky/ssh-action@v0.0.4
