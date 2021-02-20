@@ -23,10 +23,10 @@ jobs:
         dotnet-version: 5.0.103
       
     - name: Install dependencies
-      run: dotnet restore AdminSite/InterfurCreations.AdminSite/InterfurCreations.AdminSite.csproj
+      run: dotnet restore InterfurCreations.AdminSite/InterfurCreations.AdminSite.csproj
       working-directory: ./AdminSite
     - name: Build
-      run: dotnet publish AdminSite/InterfurCreations.AdminSite/InterfurCreations.AdminSite.csproj --configuration Release --no-restore
+      run: dotnet publish InterfurCreations.AdminSite/InterfurCreations.AdminSite.csproj --configuration Release --no-restore
       working-directory: ./AdminSite
     
     - name: SFTP Deploy
@@ -36,7 +36,7 @@ jobs:
         server: 18.133.6.112
         port: 22
         ssh_private_key: ${{ secrets.SERVER_PRIVATE_KEY }}
-        local_path: AdminSite/AdminSite/InterfurCreations.AdminSite/bin/Release/net5.0/publish/*
+        local_path: AdminSite/InterfurCreations.AdminSite/bin/Release/net5.0/publish/*
         remote_path: /home/sftpuser/adminsite
     - name: SSH Reload system service
       uses: fifsky/ssh-action@v0.0.4
