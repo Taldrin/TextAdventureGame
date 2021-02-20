@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using InterfurCreations.AdminSite.Core;
 using InterfurCreations.AdminSite.Models;
 using InterfurCreations.AdventureGames.DatabaseServices.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InterfurCreations.AdminSite.Controllers
 {
+    [Authorize]
     public class AlphaAccessController : Controller
     {
         private readonly IAccessTokenService _accessTokenService;

@@ -5,6 +5,7 @@ using InterfurCreations.AdventureGames.DatabaseServices.Interfaces;
 using InterfurCreations.AdventureGames.Graph;
 using InterfurCreations.AdventureGames.Graph.Store;
 using InterfurCreations.AdventureGames.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading;
@@ -12,14 +13,15 @@ using System.Threading.Tasks;
 
 namespace BotAdminSite.Controllers
 {
+    [Authorize]
     public class GameController : Controller
     {
         private readonly IConfigurationService _configService;
         private readonly IGoogleDriveService _driveService;
-        private readonly IGameStore _gameStore;
+        private readonly IGameRetrieverService _gameStore;
         private readonly IPlayerDatabaseController _playerController;
 
-        public GameController(IConfigurationService configService, IGoogleDriveService driveService, IGameStore drawStore, IPlayerDatabaseController playerController)
+        public GameController(IConfigurationService configService, IGoogleDriveService driveService, IGameRetrieverService drawStore, IPlayerDatabaseController playerController)
         {
             _configService = configService;
             _driveService = driveService;

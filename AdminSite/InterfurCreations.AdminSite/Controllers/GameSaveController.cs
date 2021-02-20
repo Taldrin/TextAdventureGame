@@ -1,10 +1,12 @@
 ﻿using InterfurCreations.AdminSite.Models;
 using InterfurCreations.AdventureGames.DatabaseServices.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
 namespace InterfurCreations.AdminSite.Controllers
 {
+    [Authorize]
     public class GameSaveController : Controller
     {
         private readonly IPlayerDatabaseController _playerController;

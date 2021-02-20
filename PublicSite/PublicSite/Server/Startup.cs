@@ -10,6 +10,7 @@ using InterfurCreations.AdventureGames.Graph;
 using InterfurCreations.AdventureGames.Graph.Store;
 using InterfurCreations.AdventureGames.Logging;
 using InterfurCreations.AdventureGames.Services;
+using InterfurCreations.AdventureGames.Services.ImageStore;
 using InterfurCreations.AdventureGames.Services.Interfaces;
 using InterfurCreations.AdventureGames.SlackReporter;
 using Microsoft.AspNetCore.Authentication;
@@ -71,7 +72,7 @@ namespace PublicSite.Server
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IGameStore gameStore, IConfigurationService configService)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IGameRetrieverService gameStore, IConfigurationService configService)
         {
             //app.UseResponseCompression();
 
@@ -124,6 +125,12 @@ namespace PublicSite.Server
             builder.RegisterType<TokenGenerator>().As<ITokenGenerator>().InstancePerLifetimeScope();
             builder.RegisterType<SlackReport>().As<IReporter>().InstancePerLifetimeScope();
 
+            builder.RegisterType<ImagingService>().As<IImagingService>().SingleInstance();
+            builder.RegisterType<AwsImageStore>().As<IImageStore>().InstancePerLifetimeScope();
+            builder.RegisterType<LanguageToolSpellChecker>().As<ISpellChecker>().InstancePerLifetimeScope();
+            builder.RegisterType<ImageBuildDataTracker>().InstancePerLifetimeScope();
+            builder.RegisterType<ImageStoreCleanupTask>().InstancePerLifetimeScope();
+
             builder.RegisterType<GameExecutor>().As<IGameExecutor>().InstancePerLifetimeScope();
             builder.RegisterType<GameProcessor>().As<IGameProcessor>().InstancePerLifetimeScope();
             builder.RegisterType<TextParsing>().As<ITextParsing>().InstancePerLifetimeScope();
@@ -134,6 +141,7 @@ namespace PublicSite.Server
             builder.RegisterType<GameSaveService>().As<IGameSaveService>().InstancePerLifetimeScope();
 
             builder.RegisterType<DrawStore>().As<IGameStore>().SingleInstance();
+            builder.RegisterType<GameRetrieverService>().As<IGameRetrieverService>().SingleInstance();
 
             builder.RegisterAssemblyTypes(typeof(IMessageHandler).Assembly)
                 .AssignableTo<IMessageHandler>()

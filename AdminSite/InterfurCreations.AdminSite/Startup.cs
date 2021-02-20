@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using InterfurCreations.AdminSite.Core;
@@ -9,18 +6,19 @@ using InterfurCreations.AdminSite.Core.Interfaces;
 using InterfurCreations.AdventureGames.Configuration;
 using InterfurCreations.AdventureGames.DatabaseServices;
 using InterfurCreations.AdventureGames.DatabaseServices.Interfaces;
-using InterfurCreations.AdventureGames.Graph;
 using InterfurCreations.AdventureGames.Graph.Store;
 using InterfurCreations.AdventureGames.Logging;
 using InterfurCreations.AdventureGames.Services;
 using InterfurCreations.AdventureGames.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
 
 namespace InterfurCreations.AdminSite
 {
@@ -44,7 +42,16 @@ namespace InterfurCreations.AdminSite
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddControllersWithViews();
+            services.AddMicrosoftIdentityWebAppAuthentication(Configuration, "AzureAd");
+
+            services.AddControllersWithViews().AddMvcOptions(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+              .RequireAuthenticatedUser()
+              .Build();
+
+                options.Filters.Add(new AuthorizeFilter(policy));
+            }).AddMicrosoftIdentityUI();
 
             RegisterAutofac(services);
 
@@ -70,6 +77,7 @@ namespace InterfurCreations.AdminSite
             builder.RegisterType<ReportsService>().As<IReportsService>().InstancePerLifetimeScope();
 
             builder.RegisterType<DrawStore>().As<IGameStore>().SingleInstance();
+            builder.RegisterType<GameRetrieverService>().As<IGameRetrieverService>().SingleInstance();
 
             builder.Populate(services);
 
@@ -90,10 +98,14 @@ namespace InterfurCreations.AdminSite
                 app.UseHsts();
             }
 
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(routes =>
             {

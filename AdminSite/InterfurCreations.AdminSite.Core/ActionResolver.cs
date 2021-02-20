@@ -12,8 +12,9 @@ namespace InterfurCreations.AdminSite.Core
 {
     public class ActionResolver : IActionResolver
     {
-        private readonly IGameStore _gameStore;
-        public ActionResolver(IGameStore gameStore)
+        private readonly IGameRetrieverService _gameStore;
+
+        public ActionResolver(IGameRetrieverService gameStore)
         {
             _gameStore = gameStore;
         }

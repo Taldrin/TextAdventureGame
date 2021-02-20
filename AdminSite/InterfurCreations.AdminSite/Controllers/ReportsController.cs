@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using BotAdminSite.Models;
 using InterfurCreations.AdventureGames.DatabaseServices.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InterfurCreations.AdminSite.Controllers
 {
+    [Authorize]
     public class ReportsController : Controller
     {
         private readonly IReportsService _reportsService;

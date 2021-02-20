@@ -5,6 +5,7 @@ using InterfurCreations.AdminSite.Models;
 using InterfurCreations.AdventureGames.Database;
 using InterfurCreations.AdventureGames.DatabaseServices.Interfaces;
 using InterfurCreations.AdventureGames.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ using System.Linq;
 
 namespace BotAdminSite.Controllers
 {
+    [Authorize]
     public class PlayerController : Controller
     {
         private readonly IPlayerDatabaseController _playerController;
