@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using InterfurCreations.AdminSite.Core;
 using InterfurCreations.AdminSite.Models;
+using InterfurCreations.AdventureGames.DatabaseServices;
 using InterfurCreations.AdventureGames.DatabaseServices.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ namespace InterfurCreations.AdminSite.Controllers
                 AccessCode = a.Token,
                 LastActivated = a.LastActivated,
                 PlayerName = a.Player?.Name,
-                PlayerPlatform = PlayerPlatformResolver.ResolvePlatformFromPlyer(a.Player).ToString(),
+                PlayerPlatform = PlayerPlatformResolver.ResolvePlatformFromPlayer(a.Player).ToString(),
                 HoursAllowed = a.HoursForRefresh,
                 Id = a.Id
             }).ToList();

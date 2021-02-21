@@ -31,6 +31,7 @@ namespace InterfurCreations.AdminSite.Core
 
             var option = actionGame.FindOptionById(action.ActionName);
 
+            if (option == null) return null;
             return new ActionDetailsDataObject
             {
                 StateOptionTaken = option.StateText,

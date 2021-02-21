@@ -3,6 +3,7 @@ using InterfurCreations.AdminSite.Core;
 using InterfurCreations.AdminSite.Core.Interfaces;
 using InterfurCreations.AdminSite.Models;
 using InterfurCreations.AdventureGames.Database;
+using InterfurCreations.AdventureGames.DatabaseServices;
 using InterfurCreations.AdventureGames.DatabaseServices.Interfaces;
 using InterfurCreations.AdventureGames.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -35,7 +36,7 @@ namespace BotAdminSite.Controllers
             if (pageNumber < 0)
                 model.PageNumber = 0;
 
-            (List<Player> players, int count) result = (null, 0);
+            (List<PlayerListModel> players, int count) result = (null, 0);
             if (Enum.TryParse<PlatformType>(playerPlatformFilter, out var platformType))
             {
                 result = _playerController.ListPlayers(platformType, playerNameFilter, pageNumber - 1, pageSize);
@@ -49,9 +50,9 @@ namespace BotAdminSite.Controllers
             {
                 var vmP = new ViewModelPlayer();
                 vmP.name = a.Name;
-                if (a.Actions != null) {
-                    vmP.actionCount = a.Actions.Count;
-                    var lastAction = a.Actions.OrderByDescending(b => b.Time).FirstOrDefault();
+                if (a.LastAction != null) {
+                    vmP.actionCount = a.ActionCount;
+                    var lastAction = a.LastAction;
                     if(lastAction != null)
                         vmP.lastAction = lastAction.Time;
                 } else
@@ -59,8 +60,8 @@ namespace BotAdminSite.Controllers
                     vmP.actionCount = 0;
                     vmP.lastAction = default(DateTime);
                 }
-                vmP.id = a.PlayerId;
-                vmP.platform = PlayerPlatformResolver.ResolvePlatformFromPlyer(a).ToString();
+                vmP.id = a.Id;
+                vmP.platform = PlayerPlatformResolver.ResolvePlatformFromPlayer(a).ToString();
                 model.Players = model.Players;
                 model.Players.Add(vmP);
             });
@@ -82,34 +83,37 @@ namespace BotAdminSite.Controllers
         {
             if (playerId == null) return RedirectToAction("List");
             var player = _playerController.GetPlayerById(playerId);
+            var actions = _playerController.GetPlayerActions(playerId);
+            var saves = _playerController.GetPlayerGameSaves(playerId);
             var model = new PlayerDetailsModel()
             {
                 actionCount = player.Actions.Count,
                 name = player.Name,
-                platform = PlayerPlatformResolver.ResolvePlatformFromPlyer(player).ToString(),
+                platform = PlayerPlatformResolver.ResolvePlatformFromPlayer(player).ToString(),
                 recentActions = new List<PlayerActionModel>(),
                 gameSaves = new List<GameSaveItemModel>(),
                 id = player.PlayerId
             };
 
-            var lastAction = player.Actions.OrderByDescending(b => b.Time).FirstOrDefault();
+            var lastAction = actions.OrderByDescending(b => b.Time).FirstOrDefault();
             if (lastAction != null)
             {
                 model.lastAction = lastAction.Time;
-                var recentActions = player.Actions.OrderByDescending(b => b.Time).Take(10);
+                var recentActions = actions.OrderByDescending(b => b.Time);
                 foreach(var action in recentActions)
                 {
                     var resolved = _actionResolver.ResolveAction(action, TimeSpan.FromMinutes(10));
-                    model.recentActions.Add(new PlayerActionModel
-                    {
-                        currentStateText = resolved.CurrentStateText,
-                        gameName = action.GameName,
-                        lastOptionText = resolved.StateOptionTaken
-                    });
+                    if(resolved != null)
+                        model.recentActions.Add(new PlayerActionModel
+                        {
+                            currentStateText = resolved.CurrentStateText,
+                            gameName = action.GameName,
+                            lastOptionText = resolved.StateOptionTaken
+                        });
                 }
             }
 
-            model.gameSaves = player.GameSaves.Select(a => new GameSaveItemModel
+            model.gameSaves = saves.Select(a => new GameSaveItemModel
             {
                 gameName = a.PlayerGameSave.GameName, dateCreated = a.CreatedDate, saveId = a.PlayerGameSaveId
             }).ToList();

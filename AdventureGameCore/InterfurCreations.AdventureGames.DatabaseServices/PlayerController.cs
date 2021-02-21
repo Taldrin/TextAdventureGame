@@ -31,7 +31,17 @@ namespace InterfurCreations.AdventureGames.DatabaseServices
             return _context.Players.Where(a => a.PlayerId == id).LoadPlayerData().Include(a => a.TelegramPlayer).Include(a => a.DiscordPlayer).Include(a => a.KikPlayer).Include(a => a.WebPlayer).SingleOrDefault();
         }
 
-        public (List<Player> Players, int PageCount) ListPlayers(PlatformType platform, string playerName, int pageNumber, int pageSize)
+        public List<PlayerAction> GetPlayerActions(string playerId, int maxActions = 50)
+        {
+            return _context.PlayerActions.Where(a => a.PlayerId == playerId).OrderByDescending(a => a.Time).Take(maxActions).ToList();
+        }
+
+        public List<GameSaves> GetPlayerGameSaves(string playerId, int maxSaves = 50)
+        {
+            return _context.GameSaves.Include(a => a.PlayerGameSave).ThenInclude(a => a.GameSaveData).Where(a => a.PlayerId == playerId).OrderByDescending(a => a.CreatedDate).Take(maxSaves).ToList();
+        }
+
+        public (List<PlayerListModel> Players, int PageCount) ListPlayers(PlatformType platform, string playerName, int pageNumber, int pageSize)
         {
             IQueryable<Player> query = null;
             if (platform == PlatformType.Telegram)
@@ -48,9 +58,19 @@ namespace InterfurCreations.AdventureGames.DatabaseServices
             if (!string.IsNullOrEmpty(playerName))
                 query = query.Where(a => a.Name.Contains(playerName));
 
-            query = query.Include(a => a.Actions);
             var results = query.OrderByDescending(a => a.Actions.Max(b => (DateTime?)b.Time)).Skip(pageNumber * pageSize).Include(a => a.DiscordPlayer).
-                Include(a => a.KikPlayer).Include(a => a.TelegramPlayer).Include(a => a.WebPlayer).Take(pageSize).ToList();
+                Include(a => a.KikPlayer).Include(a => a.TelegramPlayer).Include(a => a.WebPlayer).Select(a => new PlayerListModel
+                {  
+                    DiscordPlayer = a.DiscordPlayer,
+                    LastAction = a.Actions.OrderByDescending(a => a.Time).FirstOrDefault(),
+                    ActionCount = a.Actions.Count,
+                    Name = a.Name,
+                    KikPlayer = a.KikPlayer,
+                    WebPlayer = a.WebPlayer,
+                    TelegramPlayer = a.TelegramPlayer,
+                    Id = a.PlayerId
+                }).Take(pageSize).ToList();
+
             var totalCount = query.Count();
             return (results, totalCount);
         }
