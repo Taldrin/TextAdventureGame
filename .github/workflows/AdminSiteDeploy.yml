@@ -42,7 +42,7 @@ jobs:
       uses: fifsky/ssh-action@v0.0.4
       with:
         command: |
-                 cp -R /home/sftpuser/adminsite/* /var/www/admin_site/
+                 sudo cp -R /home/sftpuser/adminsite/* /var/www/admin_site/
                  sudo systemctl restart kestrel-admin-site.service
                  sudo systemctl restart nginx
         host: 18.133.6.112
