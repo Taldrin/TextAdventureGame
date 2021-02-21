@@ -1,7 +1,6 @@
 ﻿using Hangfire;
 using InterfurCreations.AdventureGames.DatabaseServices.Interfaces;
 using InterfurCreations.AdventureGames.Logging;
-using InterfurCreations.AdventureGames.Services;
 
 namespace InterfurCreations.AdventureGames.SlackReporter
 {

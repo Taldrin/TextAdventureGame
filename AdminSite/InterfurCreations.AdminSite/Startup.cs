@@ -1,6 +1,8 @@
 ﻿using System;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Hangfire;
+using Hangfire.SqlServer;
 using InterfurCreations.AdminSite.Core;
 using InterfurCreations.AdminSite.Core.Interfaces;
 using InterfurCreations.AdventureGames.Configuration;
@@ -9,6 +11,7 @@ using InterfurCreations.AdventureGames.DatabaseServices.Interfaces;
 using InterfurCreations.AdventureGames.Graph.Store;
 using InterfurCreations.AdventureGames.Logging;
 using InterfurCreations.AdventureGames.Services;
+using InterfurCreations.AdventureGames.Services.ImageStore;
 using InterfurCreations.AdventureGames.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -54,6 +57,21 @@ namespace InterfurCreations.AdminSite
                 options.Filters.Add(new AuthorizeFilter(policy));
             }).AddMicrosoftIdentityUI();
 
+
+
+            var config = new AppSettingsConfigurationService(Configuration);
+            var connectionString = config.GetConfig("DatabaseConnectionString");
+            services.AddHangfire(config => config.UseSqlServerStorage(connectionString, new SqlServerStorageOptions
+            {
+                CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                QueuePollInterval = TimeSpan.Zero,
+                UseRecommendedIsolationLevel = true,
+                DisableGlobalLocks = true
+            }));
+
+            services.AddHangfireServer();
+
             RegisterAutofac(services);
 
             return new AutofacServiceProvider(AutofacContainer);
@@ -77,6 +95,7 @@ namespace InterfurCreations.AdminSite
             builder.RegisterType<ActionResolver>().As<IActionResolver>().InstancePerLifetimeScope();
             builder.RegisterType<ReportsService>().As<IReportsService>().InstancePerLifetimeScope();
 
+            builder.RegisterType<AwsImageStore>().As<IImageStore>().SingleInstance();
             builder.RegisterType<DrawStore>().As<IGameStore>().SingleInstance();
             builder.RegisterType<GameRetrieverService>().As<IGameRetrieverService>().SingleInstance();
 
@@ -113,14 +132,14 @@ namespace InterfurCreations.AdminSite
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                Authorization = new [] { new HangfireAuthorizationFilter() }
+            });
             app.UseEndpoints(routes =>
             {
-
                 routes.MapControllerRoute("defalt", "{controller=Home}/{action=Index}/{id?}");
-
-                //routes.MapRoute(
-                //    name: "default",
-                //    template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapHangfireDashboard();
             });
         }
     }

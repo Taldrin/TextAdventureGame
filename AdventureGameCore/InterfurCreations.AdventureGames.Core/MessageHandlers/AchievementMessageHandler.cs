@@ -72,8 +72,6 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
                     OptionsToShow = optionsToSend
                 };
             }
-
-            int[] array = new int[3];
         }
 
         public bool ShouldHandleMessage(string message, string gameState, string playerFlag)

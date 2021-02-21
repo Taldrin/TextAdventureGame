@@ -66,7 +66,7 @@ namespace InterfurCreations.AdventureGames.Logging
                             tw.WriteLine(line);
                         }
                     }
-                } catch (Exception e) { /*Who cares*/ }
+                } catch (Exception) { /*Who cares*/ }
             }
         }
     }

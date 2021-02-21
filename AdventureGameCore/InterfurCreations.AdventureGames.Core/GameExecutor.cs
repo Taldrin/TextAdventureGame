@@ -6,7 +6,6 @@ using InterfurCreations.AdventureGames.Database;
 using InterfurCreations.AdventureGames.DatabaseServices.Interfaces;
 using InterfurCreations.AdventureGames.Exceptions;
 using InterfurCreations.AdventureGames.Logging;
-using InterfurCreations.AdventureGames.Services;
 using InterfurCreations.AdventureGames.Services.Interfaces;
 using System;
 using System.Collections.Generic;

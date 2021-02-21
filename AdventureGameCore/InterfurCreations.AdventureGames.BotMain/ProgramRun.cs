@@ -1,7 +1,4 @@
-﻿using Hangfire;
-using Hangfire.Logging;
-using Hangfire.Logging.LogProviders;
-using System;
+﻿using System;
 using System.Threading;
 using System.Reflection;
 using InterfurCreations.AdventureGames.Configuration;
@@ -68,9 +65,6 @@ namespace InterfurCreations.AdventureGames.BotMain
             var connectionString = configSetupService.GetConfig("DatabaseConnectionString");
 
             bool shouldRunBackgroundJobs = configSetupService.GetConfig("RunBackgroundJobs", true).ToLower() == "true";
-            GlobalConfiguration.Configuration.UseSqlServerStorage(connectionString);
-            LogProvider.SetCurrentLogProvider(new ColouredConsoleLogProvider());
-            GlobalConfiguration.Configuration.UseAutofacActivator(Container);
 
             ContainerStore.Container = Container;
 
@@ -78,33 +72,23 @@ namespace InterfurCreations.AdventureGames.BotMain
 
             using (var scope = Container.BeginLifetimeScope())
             {
-                using (var server = new BackgroundJobServer())
-                {
-                    var configService = scope.Resolve<IConfigurationService>();
+
+                var configService = scope.Resolve<IConfigurationService>();
 
 #if !TelegramDev
                     Log.EnableReporting(scope.Resolve<IReporter>());
 #endif
+                // List games straight away, so there is no long delay when the first person sends a message
+                scope.Resolve<IGameRetrieverService>().ListGames();
 
-                    if (shouldRunBackgroundJobs)
-                    {
-                        HangfireReporter report = new HangfireReporter();
-                        report.SetupJobs(scope.Resolve<IDatabaseContextProvider>(), scope.Resolve<IReporter>());
-                        SetupBackgroundJobs();
-                    }
+                var inputController = scope.Resolve<IInputController>();
+                inputController.Setup();
 
-                    // List games straight away, so there is no long delay when the first person sends a message
-                    scope.Resolve<IGameRetrieverService>().ListGames();
-
-                    var inputController = scope.Resolve<IInputController>();
-                    inputController.Setup();
-
-                    scope.Resolve<IHeartbeatMonitor>().BeginMonitor(configService.GetConfigOrDefault("HeartbeatUrl", null, true));
+                scope.Resolve<IHeartbeatMonitor>().BeginMonitor(configService.GetConfigOrDefault("HeartbeatUrl", null, true));
 
 
-                    if (IsInConsoleMode)
-                        _quitEvent.WaitOne();
-                }
+                if (IsInConsoleMode)
+                    _quitEvent.WaitOne();
             }
         }
 
@@ -183,11 +167,6 @@ namespace InterfurCreations.AdventureGames.BotMain
             var repoAssembly = Assembly.GetAssembly(typeof(KikService));
             builder.RegisterAssemblyTypes(webAssembly, repoAssembly)
                         .AsImplementedInterfaces();
-        }
-
-        private static void SetupBackgroundJobs()
-        {
-            RecurringJob.AddOrUpdate<ImageStoreCleanupTask>("ImageBuilderCleanup", a => a.ClearImages(), Cron.Minutely);
         }
     }
 }

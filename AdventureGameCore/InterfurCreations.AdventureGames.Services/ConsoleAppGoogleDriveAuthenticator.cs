@@ -24,7 +24,6 @@ namespace InterfurCreations.AdventureGames.Services
             using (var stream =
                 new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
-                string credPath = "token.json";
                 credential = GoogleCredential.FromFile(filePath).CreateScoped(Scopes);
             }
 

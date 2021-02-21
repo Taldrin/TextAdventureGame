@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HangFire.SqlServer" Version="1.7.6" />
+    <PackageReference Include="Hangfire" Version="1.7.19" />
     <PackageReference Include="SlackAPI" Version="1.1.2" />
     <PackageReference Include="Slacker" Version="1.0.0" />
   </ItemGroup>

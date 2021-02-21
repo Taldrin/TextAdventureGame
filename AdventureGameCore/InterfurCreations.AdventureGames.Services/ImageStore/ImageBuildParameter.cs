@@ -26,6 +26,10 @@ namespace InterfurCreations.AdventureGames.Services.ImageStore
             }
             return base.Equals(obj);
         }
-    }
 
+        public override int GetHashCode()
+        {
+            return Image.GetHashCode() + Opacity.GetHashCode() + Location.GetHashCode();
+        }
+    }
 }

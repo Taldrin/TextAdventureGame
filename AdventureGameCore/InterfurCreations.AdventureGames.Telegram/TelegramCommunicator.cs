@@ -11,7 +11,6 @@ namespace InterfurCreations.AdventureGames.Telegram
     public class TelegramCommunicator : ICommunicator
     {
         public static TelegramService _service;
-        TelegramBotOverseer _overseer;
 
         private readonly IReporter _reporter;
 

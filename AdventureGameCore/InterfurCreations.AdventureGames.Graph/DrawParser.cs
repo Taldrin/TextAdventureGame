@@ -29,7 +29,7 @@ namespace InterfurCreations.AdventureGames.Graph
                         rootElement = XElement.Load(sr);
                     }
                 }
-            } catch (Exception e) { Log.LogMessage("Error converting XML bytes to XElement!"); return default; }
+            } catch (Exception) { Log.LogMessage("Error converting XML bytes to XElement!"); return default; }
 
             var elements = FindRootElement(rootElement).Elements();
 

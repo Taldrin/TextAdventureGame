@@ -51,7 +51,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
                 try
                 {
                     achievementList = AchievementService.HasPlayerDoneAchievements(activeGame, player);
-                } catch (Exception e)
+                } catch (Exception)
                 {
                     _reporter.ReportError($"Error when finding achievements for player: {player?.Name}. Game was: {activeGame?.GameName}, player achievs: {player?.PermanentData?.Count}");
                 }
