@@ -40,6 +40,7 @@
   <ItemGroup>
     <ProjectReference Include="..\InterfurCreations.AdventureGames.Configuration\InterfurCreations.AdventureGames.Configuration.csproj" />
     <ProjectReference Include="..\InterfurCreations.AdventureGames.Discord\InterfurCreations.AdventureGames.Discord.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.Graph.Store\InterfurCreations.AdventureGames.Graph.Store.csproj" />
     <ProjectReference Include="..\InterfurCreations.AdventureGames.HeartbeatMonitor\InterfurCreations.AdventureGames.HeartbeatMonitor.csproj" />
     <ProjectReference Include="..\InterfurCreations.AdventureGames.Kik\InterfurCreations.AdventureGames.Kik.csproj" />
     <ProjectReference Include="..\InterfurCreations.AdventureGames.Services\InterfurCreations.AdventureGames.Services.csproj" />

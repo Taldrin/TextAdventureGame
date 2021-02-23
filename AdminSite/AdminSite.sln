@@ -27,9 +27,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfurCreations.Adventure
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfurCreations.AdventureGames.LanguageTool", "..\AdventureGameCore\InterfurCreations.AdventureGames.LanguageTool\InterfurCreations.AdventureGames.LanguageTool.csproj", "{F30C4A19-D487-46D4-B4C8-141AAA8608ED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfurCreations.AdventureGames.Graph.Store", "..\AdventureGameCore\InterfurCreations.AdventureGames.Graph.Store\InterfurCreations.AdventureGames.Graph.Store.csproj", "{2AA87431-095C-4834-B959-E51EB61333BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfurCreations.AdminSite.Statistics", "InterfurCreations.AdminSite.Statistics\InterfurCreations.AdminSite.Statistics.csproj", "{512BFCF9-863F-4DDE-835B-552F0049592D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterfurCreations.AdminSite.Statistics", "InterfurCreations.AdminSite.Statistics\InterfurCreations.AdminSite.Statistics.csproj", "{512BFCF9-863F-4DDE-835B-552F0049592D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfurCreations.AdventureGames.Graph.Store", "..\AdventureGameCore\InterfurCreations.AdventureGames.Graph.Store\InterfurCreations.AdventureGames.Graph.Store.csproj", "{BC3B5078-CE44-4499-AA74-F160AAD5E74F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -260,24 +260,6 @@ Global
 		{F30C4A19-D487-46D4-B4C8-141AAA8608ED}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F30C4A19-D487-46D4-B4C8-141AAA8608ED}.TelegramDev|Any CPU.ActiveCfg = Debug|Any CPU
 		{F30C4A19-D487-46D4-B4C8-141AAA8608ED}.TelegramDev|Any CPU.Build.0 = Debug|Any CPU
-		{2AA87431-095C-4834-B959-E51EB61333BA}.AdminSite|Any CPU.ActiveCfg = Debug|Any CPU
-		{2AA87431-095C-4834-B959-E51EB61333BA}.AdminSite|Any CPU.Build.0 = Debug|Any CPU
-		{2AA87431-095C-4834-B959-E51EB61333BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2AA87431-095C-4834-B959-E51EB61333BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2AA87431-095C-4834-B959-E51EB61333BA}.DebugLive|Any CPU.ActiveCfg = Debug|Any CPU
-		{2AA87431-095C-4834-B959-E51EB61333BA}.DebugLive|Any CPU.Build.0 = Debug|Any CPU
-		{2AA87431-095C-4834-B959-E51EB61333BA}.DebugTest|Any CPU.ActiveCfg = Debug|Any CPU
-		{2AA87431-095C-4834-B959-E51EB61333BA}.DebugTest|Any CPU.Build.0 = Debug|Any CPU
-		{2AA87431-095C-4834-B959-E51EB61333BA}.DiscordAlpha|Any CPU.ActiveCfg = Debug|Any CPU
-		{2AA87431-095C-4834-B959-E51EB61333BA}.DiscordAlpha|Any CPU.Build.0 = Debug|Any CPU
-		{2AA87431-095C-4834-B959-E51EB61333BA}.DiscordLive|Any CPU.ActiveCfg = Debug|Any CPU
-		{2AA87431-095C-4834-B959-E51EB61333BA}.DiscordLive|Any CPU.Build.0 = Debug|Any CPU
-		{2AA87431-095C-4834-B959-E51EB61333BA}.KikLive|Any CPU.ActiveCfg = Debug|Any CPU
-		{2AA87431-095C-4834-B959-E51EB61333BA}.KikLive|Any CPU.Build.0 = Debug|Any CPU
-		{2AA87431-095C-4834-B959-E51EB61333BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2AA87431-095C-4834-B959-E51EB61333BA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2AA87431-095C-4834-B959-E51EB61333BA}.TelegramDev|Any CPU.ActiveCfg = Debug|Any CPU
-		{2AA87431-095C-4834-B959-E51EB61333BA}.TelegramDev|Any CPU.Build.0 = Debug|Any CPU
 		{512BFCF9-863F-4DDE-835B-552F0049592D}.AdminSite|Any CPU.ActiveCfg = Debug|Any CPU
 		{512BFCF9-863F-4DDE-835B-552F0049592D}.AdminSite|Any CPU.Build.0 = Debug|Any CPU
 		{512BFCF9-863F-4DDE-835B-552F0049592D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -296,6 +278,24 @@ Global
 		{512BFCF9-863F-4DDE-835B-552F0049592D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{512BFCF9-863F-4DDE-835B-552F0049592D}.TelegramDev|Any CPU.ActiveCfg = Debug|Any CPU
 		{512BFCF9-863F-4DDE-835B-552F0049592D}.TelegramDev|Any CPU.Build.0 = Debug|Any CPU
+		{BC3B5078-CE44-4499-AA74-F160AAD5E74F}.AdminSite|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC3B5078-CE44-4499-AA74-F160AAD5E74F}.AdminSite|Any CPU.Build.0 = Debug|Any CPU
+		{BC3B5078-CE44-4499-AA74-F160AAD5E74F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC3B5078-CE44-4499-AA74-F160AAD5E74F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC3B5078-CE44-4499-AA74-F160AAD5E74F}.DebugLive|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC3B5078-CE44-4499-AA74-F160AAD5E74F}.DebugLive|Any CPU.Build.0 = Debug|Any CPU
+		{BC3B5078-CE44-4499-AA74-F160AAD5E74F}.DebugTest|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC3B5078-CE44-4499-AA74-F160AAD5E74F}.DebugTest|Any CPU.Build.0 = Debug|Any CPU
+		{BC3B5078-CE44-4499-AA74-F160AAD5E74F}.DiscordAlpha|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC3B5078-CE44-4499-AA74-F160AAD5E74F}.DiscordAlpha|Any CPU.Build.0 = Debug|Any CPU
+		{BC3B5078-CE44-4499-AA74-F160AAD5E74F}.DiscordLive|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC3B5078-CE44-4499-AA74-F160AAD5E74F}.DiscordLive|Any CPU.Build.0 = Debug|Any CPU
+		{BC3B5078-CE44-4499-AA74-F160AAD5E74F}.KikLive|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC3B5078-CE44-4499-AA74-F160AAD5E74F}.KikLive|Any CPU.Build.0 = Debug|Any CPU
+		{BC3B5078-CE44-4499-AA74-F160AAD5E74F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC3B5078-CE44-4499-AA74-F160AAD5E74F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC3B5078-CE44-4499-AA74-F160AAD5E74F}.TelegramDev|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC3B5078-CE44-4499-AA74-F160AAD5E74F}.TelegramDev|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

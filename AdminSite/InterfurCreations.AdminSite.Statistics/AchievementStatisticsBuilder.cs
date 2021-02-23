@@ -63,6 +63,8 @@ namespace InterfurCreations.AdminSite.Statistics
 
             position.StatisticsValue = (int.Parse(position.StatisticsValue) + gameAchievements.Count).ToString();
 
+            Console.WriteLine("Updated: " + gameAchievements.Count);
+
             _dbContext.GetContext().SaveChanges();
         }
     }

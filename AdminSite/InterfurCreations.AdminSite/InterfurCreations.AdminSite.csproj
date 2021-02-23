@@ -25,17 +25,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Configuration\InterfurCreations.AdventureGames.Configuration.csproj" />
     <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.DatabaseServices\InterfurCreations.AdventureGames.DatabaseServices.csproj" />
-    <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Graph\InterfurCreations.AdventureGames.Graph.csproj" />
+    <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Graph.Store\InterfurCreations.AdventureGames.Graph.Store.csproj" />
     <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Services\InterfurCreations.AdventureGames.Services.csproj" />
     <ProjectReference Include="..\InterfurCreations.AdminSite.Core\InterfurCreations.AdminSite.Core.csproj" />
     <ProjectReference Include="..\InterfurCreations.AdminSite.Statistics\InterfurCreations.AdminSite.Statistics.csproj" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Reference Include="InterfurCreations.AdventureGames.Graph.Store">
-      <HintPath>..\..\AdventureGameCore\InterfurCreations.AdventureGames.Graph.Store\bin\Debug\netcoreapp3.1\InterfurCreations.AdventureGames.Graph.Store.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
