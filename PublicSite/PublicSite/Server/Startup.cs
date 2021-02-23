@@ -139,6 +139,8 @@ namespace PublicSite.Server
             builder.RegisterType<AccessService>().As<IAccessService>().InstancePerLifetimeScope();
             builder.RegisterType<TokenGenerator>().As<ITokenGenerator>().InstancePerLifetimeScope();
             builder.RegisterType<GameSaveService>().As<IGameSaveService>().InstancePerLifetimeScope();
+            builder.RegisterType<ImagingService>().As<IImagingService>().InstancePerLifetimeScope();
+            builder.RegisterType<ImageBuildDataTracker>().InstancePerLifetimeScope();
 
             builder.RegisterType<DrawStore>().As<IGameStore>().SingleInstance();
             builder.RegisterType<GameRetrieverService>().As<IGameRetrieverService>().SingleInstance();
