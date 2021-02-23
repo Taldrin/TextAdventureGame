@@ -79,14 +79,17 @@ namespace InterfurCreations.AdventureGames.GameLanguage
 
         public void SavePermanentData(Player player, string dataName, string dataValue, PlayerSaveDataType dataType)
         {
-            player.PermanentData.Add(new PlayerSavedData
+            if (!player.PermanentData.Any(a => a.DataName == dataName && a.DataValue == dataValue))
             {
-                Player = player,
-                PlayerId = player.PlayerId,
-                DataName = dataName,
-                DataValue = dataValue,
-                DataType = dataType.ToString()
-            });
+                player.PermanentData.Add(new PlayerSavedData
+                {
+                    Player = player,
+                    PlayerId = player.PlayerId,
+                    DataName = dataName,
+                    DataValue = dataValue,
+                    DataType = dataType.ToString()
+                });
+            }
         }
     }
 }
