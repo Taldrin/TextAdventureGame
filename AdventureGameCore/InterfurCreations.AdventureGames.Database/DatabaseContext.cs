@@ -1,4 +1,5 @@
 ﻿using InterfurCreations.AdventureGames.Configuration;
+using InterfurCreations.AdventureGames.Database.Statistics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -8,6 +9,7 @@ namespace InterfurCreations.AdventureGames.Database
     {
         private readonly IConfigurationService _configService;
 
+        #region Core Data
         public DbSet<PlayerAction> PlayerActions { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<TelegramPlayer> TelegramPlayers { get; set; }
@@ -19,6 +21,12 @@ namespace InterfurCreations.AdventureGames.Database
         public DbSet<GameSaves> GameSaves { get; set; }
         public DbSet<AccessToken> AccessToken { get; set; }
         public DbSet<PlayerSavedData> PlayerSavedData { get; set; }
+        #endregion
+
+        #region Statistics
+        public DbSet<StatisticsGameAchievement> StatisticsGameAchievements { get; set; }
+        public DbSet<StatisticsPosition> StatisticsPositions { get; set; }
+        #endregion
 
         public DatabaseContext(IConfigurationService configService)
         {

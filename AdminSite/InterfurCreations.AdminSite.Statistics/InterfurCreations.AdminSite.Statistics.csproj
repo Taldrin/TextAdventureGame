@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.DatabaseServices\InterfurCreations.AdventureGames.DatabaseServices.csproj" />
+    <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Database\InterfurCreations.AdventureGames.Database.csproj" />
+    <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Graph.Store\InterfurCreations.AdventureGames.Graph.Store.csproj" />
+  </ItemGroup>
+
+</Project>

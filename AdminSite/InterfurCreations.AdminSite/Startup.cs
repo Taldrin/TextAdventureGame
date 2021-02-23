@@ -5,6 +5,7 @@ using Hangfire;
 using Hangfire.SqlServer;
 using InterfurCreations.AdminSite.Core;
 using InterfurCreations.AdminSite.Core.Interfaces;
+using InterfurCreations.AdminSite.Statistics.Tasks;
 using InterfurCreations.AdventureGames.Configuration;
 using InterfurCreations.AdventureGames.DatabaseServices;
 using InterfurCreations.AdventureGames.DatabaseServices.Interfaces;
@@ -94,10 +95,13 @@ namespace InterfurCreations.AdminSite
             builder.RegisterType<EmptyReporterService>().As<IReporter>().InstancePerLifetimeScope();
             builder.RegisterType<ActionResolver>().As<IActionResolver>().InstancePerLifetimeScope();
             builder.RegisterType<ReportsService>().As<IReportsService>().InstancePerLifetimeScope();
+            builder.RegisterType<StatisticsService>().As<IStatisticsService>().InstancePerLifetimeScope();
 
             builder.RegisterType<AwsImageStore>().As<IImageStore>().SingleInstance();
             builder.RegisterType<DrawStore>().As<IGameStore>().SingleInstance();
             builder.RegisterType<GameRetrieverService>().As<IGameRetrieverService>().SingleInstance();
+
+            builder.RegisterType<AchievementStatisticsBuildTask>().InstancePerLifetimeScope();
 
             builder.Populate(services);
 
@@ -141,6 +145,13 @@ namespace InterfurCreations.AdminSite
                 routes.MapControllerRoute("defalt", "{controller=Home}/{action=Index}/{id?}");
                 routes.MapHangfireDashboard();
             });
+
+            SetupHangfireJobs();
+        }
+
+        public void SetupHangfireJobs()
+        {
+            RecurringJob.AddOrUpdate<AchievementStatisticsBuildTask>(a => a.Run(), Cron.MinuteInterval(10));
         }
     }
 }

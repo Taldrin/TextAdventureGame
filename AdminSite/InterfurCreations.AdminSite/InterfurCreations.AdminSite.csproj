@@ -28,6 +28,7 @@
     <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Graph\InterfurCreations.AdventureGames.Graph.csproj" />
     <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Services\InterfurCreations.AdventureGames.Services.csproj" />
     <ProjectReference Include="..\InterfurCreations.AdminSite.Core\InterfurCreations.AdminSite.Core.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdminSite.Statistics\InterfurCreations.AdminSite.Statistics.csproj" />
   </ItemGroup>
 
 

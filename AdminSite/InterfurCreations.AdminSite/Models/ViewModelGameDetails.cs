@@ -14,7 +14,7 @@ namespace InterfurCreations.AdminSite.Models
         public int WordCount { get; set; }
         public int OptionCount { get; set; }
         public int StateCount { get; set; }
-        public List<DrawAchievement> Achievements { get; set; }
+        public List<AchievementItemViewModel> Achievements { get; set; }
         public string Description { get; set; }
         public string Category { get; set; }
     }

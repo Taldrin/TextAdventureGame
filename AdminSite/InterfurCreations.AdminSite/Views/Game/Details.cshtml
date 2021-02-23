@@ -42,7 +42,6 @@
                                         <div class="input-group-append">
                                             <input class="btn btn-primary" type="submit" asp-action="Test" asp-route-gameId="@Model.Id" value="Run Test"/>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -63,6 +62,8 @@
         <tr>
             <th>Name</th>
             <th>Description</th>
+            <th>Players Achieved</th>
+            <th>Percent Achieved</th>
         </tr>
     </thead>
     <tbody>
@@ -71,6 +72,8 @@
             <tr>
                 <td>@achiev.Name</td>
                 <td>@achiev.Description</td>
+                <td>@achiev.NumberOfPlayersAchieved</td>
+                <td>@achiev.PercentOfPlayersAchieved %</td>
             </tr>
         }
     </tbody>
