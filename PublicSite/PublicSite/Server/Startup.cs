@@ -10,6 +10,7 @@ using InterfurCreations.AdventureGames.Graph;
 using InterfurCreations.AdventureGames.Graph.Store;
 using InterfurCreations.AdventureGames.Logging;
 using InterfurCreations.AdventureGames.Services;
+using InterfurCreations.AdventureGames.Services.ImageStore;
 using InterfurCreations.AdventureGames.Services.Interfaces;
 using InterfurCreations.AdventureGames.SlackReporter;
 using Microsoft.AspNetCore.Authentication;
@@ -132,8 +133,11 @@ namespace PublicSite.Server
             builder.RegisterType<AccessService>().As<IAccessService>().InstancePerLifetimeScope();
             builder.RegisterType<TokenGenerator>().As<ITokenGenerator>().InstancePerLifetimeScope();
             builder.RegisterType<GameSaveService>().As<IGameSaveService>().InstancePerLifetimeScope();
+            builder.RegisterType<ImagingService>().As<IImagingService>().InstancePerLifetimeScope();
+            builder.RegisterType<ImageBuildDataTracker>().InstancePerLifetimeScope();
 
             builder.RegisterType<DrawStore>().As<IGameStore>().SingleInstance();
+            builder.RegisterType<AwsImageStore>().As<IImageStore>().SingleInstance();
 
             builder.RegisterAssemblyTypes(typeof(IMessageHandler).Assembly)
                 .AssignableTo<IMessageHandler>()
