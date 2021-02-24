@@ -102,6 +102,17 @@ namespace PublicSite.Server
                 endpoints.MapFallbackToFile("index.html");
             });
             Log.LogMessage("Finished configuration");
+
+            string buildTypeName = null;
+
+#if ReleaseLive
+            buildTypeName = "PublicSiteLive";
+#elif DebugAlpha
+            buildTypeName = "PublicSiteAlpha";
+#endif
+
+            ConfigSetting.DynamicApplicationName = buildTypeName;
+
             Log.LogMessage("Retrieving games");
 
             gameStore.ListGames();

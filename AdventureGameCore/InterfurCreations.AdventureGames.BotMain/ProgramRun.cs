@@ -64,8 +64,6 @@ namespace InterfurCreations.AdventureGames.BotMain
 
             var connectionString = configSetupService.GetConfig("DatabaseConnectionString");
 
-            bool shouldRunBackgroundJobs = configSetupService.GetConfig("RunBackgroundJobs", true).ToLower() == "true";
-
             ContainerStore.Container = Container;
 
             ServiceStore.HttpLockObj = new object();

@@ -117,7 +117,7 @@ namespace InterfurCreations.AdventureGames.Core
             var result = _accessService.TryGrantAccess(player, message);
             if (!result.result)
             {
-                return ExecutionResultHelper.SingleMessage("You do not have access to these adventure games. Please enter an access token to be granted access. Reason for token failure: " + result.reason, new List<string>());
+                return ExecutionResultHelper.SingleMessage("You do not have access to these adventure games. Please enter an access token to be granted access. Reason for token failure: " + result.reason, new List<string>(), true);
             } else
             {
                 return ExecutionResultHelper.SingleMessage("Access granted! Welcome aboard, sailor!", new List<string> {"Let's go!" });

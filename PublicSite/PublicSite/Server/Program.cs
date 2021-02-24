@@ -12,7 +12,6 @@ namespace PublicSite.Server
     {
         public static void Main(string[] args)
         {
-            ConfigSetting.DynamicApplicationName = "PublicSite";
             CreateHostBuilder(args).Build().Run();
         }
 
