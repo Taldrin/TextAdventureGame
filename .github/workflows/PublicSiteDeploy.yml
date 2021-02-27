@@ -26,7 +26,7 @@ jobs:
       run: dotnet restore PublicSite/Server/PublicSite.Server.csproj
       working-directory: ./PublicSite
     - name: Build
-      run: dotnet publish PublicSite/Server/PublicSite.Server.csproj --configuration Release --no-restore
+      run: dotnet publish PublicSite/Server/PublicSite.Server.csproj --configuration ReleaseLive --no-restore
       working-directory: ./PublicSite
     
     - name: SFTP Deploy
@@ -36,7 +36,7 @@ jobs:
         server: 18.133.6.112
         port: 22
         ssh_private_key: ${{ secrets.SERVER_PRIVATE_KEY }}
-        local_path: PublicSite/PublicSite/Server/bin/Release/net5.0/publish/*
+        local_path: PublicSite/PublicSite/Server/bin/ReleaseLive/net5.0/publish/*
         remote_path: /home/sftpuser/publicsite
     - name: SSH Reload system service
       uses: fifsky/ssh-action@v0.0.4
