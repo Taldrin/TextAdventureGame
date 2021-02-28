@@ -172,7 +172,7 @@ namespace InterfurCreations.AdventureGames.DatabaseServices
 
             Player webPlayer = null;
             var player = _context.WebPlayers.Include(a => a.Player).ThenInclude(a => a.ActiveGameSave).ThenInclude(a => a.GameSaveData).Include(a => a.Player)
-                .ThenInclude(a => a.AccessTokens).Include(a => a.Player).ThenInclude(a => a.PermanentData).FirstOrDefault(a => a.AccessKey == webKey);
+                .ThenInclude(a => a.AccessTokens).Include(a => a.Player).ThenInclude(a => a.PermanentData).Include(a => a.Player).ThenInclude(a => a.ActiveGameSave).ThenInclude(a => a.FrameStack).FirstOrDefault(a => a.AccessKey == webKey);
 
             if (player != null)
             {
