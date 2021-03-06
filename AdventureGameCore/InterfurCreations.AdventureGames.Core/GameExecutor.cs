@@ -7,9 +7,11 @@ using InterfurCreations.AdventureGames.DatabaseServices.Interfaces;
 using InterfurCreations.AdventureGames.Exceptions;
 using InterfurCreations.AdventureGames.Logging;
 using InterfurCreations.AdventureGames.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace InterfurCreations.AdventureGames.Core
 {
@@ -63,16 +65,17 @@ namespace InterfurCreations.AdventureGames.Core
 
         public ExecutionResult ProcessNewMessage(string message, PlayerState state)
         {
+            ExecutionResult result = null;
             if (!_accessService.DoesPlayerHaveAccess(state.player))
             {
-                var result = HandleNoAccess(message, state.player);
+                result = HandleNoAccess(message, state.player);
                 _dataStore.SaveChanges();
                 return result;
             }
             try
             {
                 var handler = GetMessageHandlerForState(message, state);
-                var result = handler.HandleMessage(message, state.player);
+                result = handler.HandleMessage(message, state.player);
                 _dataStore.SaveChanges();
                 return result;
             }
@@ -83,7 +86,7 @@ namespace InterfurCreations.AdventureGames.Core
                     try
                     {
                         _reporter.ReportError(ErrorMessageHelper.MakeMessage(e, state, "Handling message: " + message));
-                        var result = TryResetState(state);
+                        result = TryResetState(state);
                         _dataStore.SaveChanges();
                         result.MessagesToShow.Add(new MessageResult { Message = "Your game was reset due to an error: " + e.Message });
                         return result;
@@ -101,15 +104,31 @@ namespace InterfurCreations.AdventureGames.Core
                                     " a stuck state on Telegram or Discord, try typing '-Menu-'. If you are in browser, try refreshing. \n\nError message: " + e.Message, null);
                 }
             }
+            catch (DbUpdateConcurrencyException e)
+            {
+                e.Entries.Single().Reload();
+                if (result != null)
+                {
+                    return result;
+                }
+                else
+                {
+                    _reporter.ReportError(ErrorMessageHelper.MakeMessage(e, state, "DB Update Exception handling message: " + message));
+                    return new ExecutionResult
+                    {
+                        MessagesToShow = new List<MessageResult> { new MessageResult { Message = "DB Update error. Your game was NOT reset. Error message: " + e.Message } },
+                        OptionsToShow = new List<string> { Messages.GameMenu }
+                    };
+                }
+            }
             catch (Exception e)
             {
                 _reporter.ReportError(ErrorMessageHelper.MakeMessage(e, state, "Handling message: " + message));
-                var result = TryResetState(state);
+                result = TryResetState(state);
                 _dataStore.SaveChanges();
                 result.MessagesToShow.Add(new MessageResult { Message = "Your game was reset due to an error: " + e.Message });
                 return result;
             }
-
         }
 
         private ExecutionResult HandleNoAccess(string message, Player player)

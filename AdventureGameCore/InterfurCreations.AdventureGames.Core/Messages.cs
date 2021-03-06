@@ -16,6 +16,7 @@ namespace InterfurCreations.AdventureGames.Core
         public static string Achievements => "Achievements";
         public static string Restart => "-Restart-";
         public static string MainMenu => "-Main Menu-";
+        public static string GameMenu => "-Menu-";
         public static string ShowData => "(Debug) Show Data";
         public static string RefreshGames => "(Debug) Refresh Games";
     }
