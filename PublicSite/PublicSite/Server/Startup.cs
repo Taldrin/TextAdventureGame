@@ -34,7 +34,6 @@ namespace PublicSite.Server
         public IConfiguration Configuration { get; }
         public IContainer AutofacContainer { get; set; }
 
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -110,6 +109,8 @@ namespace PublicSite.Server
 #elif DebugAlpha
             buildTypeName = "PublicSiteAlpha";
 #endif
+
+            configService.SetConfig("TypeName", buildTypeName);
 
             ConfigSetting.DynamicApplicationName = buildTypeName;
 
