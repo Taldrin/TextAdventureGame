@@ -6,7 +6,7 @@ using InterfurCreations.AdventureGames.Services;
 using System;
 using Newtonsoft.Json;
 
-namespace InterfurCreations.AdventureGames.WebhookService
+namespace InterfurCreations.AdventureGames.Kik.Webhook
 {
     public class WebhookMessageHandlerService : IWebhookMessageHandlerService
     {

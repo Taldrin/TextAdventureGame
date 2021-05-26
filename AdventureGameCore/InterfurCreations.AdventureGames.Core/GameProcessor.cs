@@ -288,7 +288,7 @@ namespace InterfurCreations.AdventureGames.Core
                 parsedOptions = parsedOptions.Where(a => a.messageResult.OptionType != OptionType.Fallback);
             }
 
-            var returnList = parsedOptions.Select(a => (a.messageResult.text, a.resultState.ResultState, a.resultState)).ToList();
+            var returnList = parsedOptions.Select(a => (a.messageResult.text, a.resultState.ResultState, a.resultState)).OrderBy(a => a.text).ToList();
 
             // Return before adding permanent buttons, otherwise the GameMessageHandler won't add the Restart and MainMenu buttons
             if (returnList.Count == 0) return new List<(string option, DrawState resultState, StateOption stateOption)>();

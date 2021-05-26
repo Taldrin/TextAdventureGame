@@ -21,6 +21,8 @@ using InterfurCreations.AdventureGames.Graph.Store;
 using Microsoft.Extensions.Configuration;
 using InterfurCreations.AdventureGames.Services.ImageStore;
 using System.Collections.Generic;
+using InterfurCreations.AdventureGames.Kik.Webhook;
+using InterfurCreations.AdventureGames.Webhook;
 
 namespace InterfurCreations.AdventureGames.BotMain
 {
@@ -55,6 +57,8 @@ namespace InterfurCreations.AdventureGames.BotMain
             buildTypeName = "Discord Alpha";
 #elif DiscordLive
             buildTypeName = "Discord Live";
+#elif KikLive
+            buildTypeName = "Kik Live";
 #endif
             ConfigSetting.DynamicApplicationName = buildTypeName;
             var configSetupService = new AppSettingsConfigurationService(config);
@@ -153,13 +157,12 @@ namespace InterfurCreations.AdventureGames.BotMain
 
         public static void RegisterKik(ContainerBuilder builder)
         {
-          //  builder.RegisterType<WebhookMessageHandlerService>().As<IWebhookMessageHandlerService>().InstancePerLifetimeScope();
-          //  builder.RegisterType<WebhookRunService>().As<IWebhookService>().InstancePerLifetimeScope();
+            builder.RegisterType<WebhookMessageHandlerService>().As<IWebhookMessageHandlerService>().InstancePerLifetimeScope();
+            builder.RegisterType<WebhookRunService>().As<IWebhookService>().InstancePerLifetimeScope();
             builder.RegisterType<KikService>().As<ICommunicator>().InstancePerLifetimeScope();
             builder.RegisterType<KikMessageExecutor>().As<KikMessageExecutor>().InstancePerLifetimeScope();
 
-            // Assembly scanning will not pickup the Webhook project unless it's been references
-           // var _ = typeof(Startup);
+            var _ = typeof(Startup);
 
             var webAssembly = Assembly.GetExecutingAssembly();
             var repoAssembly = Assembly.GetAssembly(typeof(KikService));
