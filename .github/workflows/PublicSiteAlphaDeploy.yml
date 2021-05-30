@@ -1,4 +1,4 @@
-name: PublicSiteDeploy
+name: PublicSiteAlphaDeploy
 
 on:
   push:

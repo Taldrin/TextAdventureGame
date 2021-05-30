@@ -3,6 +3,7 @@ using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
 using InterfurCreations.AdventureGames.Configuration;
+using InterfurCreations.AdventureGames.Logging;
 using InterfurCreations.AdventureGames.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -18,10 +19,12 @@ namespace InterfurCreations.AdventureGames.Services.ImageStore
     {
         private readonly IAmazonS3 _client;
         private readonly IConfigurationService _configService;
+        private readonly IReporter _reporter;
         private const string BucketName = "furventure-games";
 
-        public AwsImageStore(IConfigurationService configService)
+        public AwsImageStore(IConfigurationService configService, IReporter reporter)
         {
+            _reporter = reporter;
             _configService = configService;
             _client = new AmazonS3Client(new BasicAWSCredentials(_configService.GetConfig("AwsAccessKey"), _configService.GetConfig("AwsSecretKey")),
                 RegionEndpoint.EUWest2);
@@ -38,7 +41,10 @@ namespace InterfurCreations.AdventureGames.Services.ImageStore
             });
 
             if (response.HttpStatusCode != HttpStatusCode.OK)
+            {
+                _reporter.ReportError($"Failed to save image to AWS. Error code '{response.HttpStatusCode}', image key '{key}'");
                 return null;
+            }
 
             var url = $"https://{BucketName}.s3.eu-west-2.amazonaws.com/{key}";
             return new StoredImage { id = url };

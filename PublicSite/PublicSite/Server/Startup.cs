@@ -102,17 +102,7 @@ namespace PublicSite.Server
             });
             Log.LogMessage("Finished configuration");
 
-            string buildTypeName = null;
-
-#if ReleaseLive
-            buildTypeName = "PublicSiteLive";
-#elif DebugAlpha
-            buildTypeName = "PublicSiteAlpha";
-#endif
-
-            configService.SetConfig("TypeName", buildTypeName);
-
-            ConfigSetting.DynamicApplicationName = buildTypeName;
+            configService.SetConfig("TypeName", ConfigSetting.DynamicApplicationName);
 
             Log.LogMessage("Retrieving games");
 
@@ -161,7 +151,15 @@ namespace PublicSite.Server
                 .AssignableTo<IMessageHandler>()
                 .AsImplementedInterfaces();
 
-           // builder.Populate(services);
+            string buildTypeName = null;
+#if ReleaseLive
+            buildTypeName = "PublicSiteLive";
+#elif DebugAlpha
+            buildTypeName = "PublicSiteAlpha";
+#endif
+            ConfigSetting.DynamicApplicationName = buildTypeName;
+
+            // builder.Populate(services);
 
             //AutofacContainer = builder.Build();
         }

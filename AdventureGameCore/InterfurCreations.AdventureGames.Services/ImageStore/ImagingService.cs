@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InterfurCreations.AdventureGames.Logging;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -50,7 +51,7 @@ namespace InterfurCreations.AdventureGames.Services.ImageStore
             {
                 imageUrl = cachedImage.Url;
             }
-
+            Log.LogMessage($"Finished building image with URL: {imageUrl}");
             return imageUrl;
         }
 

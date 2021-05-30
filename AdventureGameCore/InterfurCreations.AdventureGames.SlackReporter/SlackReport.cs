@@ -32,7 +32,7 @@ namespace InterfurCreations.AdventureGames.SlackReporter
         public SlackReport(IConfigurationService configService)
         {
             _configService = configService;
-            _appName = _configService.GetConfig("TypeName");
+            _appName = ConfigSetting.DynamicApplicationName;
 
             _webHook = _configService.GetConfigOrDefault("SlackWebhook", null);
             _userMessageWebHook = _configService.GetConfigOrDefault("SlackUserMessageWebhook", null);
