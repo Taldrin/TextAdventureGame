@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="morelinq" Version="3.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Core\InterfurCreations.AdventureGames.Core.csproj" />
     <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Database\InterfurCreations.AdventureGames.Database.csproj" />
   </ItemGroup>

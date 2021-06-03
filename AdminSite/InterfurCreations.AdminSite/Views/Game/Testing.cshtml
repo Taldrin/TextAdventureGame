@@ -1,0 +1,193 @@
+﻿@model InterfurCreations.AdminSite.Models.ViewModelTestResult
+
+@{
+    ViewData["Title"] = "Testing";
+}
+
+<h2>Test report for game @Model.GameName</h2>
+
+<div>
+    <a type="button" class="btn btn-warning" asp-action="TestDataDelete" asp-route-gameName="@Model.GameName">Delete all test data</a>
+</div>
+
+@*ERRORS*@
+<div id="accordion">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#errors">
+                    Errors (@Model.GameTestReport.Errors.Count)
+                </button>
+            </h5>
+        </div>
+        <div id="errors" class="collapse show" data-parent="#accordion">
+            <div class="card-body">
+                @foreach (var item in Model.GameTestReport.Errors)
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>@item.Data</h5>
+                            <div>
+                                @item.SaveInfo
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    @*WARNINGS*@
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#warnings">
+                    Warnings (@Model.GameTestReport.Warnings.Count)
+                </button>
+            </h5>
+        </div>
+        <div id="warnings" class="collapse show" data-parent="#accordion">
+            <div class="card-body">
+                @foreach (var item in Model.GameTestReport.Warnings)
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>@item.Data</h5>
+                            <div>
+                                @item.SaveInfo
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    @*END STATES*@
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#endStates">
+                    End States (@Model.GameTestReport.EndStates.Count)
+                </button>
+            </h5>
+        </div>
+        <div id="endStates" class="collapse show" data-parent="#accordion">
+            <div class="card-body">
+                @foreach (var item in Model.GameTestReport.EndStates)
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>@item.Data</h5>
+                            <div>
+                                @item.SaveInfo
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    @*GRAMMAR*@
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#grammar">
+                    Grammar (@Model.GameTestReport.Grammar.Count)
+                </button>
+            </h5>
+        </div>
+        <div id="grammar" class="collapse show" data-parent="#accordion">
+            <div class="card-body">
+                @foreach (var item in Model.GameTestReport.Grammar)
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>@item.Data</h5>
+                            <div>
+                                @item.SaveInfo
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    @*MISC*@
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#misc">
+                    Variables (@Model.GameTestReport.Variables.Count)
+                </button>
+            </h5>
+        </div>
+        <div id="misc" class="collapse show" data-parent="#accordion">
+            <div class="card-body">
+                @foreach (var item in Model.GameTestReport.Variables)
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <span>
+                                @item
+                            </span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    @*NON-VISITED STATES*@
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#states">
+                    States Never Visited (@Model.GameTestReport.StatesNeverVisited.Count)
+                </button>
+            </h5>
+        </div>
+        <div id="states" class="collapse show" data-parent="#accordion">
+            <div class="card-body">
+                @foreach (var item in Model.GameTestReport.StatesNeverVisited)
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <span>
+                                @item
+                            </span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    @*NON-VISITED OPTIONS*@
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#options">
+                    Options Never Visited (@Model.GameTestReport.OptionsNeverTaken.Count)
+                </button>
+            </h5>
+        </div>
+        <div id="options" class="collapse show" data-parent="#accordion">
+            <div class="card-body">
+                @foreach (var item in Model.GameTestReport.OptionsNeverTaken)
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <span>
+                                @item
+                            </span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -5,7 +5,7 @@ using Hangfire;
 using Hangfire.SqlServer;
 using InterfurCreations.AdminSite.Core;
 using InterfurCreations.AdminSite.Core.Interfaces;
-using InterfurCreations.AdminSite.Statistics.Tasks;
+using InterfurCreations.AdminSite.BackgroundTasks.Tasks;
 using InterfurCreations.AdventureGames.Configuration;
 using InterfurCreations.AdventureGames.DatabaseServices;
 using InterfurCreations.AdventureGames.DatabaseServices.Interfaces;
@@ -24,6 +24,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using InterfurCreations.AdventureGames.GameTesting;
+using InterfurCreations.AdventureGames.Core.Interface;
+using InterfurCreations.AdventureGames.Core;
+using InterfurCreations.AdventureGames.GameLanguage;
 
 namespace InterfurCreations.AdminSite
 {
@@ -61,6 +65,7 @@ namespace InterfurCreations.AdminSite
 
 
             var config = new AppSettingsConfigurationService(Configuration);
+            //var connectionString = "Server=localhost;Database=AdventureBot;Trusted_Connection=True";
             var connectionString = config.GetConfig("DatabaseConnectionString");
             services.AddHangfire(config => config.UseSqlServerStorage(connectionString, new SqlServerStorageOptions
             {
@@ -97,11 +102,30 @@ namespace InterfurCreations.AdminSite
             builder.RegisterType<ReportsService>().As<IReportsService>().InstancePerLifetimeScope();
             builder.RegisterType<StatisticsService>().As<IStatisticsService>().InstancePerLifetimeScope();
 
+            #region GameTesting
+            builder.RegisterType<GameProcessor>().As<IGameProcessor>().InstancePerLifetimeScope();
+            builder.RegisterType<GameTestDataProvider>().As<IGameTestDataProvider>().InstancePerLifetimeScope();
+            builder.RegisterType<GameRetrieverService>().As<IGameRetrieverService>().SingleInstance();
+            builder.RegisterType<DrawGameTestExecutor>().As<IGameTestExecutor>().InstancePerLifetimeScope();
+            builder.RegisterType<LanguageToolSpellChecker>().As<ISpellChecker>().InstancePerLifetimeScope();
+            builder.RegisterType<TextParsing>().As<ITextParsing>().InstancePerLifetimeScope();
+            builder.RegisterType<GameDataService>().As<IGameDataService>().InstancePerLifetimeScope();
+            builder.RegisterType<GameProcessor>().As<IGameProcessor>().InstancePerLifetimeScope();
+            builder.RegisterType<DrawStore>().As<IGameStore>().SingleInstance();
+            builder.RegisterType<ConfigSettingsGoogleDriveAuthenticator>().As<IGoogleDriveAuthenticator>().SingleInstance();
+            builder.RegisterType<GoogleDriveService>().As<IGoogleDriveService>().SingleInstance();
+            builder.RegisterType<DrawGameTestExecutor>().As<DrawGameTestExecutor>().SingleInstance();
+            builder.RegisterType<LanguageToolSpellChecker>().As<ISpellChecker>().SingleInstance();
+            builder.RegisterType<EmptyImagineService>().As<IImagingService>().SingleInstance();
+            builder.RegisterType<ImageBuildDataTracker>().As<ImageBuildDataTracker>().SingleInstance();
+            builder.RegisterType<GameTestingReportCompiler>().InstancePerLifetimeScope();
+            #endregion
+
             builder.RegisterType<AwsImageStore>().As<IImageStore>().SingleInstance();
             builder.RegisterType<DrawStore>().As<IGameStore>().SingleInstance();
-            builder.RegisterType<GameRetrieverService>().As<IGameRetrieverService>().SingleInstance();
 
             builder.RegisterType<AchievementStatisticsBuildTask>().InstancePerLifetimeScope();
+            builder.RegisterType<GameTestingTask>().InstancePerLifetimeScope();
 
             builder.Populate(services);
 
@@ -151,7 +175,9 @@ namespace InterfurCreations.AdminSite
 
         public void SetupHangfireJobs()
         {
-            RecurringJob.AddOrUpdate<AchievementStatisticsBuildTask>(a => a.Run(), Cron.MinuteInterval(2));
+            RecurringJob.AddOrUpdate<AchievementStatisticsBuildTask>(a => a.Run(), Cron.MinuteInterval(10));
+            RecurringJob.AddOrUpdate<GameTestingTask>(a => a.Run(), Cron.MinuteInterval(10));
+            RecurringJob.AddOrUpdate<ImageStoreCleanupTask>(a => a.ClearImages(), Cron.HourInterval(2));
         }
     }
 }

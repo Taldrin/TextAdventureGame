@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InterfurCreations.AdminSite.Statistics.Tasks
+namespace InterfurCreations.AdminSite.BackgroundTasks.Tasks
 {
-    public class AchievementStatisticsBuildTask
+    public class AchievementStatisticsBuildTask : IBackgroundTask
     {
         private readonly IStatisticsService _statisticsService;
         private readonly IDatabaseContextProvider _dbContext;

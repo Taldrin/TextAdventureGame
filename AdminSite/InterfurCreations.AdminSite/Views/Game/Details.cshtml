@@ -30,23 +30,10 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Test</h4>
+                        <h4>Actions</h4>
                     </div>
                     <div class="card-body">
-                        <form class="form" asp-action="Test" role="form">
-                            <div class="form-row">
-                                <div class="col">
-                                    <label>Minutes to run for</label>
-                                    <div class="input-group">
-                                        <input type="number" class="form-control" asp-for="minutesToRunFor" />
-                                        <div class="input-group-append">
-                                            <input class="btn btn-primary" type="submit" asp-action="Test" asp-route-gameId="@Model.Id" value="Run Test"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-
+                        <a type="button" class="btn btn-primary" asp-action="Testing" asp-route-gameId="@Model.Id">Testing</a>
                     </div>
                 </div>
             </div>

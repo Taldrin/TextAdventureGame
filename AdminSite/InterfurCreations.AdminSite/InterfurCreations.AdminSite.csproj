@@ -19,6 +19,7 @@
     <PackageReference Include="Microsoft.Identity.Web" Version="1.6.0" />
     <PackageReference Include="Microsoft.Identity.Web.UI" Version="1.6.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
+    <PackageReference Include="morelinq" Version="3.3.2" />
   </ItemGroup>
 
 
@@ -28,7 +29,7 @@
     <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Graph.Store\InterfurCreations.AdventureGames.Graph.Store.csproj" />
     <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Services\InterfurCreations.AdventureGames.Services.csproj" />
     <ProjectReference Include="..\InterfurCreations.AdminSite.Core\InterfurCreations.AdminSite.Core.csproj" />
-    <ProjectReference Include="..\InterfurCreations.AdminSite.Statistics\InterfurCreations.AdminSite.Statistics.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdminSite.Statistics\InterfurCreations.AdminSite.BackgroundTasks.csproj" />
   </ItemGroup>
 
 </Project>

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using InterfurCreations.AdminSite.Core;
 
 namespace BotAdminSite.Controllers
 {
@@ -21,14 +22,16 @@ namespace BotAdminSite.Controllers
         private readonly IGameRetrieverService _gameStore;
         private readonly IPlayerDatabaseController _playerController;
         private readonly IStatisticsService _statisticsService;
+        private readonly GameTestingReportCompiler _gameTestReportCompiler;
 
-        public GameController(IConfigurationService configService, IGoogleDriveService driveService, IGameRetrieverService drawStore, IPlayerDatabaseController playerController, IStatisticsService statisticsService)
+        public GameController(GameTestingReportCompiler testReportCompiler, IConfigurationService configService, IGoogleDriveService driveService, IGameRetrieverService drawStore, IPlayerDatabaseController playerController, IStatisticsService statisticsService)
         {
             _configService = configService;
             _driveService = driveService;
             _gameStore = drawStore;
             _playerController = playerController;
             _statisticsService = statisticsService;
+            _gameTestReportCompiler = testReportCompiler;
         }
 
         public async Task<ActionResult> List(CancellationToken cancellationToken)
@@ -80,10 +83,22 @@ namespace BotAdminSite.Controllers
             return View(vm);
         }
 
-        public ActionResult Test(string gameId, int minutesToRunFor)
+        public ActionResult Testing(string gameId)
         {
             var vm = new ViewModelTestResult();
-            return View();
+            var games = _gameStore.ListGames();
+            var game = games.Find(a => a.StartState.Id == gameId);
+            var report = _gameTestReportCompiler.CompileReportForGame(game.GameName);
+
+            vm.GameName = game.GameName;
+            vm.GameTestReport = report;
+            return View(vm);
+        }
+
+        public ActionResult TestDataDelete(string gameName)
+        {
+            _gameTestReportCompiler.DeleteAllDataForGame(gameName);
+            return RedirectToAction("List");
         }
     }
 }

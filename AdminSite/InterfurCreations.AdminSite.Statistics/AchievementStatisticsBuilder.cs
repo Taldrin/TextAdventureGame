@@ -4,7 +4,7 @@ using InterfurCreations.AdventureGames.Graph.Store;
 using System;
 using System.Linq;
 
-namespace InterfurCreations.AdminSite.Statistics
+namespace InterfurCreations.AdminSite.BackgroundTasks
 {
     public class AchievementStatisticsBuilder
     {

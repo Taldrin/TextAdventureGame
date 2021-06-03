@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfurCreations.Adventure
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfurCreations.AdventureGames.LanguageTool", "..\AdventureGameCore\InterfurCreations.AdventureGames.LanguageTool\InterfurCreations.AdventureGames.LanguageTool.csproj", "{F30C4A19-D487-46D4-B4C8-141AAA8608ED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfurCreations.AdminSite.Statistics", "InterfurCreations.AdminSite.Statistics\InterfurCreations.AdminSite.Statistics.csproj", "{512BFCF9-863F-4DDE-835B-552F0049592D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfurCreations.AdminSite.BackgroundTasks", "InterfurCreations.AdminSite.Statistics\InterfurCreations.AdminSite.BackgroundTasks.csproj", "{512BFCF9-863F-4DDE-835B-552F0049592D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfurCreations.AdventureGames.Graph.Store", "..\AdventureGameCore\InterfurCreations.AdventureGames.Graph.Store\InterfurCreations.AdventureGames.Graph.Store.csproj", "{BC3B5078-CE44-4499-AA74-F160AAD5E74F}"
 EndProject

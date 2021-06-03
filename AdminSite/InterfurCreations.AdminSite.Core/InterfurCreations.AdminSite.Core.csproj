@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <Configurations>Debug;Release;TelegramDev;ReleaseLive;DebugAlpha</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,14 +14,7 @@
     <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.DatabaseServices\InterfurCreations.AdventureGames.DatabaseServices.csproj" />
     <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Database\InterfurCreations.AdventureGames.Database.csproj" />
     <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Graph.Store\InterfurCreations.AdventureGames.Graph.Store.csproj" />
-    <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Graph\InterfurCreations.AdventureGames.Graph.csproj" />
     <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Services\InterfurCreations.AdventureGames.Services.csproj" />
+    <ProjectReference Include="..\..\DrawGameTester\InterfurCreations.AdventureGames.GameTesting\InterfurCreations.AdventureGames.GameTesting.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="InterfurCreations.AdventureGames.Graph.Store">
-      <HintPath>..\..\AdventureGameCore\InterfurCreations.AdventureGames.Graph.Store\bin\Debug\netcoreapp3.1\InterfurCreations.AdventureGames.Graph.Store.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>
