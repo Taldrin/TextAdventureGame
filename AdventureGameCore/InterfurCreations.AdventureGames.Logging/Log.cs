@@ -38,7 +38,7 @@ namespace InterfurCreations.AdventureGames.Logging
         {
             if(type == LogType.Verbose && logLevel != 1) { return; }
             Write(message);
-            if(type == LogType.Error)
+            if(type == LogType.Error || type == LogType.Important)
             {
                 if(_reporter != null)
                     _reporter.ReportError(message + " Additional: " + additionalInfo);
