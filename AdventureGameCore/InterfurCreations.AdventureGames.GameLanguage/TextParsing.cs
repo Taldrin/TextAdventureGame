@@ -45,8 +45,8 @@ namespace InterfurCreations.AdventureGames.GameLanguage
             {
                 optionText = CleanText(optionText);
                 optionText = optionText.Trim(' ', '\n');
-                if (optionText.Contains("<") || optionText.Contains(">"))
-                    Log.LogMessage($"Potential HTML in option text: '{optionText}' at state with id '{gameSave.StateId}' in game '{gameSave.GameName}'", LogType.Important);
+                //if (optionText.Contains("<") || optionText.Contains(">"))
+                //    Log.LogMessage($"Potential HTML in option text: '{optionText}' at state with id '{gameSave.StateId}' in game '{gameSave.GameName}'", LogType.Important);
                 if (optionText.StartsWith("#if"))
                 {
                     var result = ParseLine(gameSave, ParseOptionCommand(gameSave, optionText));
@@ -104,7 +104,7 @@ namespace InterfurCreations.AdventureGames.GameLanguage
         public string CleanText(string text)
         {
             if (text.Contains(">") && text.Contains("<"))
-                text = Regex.Replace(text, "<.*?>", "");
+                text = Regex.Replace(text, "<.*?>", " ");
             text = text.Replace("<br>", " ");
             text = text.Replace("<p>", " ");
             text = text.Replace("<p align=\"left\">", "");
