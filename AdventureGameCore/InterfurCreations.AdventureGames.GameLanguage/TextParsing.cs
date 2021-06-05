@@ -125,6 +125,7 @@ namespace InterfurCreations.AdventureGames.GameLanguage
             text = text.Replace("\\n", Environment.NewLine);
             text = text.Replace("&gt;", ">");
             text = text.Replace("&lt;", "<");
+            text = text.Replace("<span", "");
             text = text.Replace("    ", " ");
             text = text.Replace("   ", " ");
             text = text.Replace("  ", " ");

@@ -60,7 +60,7 @@ namespace InterfurCreations.AdventureGames.GameTesting
             options.ForEach(a =>
             {
                 if (options.Count(b => b.option.ToLower() == a.option.ToLower()) > 1)
-                    data.WarningMessage($"Found a state with two or more options with the same text '{a}' at state with text '{state.StateText.Substring(0, 150)}'", gameState.Clone());
+                    data.WarningMessage($"Found a state with two or more options with the same text '{a}' at state with text '{new string(state.StateText.Take(150).ToArray())}'", gameState.Clone());
             });
 
             (StateOption option, string message, int timesChosen) minValue = (options[0].optionData, options[0].option, data.GetTimesChosen(options[0].optionData.Id));

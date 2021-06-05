@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using InterfurCreations.AdminSite.Core;
+using InterfurCreations.AdventureGames.Graph;
 
 namespace BotAdminSite.Controllers
 {
@@ -99,6 +100,31 @@ namespace BotAdminSite.Controllers
         {
             _gameTestReportCompiler.DeleteAllDataForGame(gameName);
             return RedirectToAction("List");
+        }
+
+        [HttpGet]
+        public IActionResult State(string gameName, string stateId)
+        {
+            var game = _gameStore.ListGames().Find(a => a.GameName == gameName);
+            var state = game.FindStateById(stateId);
+
+            var vm = new ViewModelStateDetails()
+            {
+                GameName = gameName,
+                StateId = stateId,
+                StateText = state.StateText,
+                StateAttachments = state.StateAttachements.Select(a => a.StateText).ToList(),
+                StateOptions = state.StateOptions.Select(a =>
+                    new ViewModelOptionDetails
+                    {
+                        OptionId = a.Id,
+                        OptionText = a.StateText,
+                        ResultStateId = a.ResultState.Id,
+                        ResultStateText = a.ResultState.StateText
+                    }).ToList()
+            };
+
+            return View(vm);
         }
     }
 }

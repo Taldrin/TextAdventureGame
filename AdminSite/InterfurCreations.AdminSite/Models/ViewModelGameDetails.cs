@@ -17,5 +17,8 @@ namespace InterfurCreations.AdminSite.Models
         public List<AchievementItemViewModel> Achievements { get; set; }
         public string Description { get; set; }
         public string Category { get; set; }
+
+        //State Lookup
+        public string StateId { get; set; }
     }
 }

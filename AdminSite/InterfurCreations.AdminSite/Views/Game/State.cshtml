@@ -1,0 +1,50 @@
+﻿@model InterfurCreations.AdminSite.Models.ViewModelStateDetails
+
+@{
+    ViewData["Title"] = "State";
+}
+<h2>State - @Model.StateId</h2>
+
+<div class="card">
+    <div class="card-header">
+        <h4>State Text</h4>
+    </div>
+    <div class="card-body">
+        @Model.StateText
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h4>State Attachements</h4>
+    </div>
+    @foreach (var attachment in Model.StateAttachments)
+    {
+        <div class="card-body">
+            @attachment
+        </div>
+    }
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h4>State Options</h4>
+    </div>
+    @foreach (var option in Model.StateOptions)
+    {
+        <div class="card-body">
+            <p style="font-weight:bold">
+                @option.OptionText
+            </p>
+        </div>
+        <div>
+
+            <p>
+                Going to state <a style="font-weight:bold" asp-action="State" asp-route-gameName="@Model.GameName" asp-route-stateId="@option.ResultStateId">@option.ResultStateId</a>
+            </p>
+            <p>
+                With Text <span class="text-sm">@option.ResultStateText</span>
+            </p>
+        </div>
+    }
+</div>
