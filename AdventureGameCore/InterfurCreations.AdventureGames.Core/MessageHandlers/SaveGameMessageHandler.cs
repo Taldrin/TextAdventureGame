@@ -34,7 +34,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
             if(player.PlayerFlag != PlayerFlag.SAVE_GAME.ToString())
             {
                 player.PlayerFlag = PlayerFlag.SAVE_GAME.ToString();
-                return ExecutionResultHelper.SingleMessage($"Enter a name for your save, or press Continue to save without a name.", GetOptions(player));
+                return ExecutionResultHelper.SingleMessage($"Enter a name for your save, or press Continue to save without a name.", GetOptions(player), true);
             }
             if (message == CONT)
             {
