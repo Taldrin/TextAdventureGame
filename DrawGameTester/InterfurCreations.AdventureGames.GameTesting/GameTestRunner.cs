@@ -78,29 +78,44 @@ namespace InterfurCreations.AdventureGames.GameTesting
             //}
 
             // Select an option, preferring those that have been visited fewer times
-            var chosen = WeightedRandom(options.Select(a => (a, data.GetTimesChosen(a.optionData.Id))).ToList());
+            var chosen =  WeightedRandom(options.Select(a => new WeightedRandomItem<(string option, StateOption optionData)> { Data = a, Weight = data.GetTimesChosen(a.optionData.Id) }).ToList());
             return chosen;
 
             // Full random
             //return options[rand.Next(options.Count)];
         }
 
-        private T WeightedRandom<T>(List<(T data, int weight)> items) 
+        private class WeightedRandomItem<T>
+        {
+            public int Weight { get; set; }
+            public T Data { get; set; }
+        }
+
+        private T WeightedRandom<T>(List<WeightedRandomItem<T>> items) 
         {
             if (items == null || items.Count == 0)
                 return default;
             if (items.Count == 1)
-                return items[0].data;
+                return items[0].Data;
 
-            int totalWeight = items.Sum(a => a.weight);
-            var choice = rand.Next(totalWeight);
+            int totalWeight = items.Sum(a => a.Weight);
+            for (int i = 0; i < items.Count; i++)
+            {
+                var a = items[i];
+                if (a.Weight == 0)
+                    a.Weight = totalWeight;
+                else
+                    a.Weight = totalWeight / a.Weight;
+            }
+            var calcWeight = items.Sum(a => a.Weight);
+            var choice = rand.Next(calcWeight);
 
             int sum = 0;
             for(int i = 0; i < items.Count; i++)
             {
-                sum = sum + Math.Abs(items[i].weight - totalWeight);
+                sum = sum + Math.Abs(items[i].Weight);
                 if (choice <= sum)
-                    return items[i].data;
+                    return items[i].Data;
             }
             throw new ArgumentException("Error with weighted random. Found no choice");
         }
