@@ -8,6 +8,7 @@
 
 <div>
     <a type="button" class="btn btn-warning" asp-action="TestDataDelete" asp-route-gameName="@Model.GameName">Delete all test data</a>
+    <span style="margin-left:20px">Total actions taken: @Model.GameTestReport.TotalActionsTaken</span>
 </div>
 
 @*ERRORS*@

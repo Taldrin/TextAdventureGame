@@ -65,6 +65,9 @@ namespace InterfurCreations.AdminSite.Core
                 return $"Option with text '{a.StateText}' pointing to state with text '{new string(a.ResultState.StateText.Take(150).ToArray())}' and ID '{a.ResultState.Id}'";
             }).ToList();
 
+            var totalChoicesTaken = allData.OptionsVisited.Sum(a => a.TimesOccured);
+            returnData.TotalActionsTaken = totalChoicesTaken;
+
             return returnData;
         }
 

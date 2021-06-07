@@ -63,21 +63,46 @@ namespace InterfurCreations.AdventureGames.GameTesting
                     data.WarningMessage($"Found a state with two or more options with the same text '{a}' at state with text '{new string(state.StateText.Take(150).ToArray())}'", gameState.Clone());
             });
 
-            (StateOption option, string message, int timesChosen) minValue = (options[0].optionData, options[0].option, data.GetTimesChosen(options[0].optionData.Id));
-            foreach (var opt in options)
+            // Select the option with the fewest times chosen
+            //(StateOption option, string message, int timesChosen) minValue = (options[0].optionData, options[0].option, data.GetTimesChosen(options[0].optionData.Id));
+            //foreach (var opt in options)
+            //{
+            //    var optionTimesChosen = data.GetTimesChosen(opt.optionData.Id);
+            //    if (optionTimesChosen < minValue.timesChosen)
+            //        minValue = (opt.optionData, opt.option, optionTimesChosen);
+            //    else if (optionTimesChosen == minValue.timesChosen)
+            //    {
+            //        if (rand.Next(1) == 0)
+            //            minValue = (opt.optionData, opt.option, optionTimesChosen);
+            //    }
+            //}
+
+            // Select an option, preferring those that have been visited fewer times
+            var chosen = WeightedRandom(options.Select(a => (a, data.GetTimesChosen(a.optionData.Id))).ToList());
+            return chosen;
+
+            // Full random
+            //return options[rand.Next(options.Count)];
+        }
+
+        private T WeightedRandom<T>(List<(T data, int weight)> items) 
+        {
+            if (items == null || items.Count == 0)
+                return default;
+            if (items.Count == 1)
+                return items[0].data;
+
+            int totalWeight = items.Sum(a => a.weight);
+            var choice = rand.Next(totalWeight);
+
+            int sum = 0;
+            for(int i = 0; i < items.Count; i++)
             {
-                var optionTimesChosen = data.GetTimesChosen(opt.optionData.Id);
-                if (optionTimesChosen < minValue.timesChosen)
-                    minValue = (opt.optionData, opt.option, optionTimesChosen);
-                else if (optionTimesChosen == minValue.timesChosen)
-                {
-                    if (rand.Next(1) == 0)
-                        minValue = (opt.optionData, opt.option, optionTimesChosen);
-                }
-
+                sum = sum + items[i].weight;
+                if (choice <= sum)
+                    return items[i].data;
             }
-
-            return options[rand.Next(options.Count)];
+            throw new ArgumentException("Error with weighted random. Found no choice");
         }
 
         public async Task RunTestAsync(DrawGame drawGame, DateTime runUntil, int actionsPerRunOption, GameTestDataStore dataStore, string startingStateId = null)

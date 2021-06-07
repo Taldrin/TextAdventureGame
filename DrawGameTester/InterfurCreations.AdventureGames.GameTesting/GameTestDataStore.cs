@@ -61,7 +61,7 @@ namespace InterfurCreations.AdventureGames.GameTesting
         public void StateVisited(string id)
         {
             if (StateVisits.TryGetValue(id, out int value))
-                StateVisits[id] = value++;
+                StateVisits[id] = value + 1;
             else
                 StateVisits.Add(id, 1);
         }
@@ -69,7 +69,7 @@ namespace InterfurCreations.AdventureGames.GameTesting
         public void OptionChosen(string id)
         {
             if (OptionVisits.TryGetValue(id, out int value))
-                OptionVisits[id] = value++;
+                OptionVisits[id] = value + 1;
             else
                 OptionVisits.Add(id, 1);
         }

@@ -15,6 +15,7 @@ namespace InterfurCreations.AdminSite.Core.DataObjects
         public List<string> StatesNeverVisited { get; set; }
         public List<string> OptionsNeverTaken { get; set; }
         public List<string> Variables { get; set; }
+        public int TotalActionsTaken { get; set; }
     }
 
     public class GameTestingReportItemWithSave
