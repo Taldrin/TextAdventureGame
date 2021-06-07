@@ -98,7 +98,7 @@ namespace InterfurCreations.AdventureGames.GameTesting
             int sum = 0;
             for(int i = 0; i < items.Count; i++)
             {
-                sum = sum + items[i].weight;
+                sum = sum + Math.Abs(items[i].weight - totalWeight);
                 if (choice <= sum)
                     return items[i].data;
             }
