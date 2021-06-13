@@ -1,21 +1,15 @@
 ﻿using InterfurCreations.AdventureGames.GameTesting;
 using InterfurCreations.AdventureGames.Graph.Store;
-using InterfurCreations.AdventureGames.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace InterfurCreations.AdminSite.BackgroundTasks.Tasks
 {
-    public class GameTestingTask : IBackgroundTask
+    public class CustomGameTestTask
     {
         private readonly IGameTestExecutor _testExecutor;
         private readonly IGameTestDataProvider _dataProvider;
         private readonly IGameRetrieverService _gameRetriever;
 
-        public GameTestingTask(IGameTestExecutor gameTestExecutor, IGameTestDataProvider dataProvider,
+        public CustomGameTestTask(IGameTestExecutor gameTestExecutor, IGameTestDataProvider dataProvider,
             IGameRetrieverService gameRetriever)
         {
             _testExecutor = gameTestExecutor;
@@ -23,9 +17,9 @@ namespace InterfurCreations.AdminSite.BackgroundTasks.Tasks
             _gameRetriever = gameRetriever;
         }
 
-        public void Run()
+        public void Run(string gameName, int minutes, int maxActions, string startState)
         {
-            new GameTester(_testExecutor, _dataProvider, _gameRetriever).BeginTesting("deer's journey v2", 3, 0);
+            new GameTester(_testExecutor, _dataProvider, _gameRetriever).BeginTesting(gameName, minutes, maxActions, startState);
         }
     }
 }

@@ -8,6 +8,7 @@
 
 <div>
     <a type="button" class="btn btn-warning" asp-action="TestDataDelete" asp-route-gameName="@Model.GameName">Delete all test data</a>
+    <button class="btn btn-success" data-toggle="modal" data-target="#customTestModal">Setup custom test</button>
     <span style="margin-left:20px">Total actions taken: @Model.GameTestReport.TotalActionsTaken</span>
 </div>
 
@@ -175,7 +176,7 @@
                 </button>
             </h5>
         </div>
-        <div id="options" class="collapse show" data-parent="#accordion">
+        <div id="options" class="collapse show" aria-collpase="true" data-parent="#accordion">
             <div class="card-body">
                 @foreach (var item in Model.GameTestReport.OptionsNeverTaken)
                 {
@@ -192,3 +193,53 @@
     </div>
 </div>
 
+
+<div class="modal fade" aria-hidden="true" id="customTestModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @using (Html.BeginForm("RunCustomTest", "Game", FormMethod.Post))
+            {
+                @Html.HiddenFor(a => a.GameName);
+                <div class="modal-header">
+                    <h5 class="modal-title">Custom Test</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="col">
+                            <label>Start State</label>
+                            <input type="text" class="form-control" asp-for="CustomTestStartState" />
+                        </div>
+                        <div class="col">
+                            <label>Actions per run</label>
+                            <input type="number" class="form-control" asp-for="CustomTestMaxActions" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+
+                        <div class="col">
+                            <label>Minutes to run for</label>
+                            <input type="number" class="form-control" asp-for="CustomTestMinutesToRunFor" />
+                        </div>
+                        <div class="col">
+                            <label>Times to run</label>
+                            <input type="number" class="form-control" asp-for="CustomTestTimesToRun" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <label>Custom Data in the form - TimesEnteredTemple:5,TalkedToCat:N/A,</label>
+                            <input type="text" rows="10" class="form-control" asp-for="CustomTestStartData" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input class="btn btn-primary" type="submit" value="Execute" />
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

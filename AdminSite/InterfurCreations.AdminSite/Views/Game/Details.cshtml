@@ -35,6 +35,7 @@
                     <div class="card-body">
                         <a type="button" class="btn btn-primary" asp-action="Testing" asp-route-gameId="@Model.Id">Testing</a>
                         <br />
+                        <br />
                         @using (Html.BeginForm("State", "Game", routeValues: new {stateId=Model.StateId, gameName=Model.GameName }, FormMethod.Get))
                         {
                             <div class="input-group mb-3">
@@ -42,7 +43,7 @@
                                     <button class="btn btn-outline-secondary" type="submit">Lookup</button>
                                 </div>
                                 <input type="text" asp-for="StateId" class="form-control" placeholder="Lookup state id" aria-label="" aria-describedby="basic-addon1">
-                                @Html.HiddenFor(a => a.GameName);
+                                @Html.HiddenFor(a => a.GameName)
                             </div>
                         }
                     </div>

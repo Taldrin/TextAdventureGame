@@ -12,6 +12,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using InterfurCreations.AdminSite.Core;
 using InterfurCreations.AdventureGames.Graph;
+using Hangfire;
+using InterfurCreations.AdminSite.BackgroundTasks.Tasks;
+using System;
 
 namespace BotAdminSite.Controllers
 {
@@ -125,6 +128,21 @@ namespace BotAdminSite.Controllers
             };
 
             return View(vm);
+        }
+
+        [HttpPost]
+        public IActionResult RunCustomTest(ViewModelTestResult testResult)
+        {
+            BackgroundJob.Enqueue<CustomGameTestTask>(a => a.Run(testResult.GameName, testResult.CustomTestMinutesToRunFor, testResult.CustomTestMaxActions, testResult.CustomTestStartState));
+            
+            for(int i = 1; i < testResult.CustomTestTimesToRun; i++)
+            {
+                BackgroundJob.Schedule<CustomGameTestTask>(
+                    a => a.Run(testResult.GameName, testResult.CustomTestMinutesToRunFor, testResult.CustomTestMaxActions, testResult.CustomTestStartState),
+                    TimeSpan.FromMinutes(testResult.CustomTestMinutesToRunFor * (i + 1)));
+            }
+                
+            return RedirectToAction("List");
         }
     }
 }

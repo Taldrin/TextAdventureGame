@@ -22,9 +22,9 @@ namespace InterfurCreations.AdminSite.BackgroundTasks
             _drawStore = drawStore;
         }
 
-        public void BeginTesting()
+        public void BeginTesting(string gameName, int minutesToRunFor, int maxActionsPerRun, string startState = null)
         {
-            var gameToPick = "deer's journey v2";
+            var gameToPick = gameName.ToLower();
             var games = _drawStore.ListGames();
             var game = games.FirstOrDefault(a => a.GameName.ToLower() == gameToPick);
 
@@ -33,7 +33,7 @@ namespace InterfurCreations.AdminSite.BackgroundTasks
 
             var data = _dataProvider.ProvideDataForGameTesting(game.GameName);
 
-            _testExecutor.RunTestAsync(game, DateTime.Now.AddMinutes(3), 0, data);
+            _testExecutor.RunTestAsync(game, DateTime.Now.AddMinutes(minutesToRunFor), maxActionsPerRun, data, startState);
 
             _dataProvider.SaveDataForGame(data, game.GameName);
         }
