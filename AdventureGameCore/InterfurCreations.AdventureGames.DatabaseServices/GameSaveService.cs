@@ -47,7 +47,7 @@ namespace InterfurCreations.AdventureGames.DatabaseServices
 
         public GameSaves GetGameSaveById(int saveId, string playerId)
         {
-            return _context.GameSaves.Include(a => a.PlayerGameSave).ThenInclude(a => a.FrameStack).SingleOrDefault(a => a.PlayerGameSaveId == saveId && a.PlayerId == playerId);
+            return _context.GameSaves.Include(a => a.PlayerGameSave).ThenInclude(a => a.FrameStack).Include(a => a.PlayerGameSave).ThenInclude(a => a.GameSaveData).SingleOrDefault(a => a.PlayerGameSaveId == saveId && a.PlayerId == playerId);
         }
 
         public List<GameSaves> ListGameSaves(int pageSize, int pageNumber, string playerId)
