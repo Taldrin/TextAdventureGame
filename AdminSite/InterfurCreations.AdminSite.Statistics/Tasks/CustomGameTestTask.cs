@@ -1,5 +1,7 @@
-﻿using InterfurCreations.AdventureGames.GameTesting;
+﻿using InterfurCreations.AdventureGames.Database;
+using InterfurCreations.AdventureGames.GameTesting;
 using InterfurCreations.AdventureGames.Graph.Store;
+using System.Collections.Generic;
 
 namespace InterfurCreations.AdminSite.BackgroundTasks.Tasks
 {
@@ -17,9 +19,9 @@ namespace InterfurCreations.AdminSite.BackgroundTasks.Tasks
             _gameRetriever = gameRetriever;
         }
 
-        public void Run(string gameName, int minutes, int maxActions, string startState)
+        public void Run(string gameName, int minutes, int maxActions, string startState, List<PlayerGameSaveData> startData = null)
         {
-            new GameTester(_testExecutor, _dataProvider, _gameRetriever).BeginTesting(gameName, minutes, maxActions, startState);
+            new GameTester(_testExecutor, _dataProvider, _gameRetriever).BeginTesting(gameName, minutes, maxActions, startState, startData);
         }
     }
 }

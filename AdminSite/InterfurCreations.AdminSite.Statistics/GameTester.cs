@@ -1,4 +1,5 @@
-﻿using InterfurCreations.AdventureGames.GameTesting;
+﻿using InterfurCreations.AdventureGames.Database;
+using InterfurCreations.AdventureGames.GameTesting;
 using InterfurCreations.AdventureGames.Graph.Store;
 using InterfurCreations.AdventureGames.Services.Interfaces;
 using System;
@@ -22,7 +23,7 @@ namespace InterfurCreations.AdminSite.BackgroundTasks
             _drawStore = drawStore;
         }
 
-        public void BeginTesting(string gameName, int minutesToRunFor, int maxActionsPerRun, string startState = null)
+        public void BeginTesting(string gameName, int minutesToRunFor, int maxActionsPerRun, string startState = null, List<PlayerGameSaveData> startData = null)
         {
             var gameToPick = gameName.ToLower();
             var games = _drawStore.ListGames();
@@ -33,7 +34,7 @@ namespace InterfurCreations.AdminSite.BackgroundTasks
 
             var data = _dataProvider.ProvideDataForGameTesting(game.GameName);
 
-            _testExecutor.RunTestAsync(game, DateTime.Now.AddMinutes(minutesToRunFor), maxActionsPerRun, data, startState);
+            _testExecutor.RunTestAsync(game, DateTime.Now.AddMinutes(minutesToRunFor), maxActionsPerRun, data, startState, startData);
 
             _dataProvider.SaveDataForGame(data, game.GameName);
         }

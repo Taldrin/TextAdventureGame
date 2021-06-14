@@ -15,6 +15,7 @@ using InterfurCreations.AdventureGames.Graph;
 using Hangfire;
 using InterfurCreations.AdminSite.BackgroundTasks.Tasks;
 using System;
+using InterfurCreations.AdventureGames.Database;
 
 namespace BotAdminSite.Controllers
 {
@@ -133,12 +134,13 @@ namespace BotAdminSite.Controllers
         [HttpPost]
         public IActionResult RunCustomTest(ViewModelTestResult testResult)
         {
-            BackgroundJob.Enqueue<CustomGameTestTask>(a => a.Run(testResult.GameName, testResult.CustomTestMinutesToRunFor, testResult.CustomTestMaxActions, testResult.CustomTestStartState));
+            var startData = testResult.CustomTestStartData.Split(",", StringSplitOptions.RemoveEmptyEntries).Select(a => new PlayerGameSaveData { Name = a.Split(':')[0], Value = a.Split(':')[1] }).ToList();
+            BackgroundJob.Enqueue<CustomGameTestTask>(a => a.Run(testResult.GameName, testResult.CustomTestMinutesToRunFor, testResult.CustomTestMaxActions, testResult.CustomTestStartState, startData));
             
             for(int i = 1; i < testResult.CustomTestTimesToRun; i++)
             {
                 BackgroundJob.Schedule<CustomGameTestTask>(
-                    a => a.Run(testResult.GameName, testResult.CustomTestMinutesToRunFor, testResult.CustomTestMaxActions, testResult.CustomTestStartState),
+                    a => a.Run(testResult.GameName, testResult.CustomTestMinutesToRunFor, testResult.CustomTestMaxActions, testResult.CustomTestStartState, startData),
                     TimeSpan.FromMinutes(testResult.CustomTestMinutesToRunFor * (i + 1)));
             }
                 

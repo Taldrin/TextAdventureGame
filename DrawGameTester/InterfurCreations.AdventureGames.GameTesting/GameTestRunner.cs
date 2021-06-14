@@ -29,6 +29,8 @@ namespace InterfurCreations.AdventureGames.GameTesting
         private DrawGame game;
         private Random rand;
 
+        private List<PlayerGameSaveData> startData;
+
         private int totalActionsDone = 0;
         private int actionsDoneThisRun = 0;
         private int actionsPerRun;
@@ -45,6 +47,12 @@ namespace InterfurCreations.AdventureGames.GameTesting
             gameState = new PlayerGameSave();
             gameState.GameName = game.GameName;
             gameState.StateId = startingState.Id;
+            if (startData != null)
+                gameState.GameSaveData = startData.Select(a => new PlayerGameSaveData
+                {
+                    Name = a.Name,
+                    Value = a.Value
+                }).ToList();
             actionsDoneThisRun = 0;
             previousDataLength = 0;
         }
@@ -120,8 +128,9 @@ namespace InterfurCreations.AdventureGames.GameTesting
             throw new ArgumentException("Error with weighted random. Found no choice");
         }
 
-        public async Task RunTestAsync(DrawGame drawGame, DateTime runUntil, int actionsPerRunOption, GameTestDataStore dataStore, string startingStateId = null)
+        public async Task RunTestAsync(DrawGame drawGame, DateTime runUntil, int actionsPerRunOption, GameTestDataStore dataStore, string startingStateId = null, List<PlayerGameSaveData> startData = null)
         {
+            this.startData = startData;
             rand = new Random();
 
             actionsPerRun = actionsPerRunOption;
@@ -144,7 +153,6 @@ namespace InterfurCreations.AdventureGames.GameTesting
                 data = new GameTestDataStore();
 
             ResetGame();
-
 
             while (DateTime.Now <= runUntil)
             {
