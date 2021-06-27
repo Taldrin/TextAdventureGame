@@ -73,7 +73,10 @@ namespace InterfurCreations.AdventureGames.Discord
                     await SendMessageAsync(arg.Channel, "**Invalid Input!**");
                 foreach (var resultMessage in result.MessagesToShow)
                 {
-                    await SendMessageAsync(arg.Channel, resultMessage.Message);
+                    var sendMessage = resultMessage.Message;
+                    if (string.IsNullOrWhiteSpace(sendMessage))
+                        sendMessage = resultMessage.ImageUrl;
+                    await SendMessageAsync(arg.Channel, sendMessage);
                 }
 
                 await SendOptionMessagesAsync(arg.Channel, result.OptionsToShow);

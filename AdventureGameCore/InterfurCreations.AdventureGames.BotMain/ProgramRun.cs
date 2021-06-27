@@ -13,7 +13,6 @@ using InterfurCreations.AdventureGames.Core.Interface;
 using InterfurCreations.AdventureGames.DatabaseServices;
 using InterfurCreations.AdventureGames.Graph;
 using InterfurCreations.AdventureGames.Discord;
-using InterfurCreations.AdventureGames.Kik;
 using InterfurCreations.AdventureGames.HeartbeatMonitor;
 using Autofac;
 using InterfurCreations.AdventureGames.Logging;
@@ -21,8 +20,6 @@ using InterfurCreations.AdventureGames.Graph.Store;
 using Microsoft.Extensions.Configuration;
 using InterfurCreations.AdventureGames.Services.ImageStore;
 using System.Collections.Generic;
-using InterfurCreations.AdventureGames.Kik.Webhook;
-using InterfurCreations.AdventureGames.Webhook;
 
 namespace InterfurCreations.AdventureGames.BotMain
 {
@@ -138,8 +135,8 @@ namespace InterfurCreations.AdventureGames.BotMain
                 RegisterTelegram(builder);
             else if (buildTypeName.ToLower().StartsWith("discord"))
                 RegisterDiscord(builder);
-            else if(buildTypeName.ToLower().StartsWith("kik"))
-                RegisterKik(builder);
+            //else if(buildTypeName.ToLower().StartsWith("kik"))
+            //    RegisterKik(builder);
             Container = builder.Build();
         }
 
@@ -155,19 +152,19 @@ namespace InterfurCreations.AdventureGames.BotMain
             builder.RegisterType<DiscordMessageHandler>().As<DiscordMessageHandler>().InstancePerLifetimeScope();
         }
 
-        public static void RegisterKik(ContainerBuilder builder)
-        {
-            builder.RegisterType<WebhookMessageHandlerService>().As<IWebhookMessageHandlerService>().InstancePerLifetimeScope();
-            builder.RegisterType<WebhookRunService>().As<IWebhookService>().InstancePerLifetimeScope();
-            builder.RegisterType<KikService>().As<ICommunicator>().InstancePerLifetimeScope();
-            builder.RegisterType<KikMessageExecutor>().As<KikMessageExecutor>().InstancePerLifetimeScope();
+        //public static void RegisterKik(ContainerBuilder builder)
+        //{
+        //    builder.RegisterType<WebhookMessageHandlerService>().As<IWebhookMessageHandlerService>().InstancePerLifetimeScope();
+        //    builder.RegisterType<WebhookRunService>().As<IWebhookService>().InstancePerLifetimeScope();
+        //    builder.RegisterType<KikService>().As<ICommunicator>().InstancePerLifetimeScope();
+        //    builder.RegisterType<KikMessageExecutor>().As<KikMessageExecutor>().InstancePerLifetimeScope();
 
-            var _ = typeof(Startup);
+        //    var _ = typeof(Startup);
 
-            var webAssembly = Assembly.GetExecutingAssembly();
-            var repoAssembly = Assembly.GetAssembly(typeof(KikService));
-            builder.RegisterAssemblyTypes(webAssembly, repoAssembly)
-                        .AsImplementedInterfaces();
-        }
+        //    var webAssembly = Assembly.GetExecutingAssembly();
+        //    var repoAssembly = Assembly.GetAssembly(typeof(KikService));
+        //    builder.RegisterAssemblyTypes(webAssembly, repoAssembly)
+        //                .AsImplementedInterfaces();
+        //}
     }
 }
