@@ -71,13 +71,19 @@ namespace InterfurCreations.AdventureGames.Services.ImageStore
             foreach (var image in _imageCache)
             {
                 if (image.Params.Count != imageRequest.Count) continue;
+                bool allMatch = true;
                 for(int i = 0; i < image.Params.Count; i++)
                 {
-                    if (image.Params[i].Equals(imageRequest[i]))
+                    if (!image.Params[i].Equals(imageRequest[i]))
                     {
-                        cachedImage = image;
-                        return true;
+                        allMatch = false;
                     }
+                }
+
+                if(allMatch)
+                {
+                    cachedImage = image;
+                    return true;
                 }
             }
             return false;

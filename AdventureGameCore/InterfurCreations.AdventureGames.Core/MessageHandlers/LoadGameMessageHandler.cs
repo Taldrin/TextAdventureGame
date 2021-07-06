@@ -2,6 +2,7 @@
 using InterfurCreations.AdventureGames.Core.DataObjects;
 using InterfurCreations.AdventureGames.Core.Interface;
 using InterfurCreations.AdventureGames.Database;
+using InterfurCreations.AdventureGames.Exceptions;
 using InterfurCreations.AdventureGames.GameLanguage;
 using InterfurCreations.AdventureGames.Graph;
 using InterfurCreations.AdventureGames.Graph.Store;
@@ -120,6 +121,10 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
                 var games = _gameStore.ListGames();
                 var playerState = player.ActiveGameSave;
                 var gameFound = games.Where(a => a.GameName == playerState.GameName).FirstOrDefault();
+                if (gameFound == null)
+                {
+                    throw new AdventureGameException($"No game found with name {playerState.GameName}", true);
+                }
                 var state = gameFound.FindStateById(playerState.StateId);
                 var execResult = new ExecutionResult
                 {

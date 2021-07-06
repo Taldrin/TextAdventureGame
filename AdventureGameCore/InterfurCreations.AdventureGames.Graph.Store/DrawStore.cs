@@ -24,7 +24,7 @@ namespace InterfurCreations.AdventureGames.Graph.Store
         public List<string> CheckForOutOfDateGames(Dictionary<DrawGame, DateTime> timeRetrievedGames)
         {
             var fileList = _service.ListFiles();
-            var outOfDateGames = timeRetrievedGames.Where(a => a.Value < fileList.FirstOrDefault(b => b.FileName == a.Key.GameName).LastModified);
+            var outOfDateGames = timeRetrievedGames.Where(a => a.Value < fileList.FirstOrDefault(b => b.FileName == a.Key.GameName)?.LastModified);
             var newGames = fileList.Where(a => !timeRetrievedGames.Keys.Any(b => b.GameName == a.FileName)).GroupBy(a => a.FileName).Select(a => a.First()).ToList();
             return outOfDateGames.ToList().Select(a => a.Key.GameName).ToList().Concat(newGames.Select(a => a.FileName)).ToList();
         }
