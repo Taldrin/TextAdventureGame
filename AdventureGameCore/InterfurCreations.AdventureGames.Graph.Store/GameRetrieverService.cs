@@ -18,6 +18,7 @@ namespace InterfurCreations.AdventureGames.Graph.Store
         private Dictionary<DrawGame, DateTime> TimeRetrievedGame = new Dictionary<DrawGame, DateTime>();
         private DateTime LastChecked;
 
+        private object lockObj = new object();
 
         public GameRetrieverService(IGameStore gameStore, IReporter reporter, IConfigurationService configService)
         {
@@ -44,22 +45,26 @@ namespace InterfurCreations.AdventureGames.Graph.Store
 
         private void CheckForOutOfDate()
         {
-            LastChecked = DateTime.UtcNow;
-            var oldGames = _gameStore.CheckForOutOfDateGames(TimeRetrievedGame);
-
-            foreach(var gameToUpdate in oldGames)
+            lock (lockObj)
             {
-                var existingGame = TimeRetrievedGame.Keys.FirstOrDefault(a => a.GameName == gameToUpdate);
-                if (existingGame == null)
+                LastChecked = DateTime.UtcNow;
+                var oldGames = _gameStore.CheckForOutOfDateGames(TimeRetrievedGame);
+
+                foreach (var gameToUpdate in oldGames)
                 {
-                    var newGame = ParseGame(_gameStore.GetGame(gameToUpdate), gameToUpdate);
-                    if(newGame != null)
-                        AddNewGame(newGame);
-                } else
-                {
-                    var updatedGame = ParseGame(_gameStore.GetGame(gameToUpdate), gameToUpdate);
-                    if (updatedGame != null)
-                        AddExistingGame(updatedGame, existingGame);
+                    var existingGame = TimeRetrievedGame.Keys.FirstOrDefault(a => a.GameName == gameToUpdate);
+                    if (existingGame == null)
+                    {
+                        var newGame = ParseGame(_gameStore.GetGame(gameToUpdate), gameToUpdate);
+                        if (newGame != null)
+                            AddNewGame(newGame);
+                    }
+                    else
+                    {
+                        var updatedGame = ParseGame(_gameStore.GetGame(gameToUpdate), gameToUpdate);
+                        if (updatedGame != null)
+                            AddExistingGame(updatedGame, existingGame);
+                    }
                 }
             }
         }

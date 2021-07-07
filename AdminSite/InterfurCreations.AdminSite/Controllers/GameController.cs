@@ -54,6 +54,7 @@ namespace BotAdminSite.Controllers
 
             var allAchievementStats = _statisticsService.ListAchievements();
             var achievementsForGame = allAchievementStats.Where(a => a.GameName == game.GameName);
+            var playersPlayed = _statisticsService.GetPlayerCountForGame(game.GameName);
 
             var vm = new ViewModelGameDetails
             {
@@ -61,13 +62,13 @@ namespace BotAdminSite.Controllers
                 OptionCount = game.Stats.optionsCount,
                 StateCount = game.Stats.states.Count,
                 WordCount = game.Stats.wordCount,
+                PlayersPlayed = playersPlayed.TotalPlayed,
                 Category = game.Metadata.Category,
                 Description = game.Metadata.Description,
                 Achievements = new List<AchievementItemViewModel>(),
                 Id = gameId
             };
 
-            var totalPlayers = _statisticsService.CountTotalPlayers();
 
             foreach(var achievement in game.Metadata.Achievements)
             {
@@ -79,7 +80,7 @@ namespace BotAdminSite.Controllers
                 if(achievStats != null)
                 {
                     model.NumberOfPlayersAchieved = achievStats.TotalPlayed;
-                    model.PercentOfPlayersAchieved =  ((achievStats.TotalPlayed / (double)totalPlayers) * 100).ToString("#.##");
+                    model.PercentOfPlayersAchieved =  ((achievStats.TotalPlayed / (double)playersPlayed.TotalPlayed) * 100).ToString("#.##");
                 }
                 vm.Achievements.Add(model);
             }

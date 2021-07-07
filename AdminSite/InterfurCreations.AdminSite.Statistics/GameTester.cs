@@ -1,5 +1,6 @@
 ﻿using InterfurCreations.AdventureGames.Database;
 using InterfurCreations.AdventureGames.GameTesting;
+using InterfurCreations.AdventureGames.Graph;
 using InterfurCreations.AdventureGames.Graph.Store;
 using InterfurCreations.AdventureGames.Services.Interfaces;
 using System;
@@ -25,12 +26,21 @@ namespace InterfurCreations.AdminSite.BackgroundTasks
 
         public void BeginTesting(string gameName, int minutesToRunFor, int maxActionsPerRun, string startState = null, List<PlayerGameSaveData> startData = null)
         {
-            var gameToPick = gameName.ToLower();
             var games = _drawStore.ListGames();
-            var game = games.FirstOrDefault(a => a.GameName.ToLower() == gameToPick);
 
-            if (game == null)
-                throw new Exception($"No game found with name {gameToPick}");
+            DrawGame game;
+
+            if(string.IsNullOrEmpty(gameName))
+            {
+                game = games[new Random().Next(games.Count())];
+            }
+            else
+            {
+                var gameToPick = gameName.ToLower();
+                game = games.FirstOrDefault(a => a.GameName.ToLower() == gameToPick);
+                if (game == null)
+                    throw new Exception($"No game found with name {gameToPick}");
+            }
 
             var data = _dataProvider.ProvideDataForGameTesting(game.GameName);
 

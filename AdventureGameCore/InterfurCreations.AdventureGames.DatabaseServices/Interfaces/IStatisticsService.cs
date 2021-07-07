@@ -10,6 +10,7 @@ namespace InterfurCreations.AdventureGames.DatabaseServices.Interfaces
     public interface IStatisticsService
     {
         int CountTotalPlayers();
+        StatisticsGamesByPlayerCount GetPlayerCountForGame(string gameName);
         StatisticsPosition GetStatisticsPosition(string statisticsName);
         List<StatisticsGameAchievement> ListAchievements();
     }

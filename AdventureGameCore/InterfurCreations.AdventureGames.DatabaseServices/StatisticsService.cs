@@ -21,6 +21,11 @@ namespace InterfurCreations.AdventureGames.DatabaseServices
             return _databaseContext.GetContext().StatisticsGameAchievements.ToList();
         }
 
+        public StatisticsGamesByPlayerCount GetPlayerCountForGame(string gameName)
+        {
+            return _databaseContext.GetContext().StatisticsGamesByPlayerCount.FirstOrDefault(a => a.GameName == gameName);
+        }
+
         public StatisticsPosition GetStatisticsPosition(string statisticsName)
         {
             return _databaseContext.GetContext().StatisticsPositions.FirstOrDefault(a => a.StatisticsName == statisticsName);

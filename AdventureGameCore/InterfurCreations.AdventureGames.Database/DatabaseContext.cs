@@ -27,6 +27,7 @@ namespace InterfurCreations.AdventureGames.Database
         #region Statistics
         public DbSet<StatisticsGameAchievement> StatisticsGameAchievements { get; set; }
         public DbSet<StatisticsPosition> StatisticsPositions { get; set; }
+        public DbSet<StatisticsGamesByPlayerCount> StatisticsGamesByPlayerCount { get; set; }
         #endregion
 
         #region Game Testing

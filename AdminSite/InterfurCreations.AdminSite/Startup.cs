@@ -176,8 +176,9 @@ namespace InterfurCreations.AdminSite
         public void SetupHangfireJobs()
         {
             RecurringJob.AddOrUpdate<AchievementStatisticsBuildTask>(a => a.Run(), Cron.MinuteInterval(10));
-            RecurringJob.AddOrUpdate<GameTestingTask>(a => a.Run(), Cron.MinuteInterval(10));
+            RecurringJob.AddOrUpdate<GameTestingTask>(a => a.Run(), Cron.MinuteInterval(12));
             RecurringJob.AddOrUpdate<ImageStoreCleanupTask>(a => a.ClearImages(), Cron.HourInterval(2));
+            RecurringJob.AddOrUpdate<GamesByPlayerCountStatisticsBuildTask>(a => a.Run(), Cron.HourInterval(12));
         }
     }
 }

@@ -25,7 +25,7 @@ namespace InterfurCreations.AdminSite.BackgroundTasks.Tasks
 
         public void Run()
         {
-            new GameTester(_testExecutor, _dataProvider, _gameRetriever).BeginTesting("deer's journey v2", 3, 0);
+            new GameTester(_testExecutor, _dataProvider, _gameRetriever).BeginTesting(null, 3, 0);
         }
     }
 }
