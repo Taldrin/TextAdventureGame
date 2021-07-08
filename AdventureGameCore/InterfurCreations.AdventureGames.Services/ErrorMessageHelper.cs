@@ -22,10 +22,10 @@ namespace InterfurCreations.AdventureGames.Core.Services
             string saveData = "NODATA";
             string gameName = "NOGAME";
             string player = "NOPLAYER";
-            gameName = gameState.GameName;
-            if (gameState.GameSaveData != null)
+            gameName = gameState?.GameName;
+            if (gameState?.GameSaveData != null)
             {
-                saveData = string.Join(" ", gameState.GameSaveData.Select(a => $"[N: {a.Name} V: {a.Value}] "));
+                saveData = string.Join(" ", gameState.GameSaveData.Select(a => $"[N: {a?.Name} V: {a?.Value}] "));
             }
 
             return $"ERROR: {additional} \n\nPlayer: {player}\nGame: {gameName} \nException messages: \n{messages} \n\nSave data: \n{saveData}\n\nStack trace\n{stackTrace}";

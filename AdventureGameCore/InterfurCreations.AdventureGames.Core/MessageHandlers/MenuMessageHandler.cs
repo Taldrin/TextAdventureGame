@@ -2,6 +2,7 @@
 using InterfurCreations.AdventureGames.Core.DataObjects;
 using InterfurCreations.AdventureGames.Core.Interface;
 using InterfurCreations.AdventureGames.Database;
+using InterfurCreations.AdventureGames.DatabaseServices.Interfaces;
 using InterfurCreations.AdventureGames.GameLanguage;
 using InterfurCreations.AdventureGames.Graph;
 using InterfurCreations.AdventureGames.Graph.Store;
@@ -26,9 +27,10 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
         private readonly IGameSaveService _gameSaveService;
         private readonly IConfigurationService _configService;
         private readonly IReporter _reporter;
+        private readonly IStatisticsService _statService;
 
         public MenuMessageHandler(IGameRetrieverService gameStore, IGameProcessor gameProcessor, ITextParsing textParsing, IGameSaveService gameSaveService,
-            IConfigurationService configService, IReporter reporter)
+            IConfigurationService configService, IReporter reporter, IStatisticsService statSerivce)
         {
             _mainMenuMessageHandler = new MainMenuMessageHandler(gameStore, gameProcessor, textParsing);
             _gameStore = gameStore;
@@ -37,6 +39,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
             _gameSaveService = gameSaveService;
             _configService = configService;
             _reporter = reporter;
+            _statService = statSerivce;
         }
 
         public ExecutionResult HandleMessage(string message, Player player)
@@ -91,7 +94,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
             }
             if(message.StartsWith(Messages.Achievements))
             {
-                var achievmentListString = achievementList.OrderBy(a => a.hasAchieved).Select(a => $"{(a.hasAchieved ? "UNLOCKED! " : "")}{a.achievement.Name} - {a.achievement.Description}").ToList();
+                var achievmentListString = AchievementService.HasPlayerDoneAchievements(activeGame, player).OrderBy(a => a.hasAchieved).Select(a => $"{(a.hasAchieved ? "UNLOCKED! " : "")}{a.achievement.Name} - {a.achievement.Description} {AchievementService.GetPercentageAchieved(_statService, activeGame, a.achievement.Name)}").ToList();
                 var responseMessage = string.Join("\n\n", achievmentListString);
                 messages.Add(new MessageResult { Message = "Achievements for  game: " + activeGame.GameName });
                 messages.Add(new MessageResult { Message = responseMessage });

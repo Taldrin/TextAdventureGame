@@ -116,6 +116,7 @@ namespace InterfurCreations.AdventureGames.BotMain
             builder.RegisterType<AwsImageStore>().As<IImageStore>().InstancePerLifetimeScope();
             builder.RegisterType<LanguageToolSpellChecker>().As<ISpellChecker>().InstancePerLifetimeScope();
             builder.RegisterType<ImageBuildDataTracker>().InstancePerLifetimeScope();
+            builder.RegisterType<StatisticsService>().As<IStatisticsService>().InstancePerLifetimeScope();
 
             builder.RegisterType<DatabaseContextProvider>().As<IDatabaseContextProvider>().InstancePerLifetimeScope();
             builder.RegisterType<AccountController>().As<IAccountController>().InstancePerLifetimeScope();

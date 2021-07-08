@@ -1,4 +1,5 @@
 ﻿using InterfurCreations.AdventureGames.Database;
+using InterfurCreations.AdventureGames.DatabaseServices.Interfaces;
 using InterfurCreations.AdventureGames.Graph;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,17 @@ namespace InterfurCreations.AdventureGames.Core
         public static int CountTotalAchievements(List<DrawGame> games)
         {
             return games.Sum(a => a.Metadata.Achievements.Count());
+        }
+
+        public static string GetPercentageAchieved(IStatisticsService service, DrawGame game, string achievement)
+        {
+            var playerCount = service.GetPlayerCountForGame(game.GameName);
+            var achievementCount = service.ListAchievements().FirstOrDefault(a => a.GameName == game.GameName && a.AchievementName == achievement)?.TotalPlayed;
+            if(achievementCount.HasValue && playerCount != null)
+            {
+                return " - " + string.Format("{0:0.#}", ((double)achievementCount.Value / (double)playerCount.TotalPlayed) * 100) + "%";
+            }
+            return string.Empty;
         }
     }
 }

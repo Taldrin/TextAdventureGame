@@ -47,7 +47,7 @@ namespace InterfurCreations.AdventureGames.GameTesting
             gameState = new PlayerGameSave();
             gameState.GameName = game.GameName;
             gameState.StateId = startingState.Id;
-            if (startData != null)
+            if (startData != null && startData.Count > 0)
                 gameState.GameSaveData = startData.Select(a => new PlayerGameSaveData
                 {
                     Name = a.Name,

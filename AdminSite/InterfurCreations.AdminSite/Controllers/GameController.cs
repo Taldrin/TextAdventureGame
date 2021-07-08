@@ -135,10 +135,14 @@ namespace BotAdminSite.Controllers
         [HttpPost]
         public IActionResult RunCustomTest(ViewModelTestResult testResult)
         {
-            var startData = testResult.CustomTestStartData.Split(",", StringSplitOptions.RemoveEmptyEntries).Select(a => new PlayerGameSaveData { Name = a.Split(':')[0], Value = a.Split(':')[1] }).ToList();
+            var startData = new List<PlayerGameSaveData>();
+            if(testResult.CustomTestStartData != null)
+            {
+                startData = testResult.CustomTestStartData.Split(",", StringSplitOptions.RemoveEmptyEntries).Select(a => new PlayerGameSaveData { Name = a.Split(':')[0], Value = a.Split(':')[1] }).ToList();
+            }
             BackgroundJob.Enqueue<CustomGameTestTask>(a => a.Run(testResult.GameName, testResult.CustomTestMinutesToRunFor, testResult.CustomTestMaxActions, testResult.CustomTestStartState, startData));
-            
-            for(int i = 1; i < testResult.CustomTestTimesToRun; i++)
+
+            for (int i = 1; i < testResult.CustomTestTimesToRun; i++)
             {
                 BackgroundJob.Schedule<CustomGameTestTask>(
                     a => a.Run(testResult.GameName, testResult.CustomTestMinutesToRunFor, testResult.CustomTestMaxActions, testResult.CustomTestStartState, startData),

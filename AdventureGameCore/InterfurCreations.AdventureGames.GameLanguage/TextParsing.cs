@@ -43,6 +43,8 @@ namespace InterfurCreations.AdventureGames.GameLanguage
         {
             try
             {
+                if(optionText == null)
+                    return new ParsedStateOption { OptionType = OptionType.Normal, text = null };
                 optionText = CleanText(optionText);
                 optionText = optionText.Trim(' ', '\n');
                 //if (optionText.Contains("<") || optionText.Contains(">"))

@@ -1,6 +1,7 @@
 ﻿using InterfurCreations.AdventureGames.Core.DataObjects;
 using InterfurCreations.AdventureGames.Core.Interface;
 using InterfurCreations.AdventureGames.Database;
+using InterfurCreations.AdventureGames.DatabaseServices.Interfaces;
 using InterfurCreations.AdventureGames.GameLanguage;
 using InterfurCreations.AdventureGames.Graph;
 using InterfurCreations.AdventureGames.Graph.Store;
@@ -18,12 +19,15 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
         private readonly IGameRetrieverService _gameStore;
         private readonly IGameProcessor _gameProcessor;
         private readonly ITextParsing _textParsing;
+        private readonly IStatisticsService _statService;
 
-        public AchievementMessageHandler(IGameRetrieverService gameStore, IGameProcessor gameProcessor, ITextParsing textParsing)
+        public AchievementMessageHandler(IGameRetrieverService gameStore, IGameProcessor gameProcessor, ITextParsing textParsing,
+            IStatisticsService statService)
         {
             _gameStore = gameStore;
             _gameProcessor = gameProcessor;
             _textParsing = textParsing;
+            _statService = statService;
         }
 
         public List<string> GetOptions(Player player)
@@ -51,7 +55,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
 
             if(selectedGame != null)
             {
-                var achievmentListString = AchievementService.HasPlayerDoneAchievements(selectedGame, player).OrderBy(a => a.hasAchieved).Select(a => $"{(a.hasAchieved ? "UNLOCKED! " : "")}{a.achievement.Name} - {a.achievement.Description}").ToList();
+                var achievmentListString = AchievementService.HasPlayerDoneAchievements(selectedGame, player).OrderBy(a => a.hasAchieved).Select(a => $"{(a.hasAchieved ? "UNLOCKED! " : "")}{a.achievement.Name} - {a.achievement.Description} {AchievementService.GetPercentageAchieved(_statService, selectedGame, a.achievement.Name)}").ToList();
                 var responseMessage = string.Join("\n\n", achievmentListString);
                 var result = ExecutionResultHelper.SingleMessage(responseMessage, optionsToSend);
                 result.MessagesToShow.Insert(0, new MessageResult
