@@ -130,6 +130,7 @@ namespace InterfurCreations.AdminSite
             builder.Populate(services);
 
             AutofacContainer = builder.Build();
+            GlobalConfiguration.Configuration.UseAutofacActivator(AutofacContainer);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

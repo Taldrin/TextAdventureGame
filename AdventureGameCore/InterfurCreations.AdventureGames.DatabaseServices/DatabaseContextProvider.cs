@@ -26,5 +26,17 @@ namespace InterfurCreations.AdventureGames.DatabaseServices
                 cachedContext = new DatabaseContext(_configService);
             return cachedContext;
         }
+
+        public DatabaseContext GetNewContext()
+        {
+            cachedContext = new DatabaseContext(_configService);
+            return cachedContext;
+        }
+
+        public void Clear()
+        {
+            if (cachedContext != null)
+                cachedContext.Dispose();
+        }
     }
 }

@@ -35,9 +35,9 @@ namespace InterfurCreations.AdminSite.BackgroundTasks
 
             while(true)
             {
+                _dbContext.Clear();
                 var players = _dbContext.GetContext().Players.Skip(batchNumber * batchSize).Take(batchSize).Include(a => a.Actions).ToList();
                 batchNumber++;
-
                 if (players.Count == 0)
                     break;
 
@@ -52,7 +52,7 @@ namespace InterfurCreations.AdminSite.BackgroundTasks
                 }
             }
 
-            var existingStats = _dbContext.GetContext().StatisticsGamesByPlayerCount.ToList();
+            var existingStats = _dbContext.GetNewContext().StatisticsGamesByPlayerCount.ToList();
             foreach (var stat in existingStats)
                 _dbContext.GetContext().Remove(stat);
 
@@ -65,6 +65,7 @@ namespace InterfurCreations.AdminSite.BackgroundTasks
                 });
             }
             _dbContext.GetContext().SaveChanges();
+            _dbContext.Clear();
         }
 
         private void AddOrUpdate(Dictionary<string, long> dict, string name)

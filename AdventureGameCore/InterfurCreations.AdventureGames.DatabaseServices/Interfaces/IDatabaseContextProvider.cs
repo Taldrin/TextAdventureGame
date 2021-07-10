@@ -11,5 +11,7 @@ namespace InterfurCreations.AdventureGames.DatabaseServices.Interfaces
     public interface IDatabaseContextProvider
     {
         DatabaseContext GetContext();
+        DatabaseContext GetNewContext();
+        void Clear();
     }
 }

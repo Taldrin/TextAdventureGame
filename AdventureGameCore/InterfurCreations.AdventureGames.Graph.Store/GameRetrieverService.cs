@@ -30,41 +30,45 @@ namespace InterfurCreations.AdventureGames.Graph.Store
 
         public List<DrawGame> ListGames()
         {
-            var minutesBetweenChecks = int.Parse(_configService.GetConfigOrDefault("MaxMinutesBetweenGameCheck", "10", true));
-            if (LastChecked.Add(TimeSpan.FromMinutes(minutesBetweenChecks)) < DateTime.UtcNow)
-                CheckForOutOfDate();
-            return TimeRetrievedGame.Keys.ToList();
+            lock (lockObj)
+            {
+                var minutesBetweenChecks = int.Parse(_configService.GetConfigOrDefault("MaxMinutesBetweenGameCheck", "10", true));
+                if (LastChecked.Add(TimeSpan.FromMinutes(minutesBetweenChecks)) < DateTime.UtcNow)
+                    CheckForOutOfDate();
+                return TimeRetrievedGame.Keys.ToList();
+            }
         }
 
         public List<DrawGame> ListGames(TimeSpan timeBetweenCheck)
         {
-            if (LastChecked.Add(timeBetweenCheck) < DateTime.UtcNow)
-                CheckForOutOfDate();
-            return TimeRetrievedGame.Keys.ToList();
+            lock (lockObj)
+            {
+                if (LastChecked.Add(timeBetweenCheck) < DateTime.UtcNow)
+                    CheckForOutOfDate();
+                return TimeRetrievedGame.Keys.ToList();
+            }
         }
 
         private void CheckForOutOfDate()
         {
-            lock (lockObj)
-            {
-                LastChecked = DateTime.UtcNow;
-                var oldGames = _gameStore.CheckForOutOfDateGames(TimeRetrievedGame);
 
-                foreach (var gameToUpdate in oldGames)
+            LastChecked = DateTime.UtcNow;
+            var oldGames = _gameStore.CheckForOutOfDateGames(TimeRetrievedGame);
+
+            foreach (var gameToUpdate in oldGames)
+            {
+                var existingGame = TimeRetrievedGame.Keys.FirstOrDefault(a => a.GameName == gameToUpdate);
+                if (existingGame == null)
                 {
-                    var existingGame = TimeRetrievedGame.Keys.FirstOrDefault(a => a.GameName == gameToUpdate);
-                    if (existingGame == null)
-                    {
-                        var newGame = ParseGame(_gameStore.GetGame(gameToUpdate), gameToUpdate);
-                        if (newGame != null)
-                            AddNewGame(newGame);
-                    }
-                    else
-                    {
-                        var updatedGame = ParseGame(_gameStore.GetGame(gameToUpdate), gameToUpdate);
-                        if (updatedGame != null)
-                            AddExistingGame(updatedGame, existingGame);
-                    }
+                    var newGame = ParseGame(_gameStore.GetGame(gameToUpdate), gameToUpdate);
+                    if (newGame != null)
+                        AddNewGame(newGame);
+                }
+                else
+                {
+                    var updatedGame = ParseGame(_gameStore.GetGame(gameToUpdate), gameToUpdate);
+                    if (updatedGame != null)
+                        AddExistingGame(updatedGame, existingGame);
                 }
             }
         }
