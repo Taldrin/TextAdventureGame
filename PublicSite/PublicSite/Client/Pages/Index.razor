@@ -2,40 +2,56 @@
 @inject PublicSite.Client.Components.IMenuService MenuService
 @inject IJSRuntime JSRuntime
 
-    <div>
-        <div class="jumbotron" style="text-align:center">
-            <h1>Furry Themed Text Adventures By Furventure Games!</h1>
-            <p>
-                Welcome to our website! Here you can play our adventure games in browser, or get links to play on other platforms such as Telegram and Discord!
-            </p>
+<div class="row justify-content-md-center">
+    <div class="col-lg-4">
+        <div class="jumbotron" style="text-align: center; margin-bottom: 0; padding: 3rem 2rem; background-color: #4E5D6C6B">
+            <h1>Furventure Games</h1>
+            <h4>Furry Themed Text Adventures, playable on Discord, Telegram, or here in your browser!</h4>
         </div>
 
-        <div class="container">
-            <div class="row justify-content-md-center">
-                <div class="col col-lg-6">
-                    <div class="btn-group-vertical" style="width:100%">
-                        <a href="https://www.patreon.com/interfurcreations" class="btn btn-outline-primary">Patreon</a>
-                        <a href="https://discord.gg/WkpWMep" class="btn btn-outline-primary">Discord Bot Server</a>
-                        <a href="https://discordapp.com/api/oauth2/authorize?client_id=556607666869501975&permissions=3072&scope=bot" class="btn btn-outline-primary">Invite Bot To Your Discord</a>
-                        <a href="https://t.me/furryadventurebot" class="btn btn-outline-primary">Telegram Bot</a>
-                        <a href="https://t.me/joinchat/AAAAAFPLgLJbDsQPZLUp1w" class="btn btn-outline-primary">Telegram Announcement Channel</a>
-                        <a href="https://twitter.com/fur_inter" class="btn btn-outline-primary">Twitter</a>
-                        <a href="https://stats.furrytextadventures.com" class="btn btn-outline-primary">Status</a>
-                    </div>
-                </div>
+        <div class="row" style="margin:0">
+            <div class="col-lg-12" style="padding:0">
+                <NavLink class="nav-link" href="play" style="padding:0">
+                    <a style="width:100%;" class="btn btn-outline-primary">Play</a>
+                </NavLink>
+            </div>
+        </div>
+        <div class="row" style="margin:0">
+            <div class="col-lg-12" style="padding:0">
+                <a href="https://t.me/furryadventurebot" style="width:100%;" class="btn btn-outline-primary">Telegram Bot</a>
+            </div>
+        </div>
+        <div class="row" style="margin:0">
+            <div class="col-lg-12" style="padding:0">
+                <a style="width:100%;" href="https://discordapp.com/api/oauth2/authorize?client_id=556607666869501975&permissions=3072&scope=bot" class="btn btn-outline-primary">Invite Bot To Your Discord</a>
+            </div>
+        </div>
+        <div class="row" style="margin:0">
+            <div class="col-lg-6" style="padding:0">
+                <a style="width: 100%;" href="https://t.me/joinchat/AAAAAFPLgLJbDsQPZLUp1w" class="btn btn-outline-primary">Telegram Announcements</a>
+            </div>
+            <div class="col-lg-6" style="padding:0">
+                <a style="width: 100%;height:100%" href="https://discord.gg/WkpWMep" class="btn btn-outline-primary">Discord Server</a>
+            </div>
+        </div>
+        <div class="row" style="margin:0">
+            <div class="col-lg-12" style="padding:0">
+                <a style="width:100%;" href="https://stats.furrytextadventures.com"class="btn btn-outline-primary">Status</a>
+            </div>
+        </div>
+        <div class="row" style="margin:0">
+            <div class="col-lg-12" style="padding:0">
+                <a style="width:100%;" href="https://www.patreon.com/interfurcreations"class="btn btn-outline-primary">Support us on Patreon!</a>
             </div>
         </div>
 
-        <br />
-
-        <div class="container">
-            <div class="row justify-content-md-center">
-                <div class="col col-lg-6">
-                    <a class="twitter-timeline" data-chrome="nofooter noheader" data-tweet-limit="3" data-theme="dark" href="https://twitter.com/fur_inter?ref_src=twsrc%5Etfw">Tweets by Furventure Games</a>
-                </div>
+        <div class="row justify-content-md-center" style="margin:0">
+            <div class="col-lg-12" style="padding:0">
+                <a class="twitter-timeline" data-chrome="nofooter noheader" data-tweet-limit="3" data-theme="dark" href="https://twitter.com/fur_inter?ref_src=twsrc%5Etfw">Tweets by Furventure Games</a>
             </div>
         </div>
     </div>
+</div>
 
 @code{
     protected override async Task OnInitializedAsync()

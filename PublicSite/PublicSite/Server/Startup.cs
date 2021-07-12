@@ -126,6 +126,7 @@ namespace PublicSite.Server
             builder.RegisterType<AccessTokenService>().As<IAccessTokenService>().InstancePerLifetimeScope();
             builder.RegisterType<TokenGenerator>().As<ITokenGenerator>().InstancePerLifetimeScope();
             builder.RegisterType<SlackReport>().As<IReporter>().InstancePerLifetimeScope();
+            builder.RegisterType<StatisticsService>().As<IStatisticsService>().InstancePerLifetimeScope();
 
             builder.RegisterType<ImagingService>().As<IImagingService>().SingleInstance();
             builder.RegisterType<AwsImageStore>().As<IImageStore>().InstancePerLifetimeScope();

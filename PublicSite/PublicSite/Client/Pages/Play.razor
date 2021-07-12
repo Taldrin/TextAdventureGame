@@ -7,6 +7,7 @@
 @inject HttpClient Http
 @inject IJSRuntime JSRuntime
 @inject IMenuService MenuService
+
 @if (IsLoading)
 {
     <div style="margin:auto; width:50%; padding:10px; text-align:center">
@@ -18,59 +19,65 @@
 }
 else
 {
-<div class="row flex-grow-1" style="margin:0; padding:0; overflow-x:hidden">
-    <div class="col mh-100" id="messageDiv" style="margin:0; padding:0; overflow-x:hidden" @onscroll="(() => DivItemsScrolled())">
-        @foreach (var message in Messages)
-        {
-            <div class="card fadeInRight" style="width:100%">
-                <div class="card-body">
-                    @if (message.PlayerMessage)
-                    {
-                        <h6 class="card-subtitle text-muted text-right">You</h6>
-                        <p class="card-text float-right">
-                            @((MarkupString)message.Message)
-                        </p>
-                    }
-                    else if (message.ImageUrl)
-                    {
-                        <h6 class="card-subtitle text-muted text-left">Game</h6>
-                        <img class="img-fluid" src="@message.Message" />
-                    }
-                    else
-                    {
-                        <h6 class="card-subtitle text-muted text-left">Game</h6>
-                        <p class="card-text float-left">
-                            @((MarkupString)message.Message)
-                        </p>
-                    }
-                </div>
+    <div class="row justify-content-md-center h-100" style="margin:0; padding:0; overflow-x:hidden">
+        <div class="col-lg-6 mh-100" style="margin:0; padding:0;">
+            <div class="col mh-100" id="messageDiv" style="margin:0; padding:0; overflow-x:hidden" @onscroll="(() => DivItemsScrolled())">
+                @foreach (var message in Messages)
+                {
+                    <div class="card fadeInRight bg-secondary" style="width:100%">
+                        <div class="card-body">
+                            @if (message.PlayerMessage)
+                            {
+                                <h6 class="card-subtitle text-muted text-right">You</h6>
+                                <p class="card-text float-right">
+                                    @((MarkupString)message.Message)
+                                </p>
+                            }
+                            else if (message.ImageUrl)
+                            {
+                                <h6 class="card-subtitle text-muted text-left">Game</h6>
+                                <img style="width:40%; height:auto" class="img-fluid" src="@message.Message" />
+                            }
+                            else
+                            {
+                                <h6 class="card-subtitle text-muted text-left">Game</h6>
+                                <p class="card-text float-left">
+                                    @((MarkupString)message.Message)
+                                </p>
+                            }
+                        </div>
+                    </div>
+                }
             </div>
-        }
-    </div>
-</div>
-}
 
-<footer class="footer row flex-shrink-0 bg-primary justify-content-center">
-    <div class="d-flex flex-wrap justify-content-center">
-        @if (TakeInput)
-        {
-        <form @onsubmit="@(() => MessageButtonClicked(TextInput))">
-            <div class="input-group p-1" style="max-width:800px">
-                <div class="input-group-append">
-                    <button style="height:auto" class="btn btn-outline-info text-wrap" type="button" id="button-addon1">Submit</button>
+
+        </div>
+    </div>
+}
+<footer class="footer row flex-shrink-0 justify-content-center" style="min-height:120px">
+    <div class="col-lg-6 bg-primary" style="padding:0">
+        <div class="d-flex flex-wrap justify-content-center">
+            @if (TakeInput)
+            {
+                <form @onsubmit="@(() => MessageButtonClicked(TextInput))">
+                    <div class="input-group p-1" style="max-width:800px">
+                        <div class="input-group-append">
+                            <button style="height:auto" class="btn btn-outline-info text-wrap bg-secondary" type="button" id="button-addon1">Submit</button>
+                        </div>
+                        <input style="height:auto" type="text" placeholder="Enter your message" class="form-control" @bind="@TextInput" aria-describedby="button-addon1" />
+                    </div>
+                </form>
+            }
+            @foreach (var button in CurrentButtons)
+            {
+                <div style="padding:3px 5px 3px 5px">
+                    <button class="btn btn-secondary text-wrap btn-game bg-secondary" @onclick="@(() => MessageButtonClicked(button))">@button</button>
                 </div>
-                <input style="height:auto" type="text" placeholder="Enter your message" class="form-control" @bind="@TextInput" aria-describedby="button-addon1" />
-            </div>
-        </form>
-        }
-        @foreach (var button in CurrentButtons)
-        {
-            <div style="padding:3px 5px 3px 5px">
-                <button class="btn btn-secondary text-wrap" @onclick="@(() => MessageButtonClicked(button))">@button</button>
-            </div>
-        }
+            }
+        </div>
     </div>
 </footer>
+
 
 <Modal @ref="AccountModal">
     <ModalBackdrop />
@@ -249,8 +256,8 @@ else
         {
             if (!string.IsNullOrEmpty(a.ImageUrl))
             {
-                // Issue retrieving HTTPS images from FA
-                if (a.ImageUrl.StartsWith("https"))
+            // Issue retrieving HTTPS images from FA
+            if (a.ImageUrl.StartsWith("https"))
                     a.ImageUrl = a.ImageUrl.Replace("https", "http");
                 Messages.Add(new SavedMessage { Message = a.ImageUrl, ImageUrl = true });
             }

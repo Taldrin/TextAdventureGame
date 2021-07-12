@@ -2,16 +2,16 @@
 for details on configuring this project to bundle and minify static web assets. */
 
 a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
 }
 
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  font-size: 14px;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 14px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .content {
@@ -20,19 +20,37 @@ html {
 }
 
 .border-top {
-  border-top: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
 }
+
 .border-bottom {
-  border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+.btn-game {
+    border: 2px outset #5e5e5e;
+    border-radius: 8px;
+}
+
+a.bg-secondary:hover, a.bg-secondary:focus, button.bg-secondary:hover, button.bg-secondary:focus {
+    background-color: #67717b !important;
+}
+
+.bg-primary {
+    background-color: #303b7c73 !important;
+}
+
+.bg-secondary {
+    background-color: #323e47 !important;
 }
 
 button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+    font-size: 1rem;
+    line-height: inherit;
 }
 
 /* Sticky footer styles
@@ -42,7 +60,7 @@ app {
     height: 100vh;
     display: flex;
     margin: 0;
-    padding:0;
+    padding: 0;
 }
 
 body {
@@ -51,12 +69,12 @@ body {
 }
 
 .footer {
-  width: 100%;
-  white-space: nowrap;
-  margin:0;
-  padding:0;
-  overflow-y:scroll;
-  text-align:center;
+    width: 100%;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0;
+    overflow-y: scroll;
+    text-align: center;
 }
 
 .blazor-modal {
@@ -94,6 +112,20 @@ body {
     animation-fill-mode: both;
 }
 
+@media all and (orientation: portrait) {
+    .background-image {
+        background: url('../WebGameBackgroundMobile_MQ.jpg') no-repeat;
+        background-size: 100%;
+    }
+}
+
+@media all and (orientation: landscape) {
+    .background-image {
+        background: url('../WebGameBackground_MQ.jpg') no-repeat;
+        background-size: 100%;
+    }
+}
+
 @-webkit-keyframes fadeInRight {
     0% {
         opacity: 0;
@@ -120,4 +152,4 @@ body {
         -webkit-transform: none;
         transform: none;
     }
-} 
+}
