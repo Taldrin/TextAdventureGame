@@ -112,6 +112,16 @@ body {
     animation-fill-mode: both;
 }
 
+.btn {
+    background-color:#4E5D6C6B;
+}
+
+.btn-outline-primary {
+    background-color: #4E5D6C6B;
+    color: #68F0F7;
+    border-color: #68F0F7;
+}
+
 @media all and (orientation: portrait) {
     .background-image {
         background: url('../WebGameBackgroundMobile_MQ.jpg') no-repeat;
