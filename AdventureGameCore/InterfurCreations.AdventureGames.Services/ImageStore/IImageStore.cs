@@ -8,8 +8,7 @@ namespace InterfurCreations.AdventureGames.Services.ImageStore
 {
     public interface IImageStore
     {
-        public const int MaxCacheTimeDays = 2;
-
+        int MaxCacheTimeDays { get; }
         Task<int> CleanupImagesOlderThan(DateTime time);
         Task<StoredImage> SaveImageAsync(Stream imageStream);
     }

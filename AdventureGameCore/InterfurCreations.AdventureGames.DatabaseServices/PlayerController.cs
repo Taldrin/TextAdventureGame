@@ -62,7 +62,7 @@ namespace InterfurCreations.AdventureGames.DatabaseServices
                 Include(a => a.KikPlayer).Include(a => a.TelegramPlayer).Include(a => a.WebPlayer).Select(a => new PlayerListModel
                 {  
                     DiscordPlayer = a.DiscordPlayer,
-                    LastAction = a.Actions.OrderByDescending(a => a.Time).FirstOrDefault(),
+                    LastAction = a.Actions.OrderByDescending(b => b.Time).FirstOrDefault(),
                     ActionCount = a.Actions.Count,
                     Name = a.Name,
                     KikPlayer = a.KikPlayer,

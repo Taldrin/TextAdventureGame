@@ -19,7 +19,7 @@ namespace InterfurCreations.AdventureGames.Services.ImageStore
 
         public async Task ClearImages()
         {
-            var minDate = DateTime.Now.Subtract(TimeSpan.FromDays(IImageStore.MaxCacheTimeDays + 1));
+            var minDate = DateTime.Now.Subtract(TimeSpan.FromDays(_imageStore.MaxCacheTimeDays + 1));
             var amountDeleted = await _imageStore.CleanupImagesOlderThan(minDate);
 
             _reporter.ReportMessage("Image Store Cleanup task ran, and deleted: " + amountDeleted + " images.");

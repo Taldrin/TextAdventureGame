@@ -68,7 +68,7 @@ namespace InterfurCreations.AdventureGames.Database
             BuildGameTesting(modelBuilder);
         }
 
-        protected void BuildGameTesting(ModelBuilder modelBuilder)
+        protected virtual void BuildGameTesting(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<GameTestingEndState>().ToTable("GameTesting_EndState");
             modelBuilder.Entity<GameTestingError>().ToTable("GameTesting_Error");

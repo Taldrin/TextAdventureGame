@@ -66,7 +66,7 @@ namespace InterfurCreations.AdventureGames.Services.ImageStore
         {
             cachedImage = null;
 
-            _imageCache = _imageCache.Where(a => DateTime.Now < a.Added.AddDays(IImageStore.MaxCacheTimeDays)).ToHashSet();
+            _imageCache = new HashSet<CachedImage>(_imageCache.Where(a => DateTime.Now < a.Added.AddDays(_imageStore.MaxCacheTimeDays)));
 
             foreach (var image in _imageCache)
             {

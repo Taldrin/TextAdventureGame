@@ -22,6 +22,8 @@ namespace InterfurCreations.AdventureGames.Services.ImageStore
         private readonly IReporter _reporter;
         private const string BucketName = "furventure-games";
 
+        public int MaxCacheTimeDays => 5;
+
         public AwsImageStore(IConfigurationService configService, IReporter reporter)
         {
             _reporter = reporter;
