@@ -1,8 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net5.0;netstandard2.1</TargetFrameworks>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Games\Arral" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Games\Arral">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="5.2.0" />
@@ -12,6 +22,12 @@
     <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Core.DataObjects\InterfurCreations.AdventureGames.Core.DataObjects.csproj" />
     <ProjectReference Include="..\..\AdventureGameCore\InterfurCreations.AdventureGames.Core\InterfurCreations.AdventureGames.Core.csproj" />
     <ProjectReference Include="..\Furventure.AdventureGames.DatabaseServices.Offline\Furventure.AdventureGames.DatabaseServices.Offline.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Games\Arral">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

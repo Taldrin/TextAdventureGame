@@ -9,6 +9,7 @@ namespace Furventure.AdventureGames.DatabaseServices.Offline
 {
     public interface IOfflinePlayerController
     {
+        void CreateNewProfile(string name);
         Player GetPlayerByProfile(string name);
     }
 }

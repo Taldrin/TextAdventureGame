@@ -1,4 +1,5 @@
 ﻿using Furventure.AdventureGames.Offline.Database;
+using InterfurCreations.AdventureGames.Database;
 using InterfurCreations.AdventureGames.DatabaseServices.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Furventure.AdventureGames.DatabaseServices.Offline
 {
-    public class OfflineDatabaseContextProvider
+    public class OfflineDatabaseContextProvider : IDatabaseContextProvider
     {
         private OfflineDatabaseContext cachedContext;
 
@@ -16,14 +17,14 @@ namespace Furventure.AdventureGames.DatabaseServices.Offline
         {
         }
 
-        public OfflineDatabaseContext GetContext()
+        public DatabaseContext GetContext()
         {
             if (cachedContext == null)
                 cachedContext = new OfflineDatabaseContext();
             return cachedContext;
         }
 
-        public OfflineDatabaseContext GetNewContext()
+        public DatabaseContext GetNewContext()
         {
             cachedContext = new OfflineDatabaseContext();
             return cachedContext;

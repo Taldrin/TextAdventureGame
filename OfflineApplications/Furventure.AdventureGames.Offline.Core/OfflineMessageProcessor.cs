@@ -20,6 +20,11 @@ namespace Furventure.AdventureGames.Offline.Core
         public ExecutionResult ProcessMessage(string message)
         {
             var player = _playerController.GetPlayerByProfile("default");
+            if(player == null)
+            {
+                _playerController.CreateNewProfile("default");
+                player = _playerController.GetPlayerByProfile("default");
+            }
             return _gameExecutor.ProcessNewMessage(message, new PlayerState { player = player });
         }
     }

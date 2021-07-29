@@ -19,15 +19,12 @@ namespace Furventure.AdventureGames.Offline.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer($"Data Sourvce={DbPath}");
+            optionsBuilder.UseSqlite($"Data Source={DbPath}");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<GameSaves>().HasKey(a => new { a.PlayerGameSaveId, a.PlayerId });
-            modelBuilder.Entity<GameSaves>()
-                .Property(b => b.CreatedDate)
-                .HasDefaultValueSql("getdate()");
 
             modelBuilder.Ignore<TelegramPlayer>();
             modelBuilder.Ignore<DiscordPlayer>();
