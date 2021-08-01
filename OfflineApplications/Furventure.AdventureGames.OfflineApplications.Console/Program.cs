@@ -37,6 +37,7 @@ namespace Furventure.AdventureGames.OfflineApplications.Console
                     var result = messageProcessor.ProcessMessage(input);
 
                     var message = string.Join("\n\n", result.MessagesToShow.Select(a => a.Message));
+                    message = message.Replace("[", "(").Replace("]", ")");
 
                     input = AnsiConsole.Prompt(
                         new SelectionPrompt<string>()
