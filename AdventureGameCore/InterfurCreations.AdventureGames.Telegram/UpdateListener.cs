@@ -14,7 +14,7 @@ namespace InterfurCreations.AdventureGames.Telegram
     public class UpdateListener
     {
         private TelegramService _service;
-        private int update_id = 0;
+        private long update_id = 0;
 
         public UpdateListener(TelegramService service)
         {

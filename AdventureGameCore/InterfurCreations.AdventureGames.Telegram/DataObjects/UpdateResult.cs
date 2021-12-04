@@ -8,7 +8,7 @@ namespace InterfurCreations.AdventureGames.Telegram.DataObjects
 {
     public class From
     {
-        public int id { get; set; }
+        public long id { get; set; }
         public bool is_bot { get; set; }
         public string first_name { get; set; }
         public string username { get; set; }
@@ -31,7 +31,7 @@ namespace InterfurCreations.AdventureGames.Telegram.DataObjects
 
     public class Result
     {
-        public int update_id { get; set; }
+        public long update_id { get; set; }
         public Message message { get; set; }
     }
 

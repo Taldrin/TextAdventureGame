@@ -8,6 +8,6 @@ namespace InterfurCreations.AdventureGames.Telegram.DataObjects
 {
     public class GetUpdates
     {
-        public int offset { get; set; }
+        public long offset { get; set; }
     }
 }

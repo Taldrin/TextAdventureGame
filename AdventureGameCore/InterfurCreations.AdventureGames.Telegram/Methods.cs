@@ -89,7 +89,7 @@ namespace InterfurCreations.AdventureGames.Telegram
             return keyboardReply;
         }
 
-        public static async Task<List<Result>> getUpdates(TelegramService service, int updateId)
+        public static async Task<List<Result>> getUpdates(TelegramService service, long updateId)
         {
             var result = await service.PostRequestAsync<UpdateResult>("getUpdates", new GetUpdates { offset = updateId });
             if(result == null || result.result == null)
