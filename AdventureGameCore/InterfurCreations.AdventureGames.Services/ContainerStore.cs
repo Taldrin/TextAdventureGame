@@ -10,5 +10,6 @@ namespace InterfurCreations.AdventureGames.Services
     public static class ContainerStore
     {
         public static IContainer Container { get; set; }
+        public static IServiceProvider ServiceProvider { get; set; }
     }
 }

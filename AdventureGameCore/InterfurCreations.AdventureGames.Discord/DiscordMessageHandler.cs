@@ -29,27 +29,10 @@ namespace InterfurCreations.AdventureGames.Discord
             _reporter = reporter;
         }
 
-        public async Task MessageReceived(SocketMessage arg)
+        public async Task<ExecutionResult> MessageReceived(string message, long authorId, string playerName)
         {
-            string message = null;
 
-            if (!(arg.Channel is SocketDMChannel)) {
-                if (!arg.Content.StartsWith("ft.")) return;
-                    message = arg.Content.Remove(0, 3);
-            } else
-            {
-                message = arg.Content;
-                if (message.StartsWith("ft."))
-                {
-                    message = arg.Content.Remove(0, 3);
-                }
-            }
-
-            var playerName = arg.Author.Username;
-            var channelId = (long)arg.Channel.Id;
-            if (arg.Author.IsBot) return;
-
-            var playerState = _playerDatabaseController.GetPlayerByDiscordAuthor((long)arg.Author.Id);
+            var playerState = _playerDatabaseController.GetPlayerByDiscordAuthor(authorId);
             PlayerState dtoPlayer;
             if (playerState != null)
             {
@@ -57,11 +40,9 @@ namespace InterfurCreations.AdventureGames.Discord
             }
             else
             {
-                var newPlayer = await CreateNewGame(arg.Channel, playerName, (long)arg.Author.Id);
+                var newPlayer = await CreateNewGame(playerName, authorId);
                 dtoPlayer = new PlayerState { player = newPlayer };
             }
-
-            message = TryGetMessageChosen(arg.Channel, dtoPlayer, message);
 
             if (string.IsNullOrEmpty(message)) message = "NULL_MESSAGE";
 
@@ -69,47 +50,53 @@ namespace InterfurCreations.AdventureGames.Discord
 
             if (result != null)
             {
-                if (result.IsInvalidInput)
-                    await SendMessageAsync(arg.Channel, "**Invalid Input!**");
-                foreach (var resultMessage in result.MessagesToShow)
+
+                // Combine all the messages into one, then split them up into max 2000 characters.
+                // This is for performance, as sending multiple messages to Discord is sloooow
+                // This way, we send as few messages as possible
+                var combinedText = string.Join("\n\n", result.MessagesToShow.Select(a => string.IsNullOrEmpty(a.ImageUrl) ? a.Message : a.ImageUrl).ToList());
+                result.MessagesToShow = new List<MessageResult> { new MessageResult { Message = combinedText } };
+
+                HandleLongMessages(result);
+
+                return result;
+            } else
+            {
+                return new ExecutionResult
                 {
-                    var sendMessage = resultMessage.Message;
-                    if (string.IsNullOrWhiteSpace(sendMessage))
-                        sendMessage = resultMessage.ImageUrl;
-                    await SendMessageAsync(arg.Channel, sendMessage);
-                }
-
-                await SendOptionMessagesAsync(arg.Channel, result.OptionsToShow);
+                    MessagesToShow = new List<MessageResult> { new MessageResult { Message = "**Invalid Input**" } }
+                };
             }
         }
 
-        private string TryGetMessageChosen(ISocketMessageChannel channel, PlayerState player, string message)
-        {
-            var formerOptions = _gameExecutor.GetPossibleOptionsFromState(player);
-            if (!int.TryParse(message, out var intMessage))
-            {
-                return message;
-            }
-
-            if (formerOptions.Count < intMessage || intMessage <= 0)
-            {
-                return null;
-            }
-
-            return formerOptions[intMessage - 1];
-        }
-
-        private async Task<Player> CreateNewGame(ISocketMessageChannel channel, string name, long playerId)
+        private async Task<Player> CreateNewGame(string name, long playerId)
         {
             var player = _accountController.GetOrCreateNewDiscordAccount(playerId, name);
             _reporter.ReportMessage("The bot was started in a new chat, with username: " + name);
-            await ShowDefaultMessage(channel);
             return player;
         }
 
-        public async Task SendMessageAsync(ISocketMessageChannel channel, string message)
+        public void HandleLongMessages(ExecutionResult result)
         {
-            if (string.IsNullOrWhiteSpace(message)) return;
+            for(int i = result.MessagesToShow.Count() - 1; i >= 0; i--)
+            {
+                var message = result.MessagesToShow[i];
+                if(message.Message.Length > 2000)
+                {
+                    result.MessagesToShow.RemoveAt(i);
+                    var newMessages = SplitMessage(message.Message);
+                    foreach(var newMessage in newMessages)
+                    {
+                        result.MessagesToShow.Insert(i, new MessageResult { Message = newMessage, ImageUrl = message.ImageUrl });
+                    }
+                }
+            }
+        }
+
+        public List<string> SplitMessage(string message)
+        {
+            List<string> messages = new List<string>();
+            if (string.IsNullOrWhiteSpace(message)) return messages;
             if (message.Length > 2000)
             {
                 var splitMessage = message;
@@ -117,39 +104,17 @@ namespace InterfurCreations.AdventureGames.Discord
                 {
                     var splitIndex = splitMessage.Substring(0, 2000).LastIndexOf(' ');
                     var toSend = splitMessage.Substring(0, splitIndex);
-                    await channel.SendMessageAsync(toSend);
+                    messages.Add(toSend);
                     splitMessage = splitMessage.Substring(splitIndex, splitMessage.Length - splitIndex);
                 }
-                await channel.SendMessageAsync(splitMessage);
-            } else
-            {
-                await channel.SendMessageAsync(message);
+                messages.Add(splitMessage);
             }
-        }
-
-        public async Task SendOptionMessagesAsync(ISocketMessageChannel channel, List<string> replies)
-        {
-            string repliesString = "";
-            int index = 1;
-            replies.ForEach(a =>
+            else
             {
-                if(channel is SocketDMChannel)
-                    repliesString = repliesString + "**" + index++ + "** - " + a + "\n";
-                else
-                    repliesString = repliesString + "**ft." + index++ + "** - " + a + "\n";
-            });
-            repliesString.TrimEnd('n', '\\');
-            if (string.IsNullOrEmpty(repliesString)) return;
-            await channel.SendMessageAsync(repliesString);
+                messages.Add(message);
+            }
+            return messages;
         }
-
-        private async Task ShowDefaultMessage(ISocketMessageChannel channel)
-        {
-            await channel.SendMessageAsync("To use this disocrd bot, reply with the 'ft.' plus the number of the option you wish to take! For example, " +
-                                    "it may say \nft.1: Run Away\nft.2: Stand and fight\nIf you wished to Stand and fight, simply reply to the bot with" +
-                                    " the message 'ft.2'.");
-        }
-
     }
 }
 

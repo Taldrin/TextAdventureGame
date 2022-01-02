@@ -348,3 +348,4 @@ healthchecksdb
 # End of https://www.gitignore.io/api/visualstudio
 /DrawGameTester/DrawGameTester/App.config
 /DrawGameTester/InterfurCreations.DrawGameConsoleTester/App.config
+/OfflineApplications/OfflineApplications.7z
