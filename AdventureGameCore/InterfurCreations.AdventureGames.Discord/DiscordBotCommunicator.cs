@@ -139,9 +139,12 @@ namespace InterfurCreations.AdventureGames.Discord
                     foreach (var option in result.OptionsToShow)
                     {
                         var displayedOption = option;
+                        var customId = option;
                         if (option.Length > 80)
                             displayedOption = option.Substring(0, 76) + "...";
-                        builder.WithButton(displayedOption, option);
+                        if (option.Length > 100)
+                            customId = option.Substring(0, 99);
+                        builder.WithButton(displayedOption, customId);
                     }
                     var msgToSend = result.MessagesToShow.Last().Message;
                     if(string.IsNullOrWhiteSpace(msgToSend))
