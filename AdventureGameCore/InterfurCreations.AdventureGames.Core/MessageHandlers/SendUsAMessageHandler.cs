@@ -35,7 +35,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
                 player.PlayerFlag = PlayerFlag.SEND_US_MESSAGE.ToString();
                 return ExecutionResultHelper.SingleMessage("You can send us a message here! Just type in your message and send it as you" +
                             " would any other message, and it'll find its way to us :) \n\nYou can use this to send" +
-                            " us anything you like, including bug reports and ideas! \n\n If you're on Discord, use 'ft.YourMessageHere'. \n\n" +
+                            " us anything you like, including bug reports and ideas! \n\n" +
                             " If you would like us to contact you back, please remember to send contact details, such as your Telegram or Discord!",
                      new List<string> { "Return to menu" }, true);
             } else if(message == "Return to menu")
