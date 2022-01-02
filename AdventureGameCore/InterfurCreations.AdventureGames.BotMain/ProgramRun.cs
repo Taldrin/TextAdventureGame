@@ -20,6 +20,8 @@ using InterfurCreations.AdventureGames.Graph.Store;
 using Microsoft.Extensions.Configuration;
 using InterfurCreations.AdventureGames.Services.ImageStore;
 using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
+using Autofac.Extensions.DependencyInjection;
 
 namespace InterfurCreations.AdventureGames.BotMain
 {
@@ -62,10 +64,12 @@ namespace InterfurCreations.AdventureGames.BotMain
             configSetupService.SetConfig("TypeName", buildTypeName);
 
             RegisterAutofac(config, buildTypeName);
+            
 
             var connectionString = configSetupService.GetConfig("DatabaseConnectionString");
 
             ContainerStore.Container = Container;
+            ContainerStore.ServiceProvider = new AutofacServiceProvider(Container);
 
             ServiceStore.HttpLockObj = new object();
 

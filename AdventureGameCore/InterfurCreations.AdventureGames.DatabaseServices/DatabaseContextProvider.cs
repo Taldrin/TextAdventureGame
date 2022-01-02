@@ -36,7 +36,10 @@ namespace InterfurCreations.AdventureGames.DatabaseServices
         public void Clear()
         {
             if (cachedContext != null)
+            {
                 cachedContext.Dispose();
+                cachedContext = null;
+            }
         }
     }
 }
