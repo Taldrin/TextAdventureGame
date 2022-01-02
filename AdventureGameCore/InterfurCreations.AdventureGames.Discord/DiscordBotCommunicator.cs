@@ -143,7 +143,13 @@ namespace InterfurCreations.AdventureGames.Discord
                             displayedOption = option.Substring(0, 76) + "...";
                         builder.WithButton(displayedOption, option);
                     }
-                    await channel.SendMessageAsync(result.MessagesToShow.Last().Message, components: builder.Build());
+                    var msgToSend = result.MessagesToShow.Last().Message;
+                    if(string.IsNullOrWhiteSpace(msgToSend))
+                    {
+                        Log.LogMessage("No messages to send error. " + result.StatesVisited?.LastOrDefault(), LogType.Error);
+                        msgToSend = "Encountered an error - empty text response. If you're in a stuck state, try typing in '-Menu-' via DMs, or '@' the bot with '-Menu-'. This error has been automatically reported.";
+                    }
+                    await channel.SendMessageAsync(msgToSend, components: builder.Build());
                 }
             }
             catch (Exception e)

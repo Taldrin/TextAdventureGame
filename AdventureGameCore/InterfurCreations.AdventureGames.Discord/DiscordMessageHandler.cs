@@ -85,6 +85,7 @@ namespace InterfurCreations.AdventureGames.Discord
                 {
                     result.MessagesToShow.RemoveAt(i);
                     var newMessages = SplitMessage(message.Message);
+                    newMessages.Reverse();
                     foreach(var newMessage in newMessages)
                     {
                         result.MessagesToShow.Insert(i, new MessageResult { Message = newMessage, ImageUrl = message.ImageUrl });
