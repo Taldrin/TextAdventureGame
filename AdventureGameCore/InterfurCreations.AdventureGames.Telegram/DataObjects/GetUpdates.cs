@@ -9,5 +9,6 @@ namespace InterfurCreations.AdventureGames.Telegram.DataObjects
     public class GetUpdates
     {
         public long offset { get; set; }
+        public int timeout { get; set; }
     }
 }

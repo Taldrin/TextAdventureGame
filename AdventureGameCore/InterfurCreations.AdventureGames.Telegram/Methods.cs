@@ -91,7 +91,7 @@ namespace InterfurCreations.AdventureGames.Telegram
 
         public static async Task<List<Result>> getUpdates(TelegramService service, long updateId)
         {
-            var result = await service.PostRequestAsync<UpdateResult>("getUpdates", new GetUpdates { offset = updateId });
+            var result = await service.PostRequestAsync<UpdateResult>("getUpdates", new GetUpdates { offset = updateId, timeout = 10 });
             if(result == null || result.result == null)
             {
                 throw new System.Exception("GetUpdates returned null");
