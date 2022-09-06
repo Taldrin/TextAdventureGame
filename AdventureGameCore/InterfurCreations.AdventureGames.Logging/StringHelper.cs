@@ -34,5 +34,18 @@ namespace InterfurCreations.AdventureGames.Logging
             text = text.Replace("  ", " ");
             return text;
         }
+
+        public static string UnwrapException(this Exception exception)
+        {
+            string text = exception.Message;
+
+            while(exception.InnerException != null)
+            {
+                exception = exception.InnerException;
+                text = text + Environment.NewLine + exception.Message;
+            }
+
+            return text;
+        }
     }
 }
