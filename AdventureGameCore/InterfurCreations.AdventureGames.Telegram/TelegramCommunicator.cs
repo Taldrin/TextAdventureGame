@@ -5,6 +5,7 @@ using InterfurCreations.AdventureGames.Logging;
 using InterfurCreations.AdventureGames.Services;
 using InterfurCreations.AdventureGames.Services.Interfaces;
 using System.Collections.Generic;
+using System.Net.Http;
 
 namespace InterfurCreations.AdventureGames.Telegram
 {
@@ -19,7 +20,7 @@ namespace InterfurCreations.AdventureGames.Telegram
         public TelegramCommunicator(IConfigurationService configService, IPlayerDatabaseController playerDatabaseController,
             IReporter reporter, IAccountController accountController, IGoogleDriveService gdriveService, IGameExecutor gameExecutor)
         {
-            _service = new TelegramService(configService.GetConfig("TelegramUrl"), configService.GetConfig("TelegramApiKey", true));
+            _service = new TelegramService(configService.GetConfig("TelegramUrl"), configService.GetConfig("TelegramApiKey", true), new HttpClient());
             _reporter = reporter;
         }
 
