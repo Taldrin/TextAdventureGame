@@ -54,6 +54,14 @@ namespace InterfurCreations.AdminSite.BackgroundTasks
             } else
             {
                 Console.WriteLine("Backup file does not exist");
+
+                try
+                {
+                    File.Create(savePath + "-testfile.txt");
+                } catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
 
         }
