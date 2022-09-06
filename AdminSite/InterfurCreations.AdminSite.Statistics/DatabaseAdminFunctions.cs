@@ -20,7 +20,7 @@ namespace InterfurCreations.AdminSite.BackgroundTasks
         public DatabaseAdminFunctions(IConfigurationService configService , IGoogleDriveService googleDriveService)
         {
             _configService = configService;
-            googleDriveService = googleDriveService;
+            _googleDriveService = googleDriveService;
         }
 
         public void ExecuteBackup()
