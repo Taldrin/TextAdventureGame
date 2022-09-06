@@ -1,4 +1,5 @@
 ﻿using InterfurCreations.AdventureGames.Configuration;
+using InterfurCreations.AdventureGames.Services.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.SqlServer.Management.Smo;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace InterfurCreations.AdminSite.BackgroundTasks
@@ -13,10 +15,12 @@ namespace InterfurCreations.AdminSite.BackgroundTasks
     public class DatabaseAdminFunctions
     {
         private readonly IConfigurationService _configService;
+        private readonly IGoogleDriveService _googleDriveService;
 
-        public DatabaseAdminFunctions(IConfigurationService configService)
+        public DatabaseAdminFunctions(IConfigurationService configService , IGoogleDriveService googleDriveService)
         {
             _configService = configService;
+            googleDriveService = googleDriveService;
         }
 
         public void ExecuteBackup()
@@ -48,8 +52,11 @@ namespace InterfurCreations.AdminSite.BackgroundTasks
             var desiredPath = backupPath + "/" + fileName;
             var savePath = "/var/opt/mssql/data/" + fileName;
 
+            Thread.Sleep(TimeSpan.FromSeconds(10));
+
             if(File.Exists(savePath))
             {
+                Console.WriteLine("Backup file exists -- moving");
                 File.Move(savePath, desiredPath);
             } else
             {
@@ -62,6 +69,13 @@ namespace InterfurCreations.AdminSite.BackgroundTasks
                 {
                     Console.WriteLine(ex.Message);
                 }
+            }
+
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            Console.WriteLine("Uploading to Google Drive");
+            using (var fileStream = new FileStream(desiredPath, FileMode.Open))
+            {
+                _googleDriveService.UploadFile($"FULL_DATABASE_BACKUP_{DateTime.Now.ToString("D")}", "Backups", fileStream);
             }
 
         }

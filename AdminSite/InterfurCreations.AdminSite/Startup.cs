@@ -104,6 +104,8 @@ namespace InterfurCreations.AdminSite
             builder.RegisterType<StatisticsService>().As<IStatisticsService>().InstancePerLifetimeScope();
             builder.RegisterType<BackupService>().InstancePerLifetimeScope();
             builder.RegisterType<DatabaseAdminFunctions>().InstancePerLifetimeScope();
+            builder.RegisterType<GoogleDriveService>().As<IGoogleDriveService>().InstancePerLifetimeScope();
+            builder.RegisterType<ConfigSettingsGoogleDriveAuthenticator>().As<IGoogleDriveAuthenticator>().InstancePerLifetimeScope();
 
             #region GameTesting
             builder.RegisterType<GameProcessor>().As<IGameProcessor>().InstancePerLifetimeScope();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,6 @@ namespace InterfurCreations.AdventureGames.Services.Interfaces
         List<GoogleFile> ListFiles();
 
         byte[] DownloadFile(GoogleFile file);
-
+        void UploadFile(string name, string folderName, Stream uploadStream);
     }
 }
