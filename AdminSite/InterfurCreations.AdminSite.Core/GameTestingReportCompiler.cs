@@ -33,9 +33,13 @@ namespace InterfurCreations.AdminSite.Core
 
             returnData.EndStates = allData.EndStates.Select(a =>
             {
-                var endState = game.FindStateById(a.EndState);
-                var message = $"{new string(endState.StateText.Take(150).ToArray())}";
-                return PrettifyData(a.LatestGameSave, message);
+                try
+                {
+                    var endState = game.FindStateById(a.EndState);
+                    var message = $"{new string(endState.StateText.Take(150).ToArray())}";
+                    return PrettifyData(a.LatestGameSave, message);
+                }
+                catch (Exception ex) { return null; }
             }).ToList();
 
             returnData.Errors = allData.Errors.Select(a =>
