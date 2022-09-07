@@ -28,6 +28,7 @@ using InterfurCreations.AdventureGames.GameTesting;
 using InterfurCreations.AdventureGames.Core.Interface;
 using InterfurCreations.AdventureGames.Core;
 using InterfurCreations.AdventureGames.GameLanguage;
+using InterfurCreations.AdminSite.BackgroundTasks;
 
 namespace InterfurCreations.AdminSite
 {
@@ -101,6 +102,10 @@ namespace InterfurCreations.AdminSite
             builder.RegisterType<ActionResolver>().As<IActionResolver>().InstancePerLifetimeScope();
             builder.RegisterType<ReportsService>().As<IReportsService>().InstancePerLifetimeScope();
             builder.RegisterType<StatisticsService>().As<IStatisticsService>().InstancePerLifetimeScope();
+            builder.RegisterType<BackupService>().InstancePerLifetimeScope();
+            builder.RegisterType<DatabaseAdminFunctions>().InstancePerLifetimeScope();
+            builder.RegisterType<GoogleDriveService>().As<IGoogleDriveService>().InstancePerLifetimeScope();
+            builder.RegisterType<ConfigSettingsGoogleDriveAuthenticator>().As<IGoogleDriveAuthenticator>().InstancePerLifetimeScope();
 
             #region GameTesting
             builder.RegisterType<GameProcessor>().As<IGameProcessor>().InstancePerLifetimeScope();
@@ -125,6 +130,7 @@ namespace InterfurCreations.AdminSite
             builder.RegisterType<DrawStore>().As<IGameStore>().SingleInstance();
 
             builder.RegisterType<AchievementStatisticsBuildTask>().InstancePerLifetimeScope();
+            builder.RegisterType<BackupTask>().InstancePerLifetimeScope();
             builder.RegisterType<GameTestingTask>().InstancePerLifetimeScope();
 
             builder.Populate(services);
@@ -180,6 +186,7 @@ namespace InterfurCreations.AdminSite
             RecurringJob.AddOrUpdate<GameTestingTask>(a => a.Run(), Cron.MinuteInterval(12));
             RecurringJob.AddOrUpdate<ImageStoreCleanupTask>(a => a.ClearImages(), Cron.HourInterval(2));
             RecurringJob.AddOrUpdate<GamesByPlayerCountStatisticsBuildTask>(a => a.Run(), Cron.HourInterval(12));
+            RecurringJob.AddOrUpdate<BackupTask>(a => a.Run(), Cron.DayInterval(1));
         }
     }
 }

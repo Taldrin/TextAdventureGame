@@ -48,5 +48,27 @@ namespace InterfurCreations.AdventureGames.Services
             return ms.ToArray();
         }
 
+        public void UploadFile(string name, string folderName, Stream uploadStream)
+        {
+            if (gDriveService == null)
+                gDriveService = _authenticator.AuthenticateService(_configService);
+
+            FilesResource.ListRequest listRequest = gDriveService.Files.List();
+            IList<Google.Apis.Drive.v3.Data.File> files = listRequest.Execute().Files;
+            var folder = files.FirstOrDefault(a => a.Name == folderName);
+
+            var fileMetadata = new Google.Apis.Drive.v3.Data.File()
+            {
+                Name = name,
+                Parents = new List<string>
+                    {
+                        folder.Id
+                    }
+
+            };
+            FilesResource.CreateMediaUpload request;
+            request = gDriveService.Files.Create(fileMetadata, uploadStream, "application/octet-stream");
+            request.Upload();
+        }
     }
 }
