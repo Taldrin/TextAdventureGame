@@ -62,7 +62,7 @@ else
                 <form @onsubmit="@(() => MessageButtonClicked(TextInput))">
                     <div class="input-group p-1" style="max-width:800px">
                         <div class="input-group-append">
-                            <button style="height:auto" class="btn btn-outline-info text-wrap bg-secondary" type="button" id="button-addon1">Submit</button>
+                            <button style="height:auto" class="btn btn-outline-info text-wrap bg-secondary" @onclick="@(() => MessageButtonClicked(TextInput))" type="button" id="button-addon1">Submit</button>
                         </div>
                         <input style="height:auto" type="text" placeholder="Enter your message" class="form-control" @bind="@TextInput" aria-describedby="button-addon1" />
                     </div>
