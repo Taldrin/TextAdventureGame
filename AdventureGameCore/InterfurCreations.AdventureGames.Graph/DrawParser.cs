@@ -101,6 +101,9 @@ namespace InterfurCreations.AdventureGames.Graph
             existingStates.Add(newState);
             var stateLinks = elementStore.Where(a => a.Attribute("source")?.Value == newState.Id);
             var stateTeleports = element.Attribute("teleport")?.Value;
+            if(string.IsNullOrEmpty(stateTeleports))
+                stateTeleports = element.Attribute("Teleport")?.Value;
+
             bool isTeleport = false;
             newState.StateOptions = new List<StateOption>();
             if (!string.IsNullOrEmpty(stateTeleports))
