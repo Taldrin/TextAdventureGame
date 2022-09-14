@@ -52,7 +52,7 @@ namespace InterfurCreations.AdventureGames.Core
             if (foundFunctions.Count() > 1)
                 throw new AdventureGameException($"Found more than 1 function matching name {functionName}!", true);
             var function = foundFunctions.FirstOrDefault();
-            if(foundFunctions == null)
+            if(function == null)
                 throw new AdventureGameException($"Found no function matching name {functionName}!", true);
 
             gameSave.FrameStack.Add(new PlayerFrameStack

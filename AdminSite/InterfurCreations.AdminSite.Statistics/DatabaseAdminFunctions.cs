@@ -75,8 +75,9 @@ namespace InterfurCreations.AdminSite.BackgroundTasks
             Console.WriteLine("Uploading to Google Drive");
             using (var fileStream = new FileStream(desiredPath, FileMode.Open))
             {
-                _googleDriveService.UploadFile($"FULL_DATABASE_BACKUP_{DateTime.Now.ToString("D")}", "Backups", fileStream);
+                _googleDriveService.UploadFile($"DATABASE_BACKUP_{DateTime.Now.ToString("D")}", "Backups", fileStream);
             }
+            Console.WriteLine("Upload complete");
 
         }
     }

@@ -68,7 +68,12 @@ namespace InterfurCreations.AdventureGames.Services
             };
             FilesResource.CreateMediaUpload request;
             request = gDriveService.Files.Create(fileMetadata, uploadStream, "application/octet-stream");
-            request.Upload();
+            var result = request.Upload();
+
+            if(result.Status == Google.Apis.Upload.UploadStatus.Failed)
+            {
+                throw result.Exception;
+            }
         }
     }
 }
