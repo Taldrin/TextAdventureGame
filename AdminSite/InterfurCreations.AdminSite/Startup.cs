@@ -93,7 +93,6 @@ namespace InterfurCreations.AdminSite
             builder.RegisterType<DatabaseContextProvider>().As<IDatabaseContextProvider>().InstancePerLifetimeScope();
             builder.RegisterType<AccountController>().As<IAccountController>().InstancePerLifetimeScope();
             builder.RegisterType<PlayerDatabaseController>().As<IPlayerDatabaseController>().InstancePerLifetimeScope();
-            builder.RegisterType<ConfigSettingsGoogleDriveAuthenticator>().As<IGoogleDriveAuthenticator>().InstancePerLifetimeScope();
             builder.RegisterType<GoogleDriveService>().As<IGoogleDriveService>().InstancePerLifetimeScope();
             builder.RegisterType<AccessTokenService>().As<IAccessTokenService>().InstancePerLifetimeScope();
             builder.RegisterType<TokenGenerator>().As<ITokenGenerator>().InstancePerLifetimeScope();
@@ -105,7 +104,6 @@ namespace InterfurCreations.AdminSite
             builder.RegisterType<BackupService>().InstancePerLifetimeScope();
             builder.RegisterType<DatabaseAdminFunctions>().InstancePerLifetimeScope();
             builder.RegisterType<GoogleDriveService>().As<IGoogleDriveService>().InstancePerLifetimeScope();
-            builder.RegisterType<ConfigSettingsGoogleDriveAuthenticator>().As<IGoogleDriveAuthenticator>().InstancePerLifetimeScope();
 
             #region GameTesting
             builder.RegisterType<GameProcessor>().As<IGameProcessor>().InstancePerLifetimeScope();
@@ -117,7 +115,7 @@ namespace InterfurCreations.AdminSite
             builder.RegisterType<GameDataService>().As<IGameDataService>().InstancePerLifetimeScope();
             builder.RegisterType<GameProcessor>().As<IGameProcessor>().InstancePerLifetimeScope();
             builder.RegisterType<DrawStore>().As<IGameStore>().SingleInstance();
-            builder.RegisterType<ConfigSettingsGoogleDriveAuthenticator>().As<IGoogleDriveAuthenticator>().SingleInstance();
+            builder.RegisterType<ConfigSettingsGoogleDriveReadWriteAuthenticator>().As<IGoogleDriveAuthenticator>().SingleInstance();
             builder.RegisterType<GoogleDriveService>().As<IGoogleDriveService>().SingleInstance();
             builder.RegisterType<DrawGameTestExecutor>().As<DrawGameTestExecutor>().SingleInstance();
             builder.RegisterType<LanguageToolSpellChecker>().As<ISpellChecker>().SingleInstance();

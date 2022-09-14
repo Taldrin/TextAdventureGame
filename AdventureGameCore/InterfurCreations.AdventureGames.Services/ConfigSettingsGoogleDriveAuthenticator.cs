@@ -11,14 +11,17 @@ namespace InterfurCreations.AdventureGames.Services
 {
     public class ConfigSettingsGoogleDriveAuthenticator : IGoogleDriveAuthenticator
     {
-        private static string[] Scopes = { DriveService.Scope.DriveReadonly };
+        protected virtual string[] GetScopes()
+        {
+            return new string[] { DriveService.Scope.DriveReadonly };
+        }
 
         public DriveService AuthenticateService(IConfigurationService configService)
         {
 
             Log.LogMessage("Looking for google drive credentials in configuration...");
             var credentialJson = configService.GetConfig("GoogleDrive");
-            var credential = GoogleCredential.FromJson(credentialJson).CreateScoped(Scopes);
+            var credential = GoogleCredential.FromJson(credentialJson).CreateScoped(GetScopes());
 
             // Create Drive API service.
             var gDriveService = new DriveService(new BaseClientService.Initializer()
