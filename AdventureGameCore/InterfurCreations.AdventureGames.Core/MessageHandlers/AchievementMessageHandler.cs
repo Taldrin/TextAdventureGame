@@ -80,7 +80,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
 
         public bool ShouldHandleMessage(string message, string gameState, string playerFlag)
         {
-            if((message.StartsWith(Messages.Achievements) && playerFlag == PlayerFlag.MAIN_MENU.ToString()) 
+            if((!string.IsNullOrWhiteSpace(message) && message.StartsWith(Messages.Achievements) && playerFlag == PlayerFlag.MAIN_MENU.ToString()) 
                 || playerFlag == PlayerFlag.ACHIEVEMENTS.ToString())
             {
                 return true;

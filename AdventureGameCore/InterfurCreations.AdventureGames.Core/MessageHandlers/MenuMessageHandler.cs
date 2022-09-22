@@ -121,7 +121,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
 
         public bool ShouldHandleMessage(string message, string gameState, string playerFlag)
         {
-            return message.ToLower() == "-menu-" || playerFlag == PlayerFlag.GAME_MENU.ToString();
+            return message?.ToLower() == "-menu-" || playerFlag == PlayerFlag.GAME_MENU.ToString();
         }
 
         public List<string> GetOptions(Player player)
