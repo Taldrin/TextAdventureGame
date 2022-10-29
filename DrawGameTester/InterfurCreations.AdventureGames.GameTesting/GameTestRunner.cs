@@ -163,7 +163,10 @@ namespace InterfurCreations.AdventureGames.GameTesting
                     data.StateVisited(gameState.StateId);
 
                     if (actionsDoneThisRun > actionsPerRun)
-                        break;
+                    {
+                        ResetGame();
+                        continue;
+                    }
 
                     var optionToExecute = PickOption(state);
 
