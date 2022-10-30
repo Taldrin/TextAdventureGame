@@ -65,6 +65,9 @@ namespace InterfurCreations.AdventureGames.Core
 
         public ExecutionResult ProcessNewMessage(string message, PlayerState state)
         {
+            if (message == null)
+                message = string.Empty;
+
             ExecutionResult result = null;
             if (!_accessService.DoesPlayerHaveAccess(state.player))
             {
