@@ -27,8 +27,6 @@ namespace InterfurCreations.AdventureGames.Telegram
             _botToken = botToken;
             _url = _telegramUrl + _botToken;
             _httpClient = client;
-
-            _httpClient.Timeout = TimeSpan.FromSeconds(30);
         }
 
         public async Task<T> PostRequestAsync<T>(string methodName, object data)
