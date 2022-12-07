@@ -29,7 +29,7 @@ namespace InterfurCreations.AdventureGames.Telegram
                 {
                     try
                     {
-                        var results = await Methods.getUpdates(_service, update_id);
+                        var results = await Methods.getUpdatesAsync(_service, update_id);
 
                         results.ForEach(a =>
                         {
