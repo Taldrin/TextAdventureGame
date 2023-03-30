@@ -67,5 +67,10 @@ namespace InterfurCreations.AdventureGames.OpenAI
                 return result;
             }
         }
+        
+        public void ClearMessagesForUser(string userId)
+        {
+            _chatDictionaries.Remove(userId);
+        }
     }
 }

@@ -44,8 +44,10 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
             var config = _gameRetrieverService.ListGames(true).FirstOrDefault(a => a.GameName == "LiveConfiguration");
             var firstMsg = _textParsing.CleanText(config.GameFunctions.FirstOrDefault(a => a.FunctionName == "AIFirstMessage").StartState.StateText).Trim();
             var postChoiceMsg = _textParsing.CleanText(config.GameFunctions.FirstOrDefault(a => a.FunctionName == "AICharacterChoiceMessage").StartState.StateText).Trim();
+            var noChoiceMsg = _textParsing.CleanText(config.GameFunctions.FirstOrDefault(a => a.FunctionName == "AINoOptionMessage").StartState.StateText).Trim();
             if(message == "ChatGPT 1")
             {
+                _aITextService.ClearMessagesForUser(player.PlayerId);
                 var response = _aITextService.SendMessage(player.PlayerId, firstMsg);
                 var options = ParseOptions(response);
                 options.Add(Messages.Return);
@@ -59,6 +61,11 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
                     var animalChoice = message + ". " + postChoiceMsg;
                     var response = _aITextService.SendMessage(player.PlayerId, animalChoice);
                     var options = ParseOptions(response);
+                    if(options.Count == 0)
+                    {
+                        response = _aITextService.SendMessage(player.PlayerId, noChoiceMsg);
+                        options = ParseOptions(response);
+                    }
                     options.Add(Messages.Return);
                     return ExecutionResultHelper.SingleMessage(response, options);
                 }
@@ -66,6 +73,11 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
                 {
                     var response = _aITextService.SendMessage(player.PlayerId, message);
                     var options = ParseOptions(response);
+                    if (options.Count == 0)
+                    {
+                        response = _aITextService.SendMessage(player.PlayerId, noChoiceMsg);
+                        options = ParseOptions(response);
+                    }
                     options.Add(Messages.Return);
                     return ExecutionResultHelper.SingleMessage(response, options);
                 }

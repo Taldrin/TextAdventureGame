@@ -36,6 +36,8 @@ namespace InterfurCreations.AdventureGames.OpenAI
 
             if (completionResult.Successful)
             {
+                if (completionResult.Usage.TotalTokens >= 4000)
+                    chatSoFar.RemoveAt(4);
                 return completionResult.Choices.FirstOrDefault()?.Message.Content;
             }
             else

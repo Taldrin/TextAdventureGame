@@ -10,6 +10,7 @@ namespace InterfurCreations.AdventureGames.Services.Interfaces
     {
         void AddSystemMessage(string userId, string message);
         string AddSystemMessageWithResponse(string userId, string message);
+        void ClearMessagesForUser(string userId);
         int GetUserMessageCount(string userId);
         string SendMessage(string userId, string message);
     }
