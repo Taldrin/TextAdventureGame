@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using InterfurCreations.AdventureGames.Core.DataObjects;
 using InterfurCreations.AdventureGames.Core.Interface;
 using InterfurCreations.AdventureGames.Core.Objects;
@@ -53,12 +54,15 @@ namespace InterfurCreations.AdventureGames.Telegram
             {
                 foreach (var a in executionResult.MessagesToShow)
                 {
-                    if(!string.IsNullOrWhiteSpace(a.ImageUrl))
+                    await Retry.Do(async () =>
                     {
-                        await Methods.sendImageWithReplyOptions(service, a.ImageUrl, message.chat.id, executionResult.OptionsToShow);
-                    }
-                    else if(!string.IsNullOrWhiteSpace(a.Message))
-                        await Methods.sendMessageWithReplyOptions(service, a.Message, message.chat.id, executionResult.OptionsToShow);
+                        if (!string.IsNullOrWhiteSpace(a.ImageUrl))
+                        {
+                            await Methods.sendImageWithReplyOptions(service, a.ImageUrl, message.chat.id, executionResult.OptionsToShow);
+                        }
+                        else if (!string.IsNullOrWhiteSpace(a.Message))
+                            await Methods.sendMessageWithReplyOptions(service, a.Message, message.chat.id, executionResult.OptionsToShow);
+                    }, TimeSpan.FromSeconds(0.5), 3);
                 };
                 if (executionResult.IsInvalidInput)
                     await Methods.sendMessage(service, "That's not a valid input!", message.chat.id);

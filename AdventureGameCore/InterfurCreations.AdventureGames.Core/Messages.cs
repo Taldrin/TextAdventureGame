@@ -12,6 +12,7 @@ namespace InterfurCreations.AdventureGames.Core
         public static string SaveGame => "Save Current Game";
         public static string LoadGame => "Load Game";
         public static string MiniGames => "Micro Games";
+        public static string AIAdventures => "AI Adventures";
         public static string Return => "Return";
         public static string Achievements => "Achievements";
         public static string Restart => "-Restart-";

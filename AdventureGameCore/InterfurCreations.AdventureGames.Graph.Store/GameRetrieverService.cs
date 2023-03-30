@@ -20,6 +20,11 @@ namespace InterfurCreations.AdventureGames.Graph.Store
 
         private object lockObj = new object();
 
+        private readonly List<string> _filteredGameNames = new List<string>()
+        {
+            "liveconfiguration"
+        };
+
         public GameRetrieverService(IGameStore gameStore, IReporter reporter, IConfigurationService configService)
         {
             _gameStore = gameStore;
@@ -28,24 +33,30 @@ namespace InterfurCreations.AdventureGames.Graph.Store
             _parser = new DrawParser();
         }
 
-        public List<DrawGame> ListGames()
+        public List<DrawGame> ListGames(bool includeFilteredGames = false)
         {
             lock (lockObj)
             {
                 var minutesBetweenChecks = int.Parse(_configService.GetConfigOrDefault("MaxMinutesBetweenGameCheck", "10", true));
                 if (LastChecked.Add(TimeSpan.FromMinutes(minutesBetweenChecks)) < DateTime.UtcNow)
                     CheckForOutOfDate();
-                return TimeRetrievedGame.Keys.ToList();
+                if(!includeFilteredGames)
+                    return TimeRetrievedGame.Keys.Where(a => !_filteredGameNames.Contains(a.GameName.ToLowerInvariant())).ToList();
+                else
+                    return TimeRetrievedGame.Keys.ToList();
             }
         }
 
-        public List<DrawGame> ListGames(TimeSpan timeBetweenCheck)
+        public List<DrawGame> ListGames(TimeSpan timeBetweenCheck, bool includeFilteredGames = false)
         {
             lock (lockObj)
             {
                 if (LastChecked.Add(timeBetweenCheck) < DateTime.UtcNow)
                     CheckForOutOfDate();
-                return TimeRetrievedGame.Keys.ToList();
+                if (!includeFilteredGames)
+                    return TimeRetrievedGame.Keys.Where(a => !_filteredGameNames.Contains(a.GameName.ToLowerInvariant())).ToList();
+                else
+                    return TimeRetrievedGame.Keys.ToList();
             }
         }
 

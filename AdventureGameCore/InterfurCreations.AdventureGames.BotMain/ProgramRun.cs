@@ -22,6 +22,7 @@ using InterfurCreations.AdventureGames.Services.ImageStore;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Autofac.Extensions.DependencyInjection;
+using InterfurCreations.AdventureGames.OpenAI;
 
 namespace InterfurCreations.AdventureGames.BotMain
 {
@@ -82,7 +83,7 @@ namespace InterfurCreations.AdventureGames.BotMain
                     Log.EnableReporting(scope.Resolve<IReporter>());
 #endif
                 // List games straight away, so there is no long delay when the first person sends a message
-                scope.Resolve<IGameRetrieverService>().ListGames();
+                //scope.Resolve<IGameRetrieverService>().ListGames();
 
                 var inputController = scope.Resolve<IInputController>();
                 inputController.Setup();
@@ -131,6 +132,10 @@ namespace InterfurCreations.AdventureGames.BotMain
             builder.RegisterType<GameRetrieverService>().As<IGameRetrieverService>().SingleInstance();
 
             builder.RegisterType<ImageStoreCleanupTask>().InstancePerLifetimeScope();
+
+            builder.RegisterType<OpenAIConnector>().As<IOpenAIConnector>().SingleInstance();
+            builder.RegisterType<ChatGptService>().As<IAITextService>().SingleInstance();
+
 
             builder.RegisterAssemblyTypes(typeof(IMessageHandler).Assembly)
                 .AssignableTo<IMessageHandler>()
