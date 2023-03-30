@@ -30,7 +30,7 @@ namespace InterfurCreations.AdventureGames.OpenAI
             var completionResult = await _openAiService.ChatCompletion.CreateCompletion(new ChatCompletionCreateRequest()
             {
                 Messages = chatSoFar,
-                Model = Models.ChatGpt3_5Turbo
+                Model = Models.ChatGpt3_5Turbo,
             });
 
 

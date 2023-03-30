@@ -107,6 +107,21 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
 
             var formattedOptions = numberedLines.Select(a => a.Substring(0, 1)).ToList();
 
+            if(formattedOptions.Count == 0)
+            {
+                var optionedLines = lines.Where(a =>
+                {
+                    if(a.StartsWith("Option"))
+                    {
+                        return true;
+                    }
+                    return false;
+                });
+
+                int i = 0;
+                formattedOptions = optionedLines.Select(a => (++i).ToString()).ToList();
+            }
+
             return formattedOptions;
         }
     }
