@@ -31,12 +31,18 @@ namespace InterfurCreations.AdventureGames.OpenAI
             {
                 Messages = chatSoFar,
                 Model = Models.ChatGpt3_5Turbo,
+                N = 1,
+                TopP = 1,
+                Temperature = 0.7f,
+                FrequencyPenalty = 0,
+                PresencePenalty = 0,
+                MaxTokens = 256
             });
 
 
             if (completionResult.Successful)
             {
-                if (completionResult.Usage.TotalTokens >= 4000)
+                if (completionResult.Usage.TotalTokens >= 3800)
                     chatSoFar.RemoveAt(4);
                 return completionResult.Choices.FirstOrDefault()?.Message.Content;
             }
