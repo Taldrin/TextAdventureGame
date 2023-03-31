@@ -49,6 +49,13 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
             {
                 _aITextService.ClearMessagesForUser(player.PlayerId);
                 var response = _aITextService.SendMessage(player.PlayerId, firstMsg);
+                for(int i = 0; i < 5; i++)
+                {
+                    if (!response.Contains("OpenAI"))
+                        break;
+                    _aITextService.ClearMessagesForUser(player.PlayerId);
+                     response = _aITextService.SendMessage(player.PlayerId, firstMsg);
+                }
                 var options = ParseOptions(response);
                 options.Add(Messages.Return);
 

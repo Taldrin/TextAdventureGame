@@ -21,7 +21,7 @@ namespace InterfurCreations.AdventureGames.OpenAI
             _configService = configService;
             _openAiService = new OpenAIService(new OpenAiOptions()
             {
-                ApiKey = _configService.GetConfig("OpenAIKey")
+                ApiKey = _configService.GetConfig("OpenAIKey"),
             });
         }
 
@@ -36,7 +36,6 @@ namespace InterfurCreations.AdventureGames.OpenAI
                 Temperature = 0.7f,
                 FrequencyPenalty = 0,
                 PresencePenalty = 0,
-                MaxTokens = 256
             });
 
 
