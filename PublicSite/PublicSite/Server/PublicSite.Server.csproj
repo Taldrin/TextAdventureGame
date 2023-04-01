@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\AdventureGameCore\InterfurCreations.AdventureGames.Core\InterfurCreations.AdventureGames.Core.csproj" />
+    <ProjectReference Include="..\..\..\AdventureGameCore\InterfurCreations.AdventureGames.OpenAI\InterfurCreations.AdventureGames.OpenAI.csproj" />
     <ProjectReference Include="..\..\..\AdventureGameCore\InterfurCreations.AdventureGames.SlackReporter\InterfurCreations.AdventureGames.SlackReporter.csproj" />
     <ProjectReference Include="..\Client\PublicSite.Client.csproj" />
   </ItemGroup>
