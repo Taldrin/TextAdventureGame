@@ -43,9 +43,10 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
             }
             var config = _gameRetrieverService.ListGames(true).FirstOrDefault(a => a.GameName == "LiveConfiguration");
             var firstMsg = _textParsing.CleanText(config.GameFunctions.FirstOrDefault(a => a.FunctionName == "AIFirstMessage").StartState.StateText).Trim();
+            var promptCommandText = _textParsing.CleanText(config.GameFunctions.FirstOrDefault(a => a.FunctionName == "AICommand").StartState.StateText).Trim();
             var postChoiceMsg = _textParsing.CleanText(config.GameFunctions.FirstOrDefault(a => a.FunctionName == "AICharacterChoiceMessage").StartState.StateText).Trim();
             var noChoiceMsg = _textParsing.CleanText(config.GameFunctions.FirstOrDefault(a => a.FunctionName == "AINoOptionMessage").StartState.StateText).Trim();
-            if(message == "ChatGPT 1")
+            if(message == "Fully Generated")
             {
                 _aITextService.ClearMessagesForUser(player.PlayerId);
                 var response = _aITextService.SendMessage(player.PlayerId, firstMsg);
@@ -60,7 +61,39 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
                 options.Add(Messages.Return);
 
                 return ExecutionResultHelper.SingleMessage(response, options);
-            } else
+            } else if(message == "Prompt Based") {
+                var options = new List<string>();
+                var prompts = config.GameFunctions.Where(a => a.FunctionName.StartsWith("AIPrompt")).ToList();
+                var selectedPrompt = prompts[new Random().Next(prompts.Count)];
+                var prompttxt = _textParsing.CleanText(selectedPrompt.StartState.StateText).Trim();
+                _aITextService.AddSystemMessage(player.PlayerId, promptCommandText);
+                _aITextService.SeedAssistantMessage(player.PlayerId, prompttxt);
+                options.Add("1");
+                options.Add("2");
+                options.Add("3");
+                options.Add("4");
+                options.Add("Change Prompt");
+                options.Add(Messages.Return);
+                return ExecutionResultHelper.SingleMessage(prompttxt, options);
+            } else if(message == "Change Prompt")
+            {
+                _aITextService.ClearMessagesForUser(player.PlayerId);
+
+                var options = new List<string>();
+                var prompts = config.GameFunctions.Where(a => a.FunctionName.StartsWith("AIPrompt")).ToList();
+                var selectedPrompt = prompts[new Random().Next(prompts.Count)];
+                var prompttxt = _textParsing.CleanText(selectedPrompt.StartState.StateText).Trim();
+                _aITextService.AddSystemMessage(player.PlayerId, promptCommandText);
+                _aITextService.SeedAssistantMessage(player.PlayerId, prompttxt);
+                options.Add("1");
+                options.Add("2");
+                options.Add("3");
+                options.Add("4");
+                options.Add("Change Prompt");
+                options.Add(Messages.Return);
+                return ExecutionResultHelper.SingleMessage(prompttxt, options);
+            }
+            else
             {
                 var count = _aITextService.GetUserMessageCount(player.PlayerId);
                 if(count == 2)
@@ -106,7 +139,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
             var lines = text.Split("\n", StringSplitOptions.RemoveEmptyEntries);
             var numberedLines = lines.Where(a =>
             {
-                if (int.TryParse(a.Trim().First().ToString(), out int num))
+                if (a.Trim().Length > 0 && int.TryParse(a.Trim().First().ToString(), out int num))
                     return true;
                 else
                     return false;

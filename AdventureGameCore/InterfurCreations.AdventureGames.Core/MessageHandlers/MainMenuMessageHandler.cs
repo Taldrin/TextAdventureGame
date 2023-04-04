@@ -115,12 +115,13 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
             var execResult = new ExecutionResult();
             var messages = new List<MessageResult>();
             List<string> options = new List<string>();
-            options.Add("ChatGPT 1");
+            options.Add("Fully Generated");
+            options.Add("Prompt Based");
             options.Add(Messages.Return);
 
             messages.Add(new MessageResult
             {
-                Message = "AI Test games!"
+                Message = "AI Test games!\nFully generated has no set prompts. The AI comes up with everything!\n\nPrompt based uses a set of hand written prompts which sets the AI on a good course for text adventuring."
             });
             execResult.OptionsToShow = options;
             execResult.MessagesToShow = messages;

@@ -39,6 +39,20 @@ namespace InterfurCreations.AdventureGames.OpenAI
             }
         }
 
+        public void SeedAssistantMessage(string userId, string message)
+        {
+            if (_chatDictionaries.TryGetValue(userId, out List<ChatMessage> messages))
+            {
+                messages.Add(new ChatMessage("assistant", message));
+            }
+            else
+            {
+                messages = new List<ChatMessage>();
+                messages.Add(new ChatMessage("assistant", message));
+                _chatDictionaries.Add(userId, messages);
+            }
+        }
+
         public string AddSystemMessageWithResponse(string userId, string message)
         {
             AddSystemMessage(userId, message);
