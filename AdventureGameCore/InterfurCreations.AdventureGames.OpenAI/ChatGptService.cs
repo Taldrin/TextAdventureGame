@@ -2,6 +2,7 @@
 using OpenAI.GPT3.ObjectModels.RequestModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace InterfurCreations.AdventureGames.OpenAI
 {
@@ -23,6 +24,15 @@ namespace InterfurCreations.AdventureGames.OpenAI
                 return messages.Count;
             }
             else return 0;
+        }
+
+        public List<string> GetUserMessages(string userId)
+        {
+            if (_chatDictionaries.TryGetValue(userId, out List<ChatMessage> messages))
+            {
+                return messages.Select(a => a.Content).ToList();
+            }
+            else return new List<string>();
         }
 
         public void AddSystemMessage(string userId, string message)

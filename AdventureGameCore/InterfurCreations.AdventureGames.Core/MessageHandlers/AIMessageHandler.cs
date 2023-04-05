@@ -62,6 +62,8 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
 
                 return ExecutionResultHelper.SingleMessage(response, options);
             } else if(message == "Prompt Based") {
+                _aITextService.ClearMessagesForUser(player.PlayerId);
+
                 var options = new List<string>();
                 var prompts = config.GameFunctions.Where(a => a.FunctionName.StartsWith("AIPrompt")).ToList();
                 var selectedPrompt = prompts[new Random().Next(prompts.Count)];
@@ -96,7 +98,8 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
             else
             {
                 var count = _aITextService.GetUserMessageCount(player.PlayerId);
-                if(count == 2)
+                var messages= _aITextService.GetUserMessages(player.PlayerId);
+                if (count == 2 && messages.FirstOrDefault() == firstMsg)
                 {
                     var animalChoice = message + ". " + postChoiceMsg;
                     var response = _aITextService.SendMessage(player.PlayerId, animalChoice);

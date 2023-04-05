@@ -33,9 +33,10 @@ namespace InterfurCreations.AdventureGames.OpenAI
                 Model = Models.ChatGpt3_5Turbo,
                 N = 1,
                 TopP = 1,
-                Temperature = 0.7f,
+                Temperature = 0.85f,
                 FrequencyPenalty = 0,
                 PresencePenalty = 0,
+                MaxTokens = 512,
             });
 
 
