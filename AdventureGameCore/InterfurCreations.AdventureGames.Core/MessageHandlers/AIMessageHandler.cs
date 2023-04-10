@@ -67,6 +67,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
                 var options = new List<string>();
                 var prompts = config.GameFunctions.Where(a => a.FunctionName.StartsWith("AIPrompt")).ToList();
                 var selectedPrompt = prompts[new Random().Next(prompts.Count)];
+                var promptName = selectedPrompt.FunctionName.Replace("AIPrompt_", "");
                 var prompttxt = _textParsing.CleanText(selectedPrompt.StartState.StateText).Trim();
                 _aITextService.AddSystemMessage(player.PlayerId, promptCommandText);
                 _aITextService.SeedAssistantMessage(player.PlayerId, prompttxt);
@@ -76,7 +77,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
                 options.Add("4");
                 options.Add("Change Prompt");
                 options.Add(Messages.Return);
-                return ExecutionResultHelper.SingleMessage(prompttxt, options);
+                return ExecutionResultHelper.SingleMessage($"{promptName}\n\n{prompttxt}", options);
             } else if(message == "Change Prompt")
             {
                 _aITextService.ClearMessagesForUser(player.PlayerId);
@@ -84,6 +85,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
                 var options = new List<string>();
                 var prompts = config.GameFunctions.Where(a => a.FunctionName.StartsWith("AIPrompt")).ToList();
                 var selectedPrompt = prompts[new Random().Next(prompts.Count)];
+                var promptName = selectedPrompt.FunctionName.Replace("AIPrompt_", "");
                 var prompttxt = _textParsing.CleanText(selectedPrompt.StartState.StateText).Trim();
                 _aITextService.AddSystemMessage(player.PlayerId, promptCommandText);
                 _aITextService.SeedAssistantMessage(player.PlayerId, prompttxt);
@@ -93,7 +95,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
                 options.Add("4");
                 options.Add("Change Prompt");
                 options.Add(Messages.Return);
-                return ExecutionResultHelper.SingleMessage(prompttxt, options);
+                return ExecutionResultHelper.SingleMessage($"{promptName}\n\n{prompttxt}", options);
             }
             else
             {
@@ -106,7 +108,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
                     var options = ParseOptions(response);
                     if(options.Count == 0)
                     {
-                        response = _aITextService.SendMessage(player.PlayerId, noChoiceMsg);
+                        response = response + "\n" + _aITextService.SendMessage(player.PlayerId, "");
                         options = ParseOptions(response);
                     }
                     options.Add(Messages.Return);
@@ -118,7 +120,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
                     var options = ParseOptions(response);
                     if (options.Count == 0)
                     {
-                        response = _aITextService.SendMessage(player.PlayerId, noChoiceMsg);
+                        response = response + "\n" + _aITextService.SendMessage(player.PlayerId, noChoiceMsg);
                         options = ParseOptions(response);
                     }
                     options.Add(Messages.Return);

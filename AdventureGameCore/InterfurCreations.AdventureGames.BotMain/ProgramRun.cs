@@ -83,7 +83,7 @@ namespace InterfurCreations.AdventureGames.BotMain
                     Log.EnableReporting(scope.Resolve<IReporter>());
 #endif
                 // List games straight away, so there is no long delay when the first person sends a message
-                //scope.Resolve<IGameRetrieverService>().ListGames();
+                scope.Resolve<IGameRetrieverService>().ListGames();
 
                 var inputController = scope.Resolve<IInputController>();
                 inputController.Setup();
