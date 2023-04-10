@@ -66,7 +66,8 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
 
                 var options = new List<string>();
                 var prompts = config.GameFunctions.Where(a => a.FunctionName.StartsWith("AIPrompt")).ToList();
-                var selectedPrompt = prompts[new Random().Next(prompts.Count)];
+                var promptNum = new Random().Next(prompts.Count);
+                var selectedPrompt = prompts[promptNum];
                 var promptName = selectedPrompt.FunctionName.Replace("AIPrompt_", "");
                 var prompttxt = _textParsing.CleanText(selectedPrompt.StartState.StateText).Trim();
                 _aITextService.AddSystemMessage(player.PlayerId, promptCommandText);
@@ -77,14 +78,15 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
                 options.Add("4");
                 options.Add("Change Prompt");
                 options.Add(Messages.Return);
-                return ExecutionResultHelper.SingleMessage($"{promptName}\n\n{prompttxt}", options);
+                return ExecutionResultHelper.SingleMessage($"{promptName} ({promptNum}/{prompts.Count})\n\n{prompttxt}", options);
             } else if(message == "Change Prompt")
             {
                 _aITextService.ClearMessagesForUser(player.PlayerId);
 
                 var options = new List<string>();
                 var prompts = config.GameFunctions.Where(a => a.FunctionName.StartsWith("AIPrompt")).ToList();
-                var selectedPrompt = prompts[new Random().Next(prompts.Count)];
+                var promptNum = new Random().Next(prompts.Count);
+                var selectedPrompt = prompts[promptNum];
                 var promptName = selectedPrompt.FunctionName.Replace("AIPrompt_", "");
                 var prompttxt = _textParsing.CleanText(selectedPrompt.StartState.StateText).Trim();
                 _aITextService.AddSystemMessage(player.PlayerId, promptCommandText);
@@ -95,7 +97,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
                 options.Add("4");
                 options.Add("Change Prompt");
                 options.Add(Messages.Return);
-                return ExecutionResultHelper.SingleMessage($"{promptName}\n\n{prompttxt}", options);
+                return ExecutionResultHelper.SingleMessage($"{promptName} ({promptNum + 1}/{prompts.Count})\n\n{prompttxt}", options);
             }
             else
             {
