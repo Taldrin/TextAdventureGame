@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using InterfurCreations.AdventureGames.Telegram.DataObjects;
@@ -91,11 +92,21 @@ namespace InterfurCreations.AdventureGames.Telegram
 
         public static async Task<List<Result>> getUpdatesAsync(TelegramService service, long updateId)
         {
-            var result = await service.PostRequestAsync<UpdateResult>("getUpdates", new GetUpdates { offset = updateId, timeout = 10 });
-            if(result == null || result.result == null)
+            UpdateResult result = null;
+            await Retry.Do(async () =>
             {
-                throw new System.Exception("GetUpdates returned null");
+                result = await service.PostRequestAsync<UpdateResult>("getUpdates", new GetUpdates { offset = updateId, timeout = 10 });
+                if (result == null || result.result == null)
+                {
+                    throw new Exception("GetUpdates returned null");
+                }
+            }, TimeSpan.FromSeconds(0.25), 10);
+
+            if(result == null)
+            {
+                throw new Exception("GetUpdates returned null");
             }
+
             return result.result;
         }
 

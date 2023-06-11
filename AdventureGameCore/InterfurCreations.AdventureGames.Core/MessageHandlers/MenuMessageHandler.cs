@@ -127,6 +127,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
         public List<string> GetOptions(Player player)
         {
             var activeGame = _gameStore.ListGames().FirstOrDefault(a => a.GameName == player.ActiveGameSave.GameName);
+
             var achievementList = AchievementService.HasPlayerDoneAchievements(activeGame, player);
 
             var achievementButtonText = $"{Messages.Achievements} ({achievementList.Count(a => a.hasAchieved)}/{achievementList.Count})";

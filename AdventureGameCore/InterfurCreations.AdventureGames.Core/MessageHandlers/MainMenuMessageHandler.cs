@@ -41,6 +41,11 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
                     player.PlayerFlag = PlayerFlag.MAIN_MENU.ToString();
                     return MainMenuMessage(games, player);
                 }
+                if(message.ToLower() == Messages.AIAdventures.ToLower())
+                {
+                    player.PlayerFlag = PlayerFlag.AI_ADVENTURES.ToString();
+                    return AIAdventuresMessage(player);
+                }
                 var gameSave = player.ActiveGameSave;
 
                 var gamesFound = games.Where(a => a.GameName.ToLower() == message.ToLower()).ToList();
@@ -80,6 +85,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
             List<string> options = new List<string>();
             options = filteredList.Select(a => a.GameName).ToList();
             options.Add(Messages.MiniGames);
+            options.Add(Messages.AIAdventures);
             options.Add(Messages.ContactUs);
             options.Add(Messages.LoadGame);
             options.Add($"{Messages.Achievements} - ({AchievementService.CountAchievementsCompletedForGames(games, player)}/{AchievementService.CountTotalAchievements(games)})");
@@ -99,6 +105,24 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
                   {
                       Message = "Enter a game to play!"
                   });
+            execResult.OptionsToShow = options;
+            execResult.MessagesToShow = messages;
+            return execResult;
+        }
+
+        public ExecutionResult AIAdventuresMessage(Player player)
+        {
+            var execResult = new ExecutionResult();
+            var messages = new List<MessageResult>();
+            List<string> options = new List<string>();
+            options.Add("Fully Generated");
+            options.Add("Prompt Based");
+            options.Add(Messages.Return);
+
+            messages.Add(new MessageResult
+            {
+                Message = "AI Test games!\nFully generated has no set prompts. The AI comes up with everything!\n\nPrompt based uses a set of hand written prompts which sets the AI on a good course for text adventuring."
+            });
             execResult.OptionsToShow = options;
             execResult.MessagesToShow = messages;
             return execResult;
