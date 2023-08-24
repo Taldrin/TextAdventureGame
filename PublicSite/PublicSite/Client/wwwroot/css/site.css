@@ -7,6 +7,12 @@ a.navbar-brand {
     word-break: break-all;
 }
 
+/* Fonts */
+@font-face {
+    font-family: 'immortal';
+    src: url('/css/immortal/IMMORTAL.ttf');
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
