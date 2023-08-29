@@ -24,7 +24,7 @@ else
             <div class="col mh-100" id="messageDiv" style="margin:0; padding:0; overflow-x:hidden" @onscroll="(() => DivItemsScrolled())">
                 @foreach (var message in Messages)
                 {
-                    <div class="card fadeInRight bg-secondary" style="width:100%">
+                    <div class="card fadeInRight bg-secondary" style="width:100%;border-radius:15px;margin-bottom:2px">
                         <div class="card-body">
                             @if (message.PlayerMessage)
                             {
@@ -36,7 +36,7 @@ else
                             else if (message.ImageUrl)
                             {
                                 <h6 class="card-subtitle text-muted text-left">Game</h6>
-                                <img style="width:40%; height:auto" class="img-fluid" src="@message.Message" />
+                                <img style="width:60%; height:auto" class="img-fluid" src="@message.Message" />
                             }
                             else
                             {
