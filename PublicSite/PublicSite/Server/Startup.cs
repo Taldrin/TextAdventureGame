@@ -9,6 +9,7 @@ using InterfurCreations.AdventureGames.GameLanguage;
 using InterfurCreations.AdventureGames.Graph;
 using InterfurCreations.AdventureGames.Graph.Store;
 using InterfurCreations.AdventureGames.Logging;
+using InterfurCreations.AdventureGames.OpenAI;
 using InterfurCreations.AdventureGames.Services;
 using InterfurCreations.AdventureGames.Services.ImageStore;
 using InterfurCreations.AdventureGames.Services.Interfaces;
@@ -147,6 +148,9 @@ namespace PublicSite.Server
 
             builder.RegisterType<DrawStore>().As<IGameStore>().SingleInstance();
             builder.RegisterType<GameRetrieverService>().As<IGameRetrieverService>().SingleInstance();
+
+            builder.RegisterType<OpenAIConnector>().As<IOpenAIConnector>().SingleInstance();
+            builder.RegisterType<ChatGptService>().As<IAITextService>().SingleInstance();
 
             builder.RegisterAssemblyTypes(typeof(IMessageHandler).Assembly)
                 .AssignableTo<IMessageHandler>()

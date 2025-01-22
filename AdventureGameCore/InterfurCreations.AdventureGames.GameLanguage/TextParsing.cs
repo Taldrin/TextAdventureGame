@@ -141,6 +141,8 @@ namespace InterfurCreations.AdventureGames.GameLanguage
         private void ParseAttachmentCommand(Player player, PlayerGameSave gameSave, string command)
         {
             command = CleanText(command);
+            command = ExtractStringBetweenBrackets(command, gameSave);
+
             var commandSplit = command.Split(' ');
             if(command.StartsWith("imageBuild"))
             {
@@ -222,6 +224,21 @@ namespace InterfurCreations.AdventureGames.GameLanguage
             _imageBuildTracker.AddParam(imageParam);
         }
 
+        private string ExtractStringBetweenBrackets(string singleLine, PlayerGameSave gameSave)
+        {
+            int startIndex = singleLine.IndexOf("{{") + 2;
+            int endIndex = singleLine.IndexOf("}}");
+
+            if (startIndex > -1 && endIndex > -1 && endIndex > startIndex)
+            {
+                var foundDataName = singleLine.Substring(startIndex, endIndex - startIndex);
+                var resolvedData = ResolveValue(foundDataName, gameSave);
+                singleLine = singleLine.Replace("{{" + foundDataName + "}}", resolvedData);
+            }
+
+            return singleLine;
+        }
+
         private string ParseLine(PlayerGameSave gameSave, string line)
         {
             if (string.IsNullOrWhiteSpace(line)) return null;
@@ -287,6 +304,7 @@ namespace InterfurCreations.AdventureGames.GameLanguage
         {
             command = CleanText(command);
             command = command.Trim(' ');
+            command = ExtractStringBetweenBrackets(command, gameSave);
             if (command.StartsWith("#if"))
             {
                 return ResolveIf(gameSave, command);

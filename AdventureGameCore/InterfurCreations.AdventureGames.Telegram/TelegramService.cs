@@ -62,7 +62,17 @@ namespace InterfurCreations.AdventureGames.Telegram
 
                 Log.LogMessage(responseString, LogType.Verbose);
             }
-            catch (Exception e) { Log.LogMessage("There was an error with sending a HTML query to telegram: " + e.UnwrapException(), LogType.Error); }
+            catch(HttpRequestException e)
+            {
+                if(!e.Message.ToLower().Contains("the ssl connection could not be"))
+                {
+                    Log.LogMessage("There was an error with sending a HTML query to telegram: " + e.UnwrapException(), LogType.Error);
+                }
+            }
+            catch (Exception e) 
+            { 
+                Log.LogMessage("There was an error with sending a HTML query to telegram: " + e.UnwrapException(), LogType.Error); 
+            }
             return returnedObject;
         }
     }

@@ -29,6 +29,8 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="5.2.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Betalgo.OpenAI.GPT3" Version="6.8.3" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -45,6 +47,7 @@
     <ProjectReference Include="..\InterfurCreations.AdventureGames.Discord\InterfurCreations.AdventureGames.Discord.csproj" />
     <ProjectReference Include="..\InterfurCreations.AdventureGames.Graph.Store\InterfurCreations.AdventureGames.Graph.Store.csproj" />
     <ProjectReference Include="..\InterfurCreations.AdventureGames.HeartbeatMonitor\InterfurCreations.AdventureGames.HeartbeatMonitor.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.OpenAI\InterfurCreations.AdventureGames.OpenAI.csproj" />
     <ProjectReference Include="..\InterfurCreations.AdventureGames.Services\InterfurCreations.AdventureGames.Services.csproj" />
     <ProjectReference Include="..\InterfurCreations.AdventureGames.SlackReporter\InterfurCreations.AdventureGames.SlackReporter.csproj" />
     <ProjectReference Include="..\InterfurCreations.AdventureGames.Telegram\InterfurCreations.AdventureGames.Telegram.csproj" />
