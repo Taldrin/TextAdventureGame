@@ -22,6 +22,8 @@ namespace InterfurCreations.AdventureGames.GameTesting
 
         private Dictionary<string, List<StateVisit>> stateVisits = new Dictionary<string, List<StateVisit>>();
 
+        public List<GameTestMessageResult> gameTestMessageResults = new List<GameTestMessageResult>();
+
         private GameTestDataStore data;
 
         private DrawState startingState;
@@ -44,6 +46,7 @@ namespace InterfurCreations.AdventureGames.GameTesting
 
         private void ResetGame()
         {
+            gameTestMessageResults = new List<GameTestMessageResult>();
             gameState = new PlayerGameSave();
             gameState.GameName = game.GameName;
             gameState.StateId = startingState.Id;
@@ -128,7 +131,7 @@ namespace InterfurCreations.AdventureGames.GameTesting
             throw new ArgumentException("Error with weighted random. Found no choice");
         }
 
-        public async Task RunTestAsync(DrawGame drawGame, DateTime runUntil, int actionsPerRunOption, GameTestDataStore dataStore, string startingStateId = null, List<PlayerGameSaveData> startData = null)
+        public async Task RunTestAsync(DrawGame drawGame, DateTime runUntil, int actionsPerRunOption, GameTestDataStore dataStore, string startingStateId = null, List<PlayerGameSaveData> startData = null, bool runOnce = false)
         {
             this.startData = startData;
             rand = new Random();
@@ -154,6 +157,12 @@ namespace InterfurCreations.AdventureGames.GameTesting
 
             ResetGame();
 
+            var firstMsg = new GameTestMessageResult();
+            firstMsg.GameMessage = startingState.StateText;
+            firstMsg.OptionsPresented = startingState.StateOptions.Select(a => a.StateText).ToList();
+            gameTestMessageResults.Add(firstMsg);
+
+            var currentMsgResult = new GameTestMessageResult();
             while (DateTime.Now <= runUntil)
             {
                 try
@@ -172,10 +181,15 @@ namespace InterfurCreations.AdventureGames.GameTesting
 
                     if (optionToExecute == null)
                     {
+                        if (runOnce)
+                            return;
                         ResetGame();
                         data.PotentialEndStateFound(state.Id, gameState.Clone());
                         continue;
                     }
+
+                    currentMsgResult.OptionTaken = optionToExecute.Value.option;
+
 
                     var execResult = _gameProcessor.ProcessMessage(optionToExecute.Value.option, gameState, game, new Player());
                     
@@ -184,7 +198,12 @@ namespace InterfurCreations.AdventureGames.GameTesting
 
                     execResult.MessagesToShow.ForEach(a => allText.Add(a.Message));
 
-                    if(gameState.GameSaveData.Count > previousDataLength)
+                    currentMsgResult.GameMessage = string.Join("\n\n", execResult.MessagesToShow.Select(a => a.Message));
+                    currentMsgResult.OptionsPresented = execResult.OptionsToShow.Select(a => a).ToList();
+                    gameTestMessageResults.Add(currentMsgResult);
+                    currentMsgResult = new GameTestMessageResult();
+
+                    if (gameState.GameSaveData.Count > previousDataLength)
                     {
                         data.CheckForNewVariables(gameState);
                     }
@@ -196,6 +215,8 @@ namespace InterfurCreations.AdventureGames.GameTesting
                 catch (Exception e)
                 {
                     data.ErrorMessageEncountered(e.Message + "\n" + e.StackTrace, gameState.Clone());
+                    if (runOnce)
+                        return;
                     ResetGame();
                     continue;
                 }

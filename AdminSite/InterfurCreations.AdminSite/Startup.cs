@@ -127,9 +127,9 @@ namespace InterfurCreations.AdminSite
             builder.RegisterType<AwsImageStore>().As<IImageStore>().SingleInstance();
             builder.RegisterType<DrawStore>().As<IGameStore>().SingleInstance();
 
-            builder.RegisterType<AchievementStatisticsBuildTask>().InstancePerLifetimeScope();
-            builder.RegisterType<BackupTask>().InstancePerLifetimeScope();
-            builder.RegisterType<GameTestingTask>().InstancePerLifetimeScope();
+            //builder.RegisterType<AchievementStatisticsBuildTask>().InstancePerLifetimeScope();
+            //builder.RegisterType<BackupTask>().InstancePerLifetimeScope();
+            //builder.RegisterType<GameTestingTask>().InstancePerLifetimeScope();
 
             builder.Populate(services);
 
@@ -180,11 +180,11 @@ namespace InterfurCreations.AdminSite
 
         public void SetupHangfireJobs()
         {
-            RecurringJob.AddOrUpdate<AchievementStatisticsBuildTask>(a => a.Run(), Cron.MinuteInterval(10));
+            //RecurringJob.AddOrUpdate<AchievementStatisticsBuildTask>(a => a.Run(), Cron.MinuteInterval(10));
             RecurringJob.AddOrUpdate<GameTestingTask>(a => a.Run(), Cron.MinuteInterval(12));
-            RecurringJob.AddOrUpdate<ImageStoreCleanupTask>(a => a.ClearImages(), Cron.HourInterval(2));
-            RecurringJob.AddOrUpdate<GamesByPlayerCountStatisticsBuildTask>(a => a.Run(), Cron.HourInterval(12));
-            RecurringJob.AddOrUpdate<BackupTask>(a => a.Run(), Cron.DayInterval(1));
+            //RecurringJob.AddOrUpdate<ImageStoreCleanupTask>(a => a.ClearImages(), Cron.HourInterval(2));
+            //RecurringJob.AddOrUpdate<GamesByPlayerCountStatisticsBuildTask>(a => a.Run(), Cron.HourInterval(12));
+            //RecurringJob.AddOrUpdate<BackupTask>(a => a.Run(), Cron.DayInterval(1));
         }
     }
 }

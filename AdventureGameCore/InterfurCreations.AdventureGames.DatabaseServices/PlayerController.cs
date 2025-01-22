@@ -58,7 +58,7 @@ namespace InterfurCreations.AdventureGames.DatabaseServices
             if (!string.IsNullOrEmpty(playerName))
                 query = query.Where(a => a.Name.Contains(playerName));
 
-            var results = query.OrderByDescending(a => a.Actions.Max(b => (DateTime?)b.Time)).Skip(pageNumber * pageSize).Include(a => a.DiscordPlayer).
+           var results = query.OrderByDescending(a => a.Actions.Max(b => (DateTime?)b.Time)).Skip(pageNumber * pageSize).Include(a => a.DiscordPlayer).
                 Include(a => a.KikPlayer).Include(a => a.TelegramPlayer).Include(a => a.WebPlayer).Select(a => new PlayerListModel
                 {  
                     DiscordPlayer = a.DiscordPlayer,
