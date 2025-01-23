@@ -46,26 +46,27 @@ namespace InterfurCreations.AdventureGames.BotMain
 
         public static void Run(IConfiguration config)
         {
-            string buildTypeName = null;
-#if TelegramDev
-            buildTypeName = "Telegram Dev";
-#elif TelegramAlpha
-            buildTypeName = "Telegram Alpha";
-#elif TelegramLive
-            buildTypeName = "Telegram Live";
-#elif DiscordAlpha
-            buildTypeName = "Discord Alpha";
-#elif DiscordLive
-            buildTypeName = "Discord Live";
-#elif KikLive
-            buildTypeName = "Kik Live";
-#endif
+            var buildTypeName = Environment.GetEnvironmentVariable("FurventureBotType");
+
+//            string buildTypeName = null;
+//#if TelegramDev
+//            buildTypeName = "Telegram Dev";
+//#elif TelegramAlpha
+//            buildTypeName = "Telegram Alpha";
+//#elif TelegramLive
+//            buildTypeName = "Telegram Live";
+//#elif DiscordAlpha
+//            buildTypeName = "Discord Alpha";
+//#elif DiscordLive
+//            buildTypeName = "Discord Live";
+//#elif KikLive
+//            buildTypeName = "Kik Live";
+//#endif
             ConfigSetting.DynamicApplicationName = buildTypeName;
             var configSetupService = new AppSettingsConfigurationService(config);
             configSetupService.SetConfig("TypeName", buildTypeName);
 
             RegisterAutofac(config, buildTypeName);
-            
 
             var connectionString = configSetupService.GetConfig("DatabaseConnectionString");
 
