@@ -46,6 +46,8 @@ namespace InterfurCreations.AdventureGames.BotMain
 
         public static void Run(IConfiguration config)
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
             var buildTypeName = Environment.GetEnvironmentVariable("FurventureBotType");
 
 //            string buildTypeName = null;

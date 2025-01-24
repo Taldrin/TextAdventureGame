@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="8.2.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\InterfurCreations.AdventureGames.Database\InterfurCreations.AdventureGames.Database.csproj" />
     <ProjectReference Include="..\InterfurCreations.AdventureGames.Exceptions\InterfurCreations.AdventureGames.Exceptions.csproj" />
     <ProjectReference Include="..\InterfurCreations.AdventureGames.Graph\InterfurCreations.AdventureGames.Graph.csproj" />

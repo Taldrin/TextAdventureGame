@@ -53,32 +53,161 @@ namespace InterfurCreations.AdventureGames.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //var connectionString = "Server=localhost;Database=AdventureBot;Trusted_Connection=True";
-            var connectionString = _configService.GetConfig("DatabaseConnectionString");
-            optionsBuilder.UseSqlServer(connectionString);
+            var connectionString = "Host=127.0.0.1:5332;Database=postgres;Username=sa;password=test_password";
+            //var connectionString = _configService.GetConfig("DatabaseConnectionString");
+            optionsBuilder.UseNpgsql(connectionString);
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+                protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<GameSaves>().HasKey(a => new { a.PlayerGameSaveId, a.PlayerId });
-            modelBuilder.Entity<GameSaves>()
-                .Property(b => b.CreatedDate)
-                .HasDefaultValueSql("getdate()");
+            modelBuilder.Entity<AccessToken>(entity =>
+            {
+                entity.ToTable("accesstoken");
+                entity.HasKey(e => e.Id).HasName("PK_AccessToken");
+            });
 
-            BuildGameTesting(modelBuilder);
-        }
+            modelBuilder.Entity<DiscordPlayer>(entity =>
+            {
+                entity.ToTable("discordplayers");
+                entity.HasKey(e => e.PlayerId).HasName("PK_DiscordPlayers");
+            });
 
-        protected void BuildGameTesting(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<GameTestingEndState>().ToTable("GameTesting_EndState");
-            modelBuilder.Entity<GameTestingError>().ToTable("GameTesting_Error");
-            modelBuilder.Entity<GameTestingGameSave>().ToTable("GameTesting_GameSave");
-            modelBuilder.Entity<GameTestingGameSaveData>().ToTable("GameTesting_GameSaveData");
-            modelBuilder.Entity<GameTestingMiscData>().ToTable("GameTesting_MiscData");
-            modelBuilder.Entity<GameTestingOptionVisited>().ToTable("GameTesting_OptionVisited");
-            modelBuilder.Entity<GameTestingGrammar>().ToTable("GameTesting_Grammar");
-            modelBuilder.Entity<GameTestingStateVisited>().ToTable("GameTesting_StateVisited");
-            modelBuilder.Entity<GameTestingWarning>().ToTable("GameTesting_Warning");
+            modelBuilder.Entity<GameSaves>(entity =>
+            {
+                entity.ToTable("gamesaves");
+                entity.HasKey(a => new { a.PlayerGameSaveId, a.PlayerId });
+                entity.Property(b => b.CreatedDate)
+                    .HasDefaultValueSql("getdate()");
+            });
+
+
+            modelBuilder.Entity<GameTestingEndState>(entity =>
+            {
+                entity.ToTable("gametesting_endstate");
+                entity.HasKey(e => e.Id).HasName("PK_GameTesting_EndState");
+            });
+
+            modelBuilder.Entity<GameTestingError>(entity =>
+            {
+                entity.ToTable("gametesting_error");
+                entity.HasKey(e => e.Id).HasName("PK_GameTesting_Error");
+            });
+
+            modelBuilder.Entity<GameTestingGameSave>(entity =>
+            {
+                entity.ToTable("gametesting_gamesave");
+                entity.HasKey(e => e.Id).HasName("PK_GameTesting_GameSave");
+            });
+
+            modelBuilder.Entity<GameTestingGameSaveData>(entity =>
+            {
+                entity.ToTable("gametesting_gamesavedata");
+                entity.HasKey(e => e.Id).HasName("PK_GameTesting_GameSaveData");
+            });
+
+            modelBuilder.Entity<GameTestingGrammar>(entity =>
+            {
+                entity.ToTable("gametesting_grammar");
+                entity.HasKey(e => e.Id).HasName("PK_GameTesting_Grammar");
+            });
+
+            modelBuilder.Entity<GameTestingMiscData>(entity =>
+            {
+                entity.ToTable("gametesting_miscdata");
+                entity.HasKey(e => e.Id).HasName("PK_GameTesting_MiscData");
+            });
+
+            modelBuilder.Entity<GameTestingOptionVisited>(entity =>
+            {
+                entity.ToTable("gametesting_optionvisited");
+                entity.HasKey(e => e.Id).HasName("PK_GameTesting_OptionVisited");
+            });
+
+            modelBuilder.Entity<GameTestingStateVisited>(entity =>
+            {
+                entity.ToTable("gametesting_statevisited");
+                entity.HasKey(e => e.Id).HasName("PK_GameTesting_StateVisited");
+            });
+
+            modelBuilder.Entity<GameTestingWarning>(entity =>
+            {
+                entity.ToTable("gametesting_warning");
+                entity.HasKey(e => e.Id).HasName("PK_GameTesting_Warning");
+            });
+
+            modelBuilder.Entity<KikPlayer>(entity =>
+            {
+                entity.ToTable("kikplayers");
+                entity.HasKey(e => e.PlayerId).HasName("PK_KikPlayers");
+            });
+
+            modelBuilder.Entity<PlayerAction>(entity =>
+            {
+                entity.ToTable("playeractions");
+                entity.HasKey(e => e.Id).HasName("PK_PlayerActions");
+            });
+
+            modelBuilder.Entity<PlayerFrameStack>(entity =>
+            {
+                entity.ToTable("playerframestack");
+                entity.HasKey(e => e.Id).HasName("PK_PlayerFrameStack");
+            });
+
+            modelBuilder.Entity<PlayerGameSave>(entity =>
+            {
+                entity.ToTable("playergamesave");
+                entity.HasKey(e => e.SaveId).HasName("PK_PlayerGameSave");
+            });
+
+            modelBuilder.Entity<PlayerGameSaveData>(entity =>
+            {
+                entity.ToTable("playergamesavedata");
+                entity.HasKey(e => e.Id).HasName("PK_PlayerGameSaveData");
+            });
+
+            modelBuilder.Entity<Player>(entity =>
+            {
+                entity.ToTable("players");
+                entity.HasKey(e => e.PlayerId).HasName("PK_Players");
+            });
+
+            modelBuilder.Entity<PlayerSavedData>(entity =>
+            {
+                entity.ToTable("playersaveddata");
+                entity.HasKey(e => e.Id).HasName("PK_PlayerSavedData");
+            });
+
+            modelBuilder.Entity<StatisticsGameAchievement>(entity =>
+            {
+                entity.ToTable("statisticsgameachievements");
+                entity.HasKey(e => e.Id).HasName("PK_StatisticsGameAchievements");
+            });
+
+            modelBuilder.Entity<StatisticsGamesByPlayerCount>(entity =>
+            {
+                entity.ToTable("statisticsgamesbyplayercount");
+                entity.HasKey(e => e.Id).HasName("PK_StatisticsGamesByPlayerCount");
+            });
+
+            modelBuilder.Entity<StatisticsPosition>(entity =>
+            {
+                entity.ToTable("statisticspositions");
+                entity.HasKey(e => e.Id).HasName("PK_StatisticsPositions");
+            });
+
+            modelBuilder.Entity<TelegramPlayer>(entity =>
+            {
+                entity.ToTable("telegramplayers");
+                entity.HasKey(e => e.PlayerId).HasName("PK_TelegramPlayers");
+            });
+
+            modelBuilder.Entity<WebPlayer>(entity =>
+            {
+                entity.ToTable("webplayers");
+                entity.HasKey(e => e.PlayerId).HasName("PK_WebPlayers");
+            });
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

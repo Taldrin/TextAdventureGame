@@ -6,9 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="8.2.0" />
     <PackageReference Include="Hangfire" Version="1.7.19" />
     <PackageReference Include="SlackAPI" Version="1.1.2" />
     <PackageReference Include="Slacker" Version="1.0.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -6,19 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20191013115825_AddedPlayerSavedData.cs" />
-    <Compile Remove="Migrations\20191013115825_AddedPlayerSavedData.Designer.cs" />
-    <Compile Remove="Migrations\20191013115938_AddedPlayerSavedData.cs" />
-    <Compile Remove="Migrations\20191013115938_AddedPlayerSavedData.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.3" />
   </ItemGroup>
 
   <ItemGroup>

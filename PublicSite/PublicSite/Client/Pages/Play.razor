@@ -4,6 +4,7 @@
 @using InterfurCreations.AdventureGames.Core.DataObjects;
 @using System.Timers;
 @using PublicSite.Client.Components;
+@using System.Net.Http.Json
 @inject HttpClient Http
 @inject IJSRuntime JSRuntime
 @inject IMenuService MenuService
@@ -180,7 +181,8 @@ else
         IsModalLoading = true;
         try
         {
-            var result = await Http.PostJsonAsync<WebPlayerDataObject>($"GameMessage/getWebAccount", PlayerCode);
+            var serverResult = await Http.PostAsJsonAsync($"GameMessage/getWebAccount", PlayerCode);
+            var result = await serverResult.Content.ReadFromJsonAsync<WebPlayerDataObject>();
             if (result == null)
             {
                 RevalidateAccount();
@@ -216,7 +218,7 @@ else
             return;
         }
         IsModalLoading = true;
-        var result = await Http.GetJsonAsync<WebPlayerDataObject>($"GameMessage/createWebAccount?name={NewAccountName}");
+        var result = await Http.GetFromJsonAsync<WebPlayerDataObject>($"GameMessage/createWebAccount?name={NewAccountName}");
 
         await JSRuntime.InvokeAsync<string>("setCookie", "playerCode", result.AccessKey, 900);
         ActivePlayer = result;
@@ -250,8 +252,9 @@ else
         TakeInput = false;
 
         Messages.Add(new SavedMessage { PlayerMessage = true, Message = message });
-        var result = await Http.PostJsonAsync<ExecutionResult>($"GameMessage/message",
+        var serverResult = await Http.PostAsJsonAsync($"GameMessage/message",
             new MessageSendDataObject { message = message, player_code = ActivePlayer.AccessKey });
+        var result = await serverResult.Content.ReadFromJsonAsync<ExecutionResult>();
         result.MessagesToShow.ForEach(a =>
         {
             if (!string.IsNullOrEmpty(a.ImageUrl))
