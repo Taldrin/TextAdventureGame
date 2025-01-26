@@ -19,6 +19,44 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+  furventure-bot-core:
+    image: furventure-bot-core
+    container_name: furventure-bot-core
+    environment:
+      - ConnectionString
+      - FurventureBotType=Telegram Dev
+    networks:
+      - db
+    restart: unless-stopped 
+  furventure-server:
+    image: "furventure-server"
+    container_name: furventure-server
+    environment:
+      - ASPNETCORE_URLS="http://0.0.0.0:5000"
+      - VIRTUAL_HOST=api.furventure.taldrin.co.uk
+      - VIRTUAL_PORT=5000
+      - LETSENCRYPT_HOST=api.furventure.taldrin.co.uk
+      - LETSENCRYPT_EMAIL=interfurcreations@gmail.com
+      - ConnectionString
+      - FurventureBotType=PublicSiteAlpha
+    expose:
+      - "5000"
+    networks:
+      - db
+    restart: unless-stopped
+  furventure-site-public:
+    image: "furventure-publicsite"
+    environment:
+      VIRTUAL_HOST: furventure.taldrin.co.uk
+      VIRTUAL_PORT: 5007
+      LETSENCRYPT_HOST: furventure.taldrin.co.uk
+      LETSENCRYPT_EMAIL: interfurcreations@gmail
+      ASPNETCORE_URLS: "https://furventure.taldrin.co.uk/"
+    expose:
+      - "5007"
+    networks:
+      - db
+    restart: always 
 networks:
   db:
     driver: bridge

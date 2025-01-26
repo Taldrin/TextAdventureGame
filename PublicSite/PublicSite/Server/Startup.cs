@@ -156,12 +156,8 @@ namespace PublicSite.Server
                 .AssignableTo<IMessageHandler>()
                 .AsImplementedInterfaces();
 
-            string buildTypeName = null;
-#if ReleaseLive
-            buildTypeName = "PublicSiteLive";
-#elif DebugAlpha
-            buildTypeName = "PublicSiteAlpha";
-#endif
+            var buildTypeName = Environment.GetEnvironmentVariable("FurventureBotType");
+
             ConfigSetting.DynamicApplicationName = buildTypeName;
 
             // builder.Populate(services);

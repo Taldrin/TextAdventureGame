@@ -21,11 +21,12 @@ log_message "Building and running applications with Docker"
 
 
 log_message "Building individual services"
-#cd ./AdventureGameCore
-#docker build -t furventure-bot-core -f InterfurCreations.AdventureGames.WorkerService/Dockerfile .
+cd ./AdventureGameCore
+docker build -t furventure-bot-core -f InterfurCreations.AdventureGames.WorkerService/Dockerfile .
 
-cd ./PublicSite
-docker build -t furventure-public-site -f PublicSite/Server/Dockerfile .
+cd ../
+docker build -t furventure-server -f PublicSite/PublicSite/Server/Dockerfile .
+docker build -t furventure-publicsite -f PublicSite/PublicSite/Client/Dockerfile .
 
 #if [[ -f "$DOCKER_COMPOSE_FILE" ]]; then
 #    log_message "Using Docker Compose"

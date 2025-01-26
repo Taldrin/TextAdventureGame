@@ -1,14 +1,12 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /AdventureGameCore
 
-# Copy everything
-COPY . ./
+WORKDIR /source
 
-# Build and publish a release
-RUN dotnet publish -o out
+COPY ../../../ ./
 
-# Build runtime image
-FROM mcr.microsoft.com/dotnet/sdk:8.0
-WORKDIR /AdventureGameCore
-COPY --from=build AdventureGameCore/InterfurCreations.AdventureGames.WorkerService/out .
-ENTRYPOINT ["dotnet", "InterfurCreations.AdventureGames.WorkerService.dll"]
+WORKDIR /source/PublicSite/PublicSite/Client
+RUN dotnet publish PublicSite.Client.csproj -c Release -o out
+
+FROM nginx:latest
+WORKDIR /app
+COPY --from=build /source/PublicSite/PublicSite/Client/out/wwwroot /usr/share/nginx/html

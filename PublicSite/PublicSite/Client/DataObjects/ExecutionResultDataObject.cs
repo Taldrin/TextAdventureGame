@@ -13,6 +13,7 @@ namespace PublicSite.Client.DataObjects
         public List<string> OptionsToShow { get; set; }
         public List<MessageResult> MessagesToShow { get; set; }
         public bool IsInvalidInput { get; set; }
+        public bool AskForInput { get; set; }
         public List<string> StatesVisited { get; set; }
     }
 }

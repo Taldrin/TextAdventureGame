@@ -1,15 +1,15 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /PublicSite
 
-# Copy everything
-COPY ../ ./
+WORKDIR /source
 
-# Build and publish a release
-WORKDIR /PublicSite/Server
-RUN dotnet publish -o out
+COPY ../../../ ./
 
-# Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
-WORKDIR /PublicSite
-COPY --from=build PublicSite/PublicSite/Server/out .
+WORKDIR /source/PublicSite/PublicSite/Server
+RUN dotnet publish PublicSite.Server.csproj -c Release -o out
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /app
+
+COPY --from=build /source/PublicSite/PublicSite/Server/out/ ./
+
 ENTRYPOINT ["dotnet", "PublicSite.Server.dll"]

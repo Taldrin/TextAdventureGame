@@ -1,7 +1,6 @@
 ﻿@page "/play"
 @using System;
 @using PublicSite.Client.DataObjects;
-@using InterfurCreations.AdventureGames.Core.DataObjects;
 @using System.Timers;
 @using PublicSite.Client.Components;
 @using System.Net.Http.Json
@@ -254,7 +253,7 @@ else
         Messages.Add(new SavedMessage { PlayerMessage = true, Message = message });
         var serverResult = await Http.PostAsJsonAsync($"GameMessage/message",
             new MessageSendDataObject { message = message, player_code = ActivePlayer.AccessKey });
-        var result = await serverResult.Content.ReadFromJsonAsync<ExecutionResult>();
+        var result = await serverResult.Content.ReadFromJsonAsync<ExecutionResultDataObject>();
         result.MessagesToShow.ForEach(a =>
         {
             if (!string.IsNullOrEmpty(a.ImageUrl))

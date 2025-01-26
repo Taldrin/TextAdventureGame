@@ -53,7 +53,7 @@ namespace InterfurCreations.AdventureGames.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionString = "Host=127.0.0.1:5332;Database=postgres;Username=sa;password=test_password";
+            var connectionString = "Host=postgres:5432;Database=postgres;Username=sa;password=test_password";
             //var connectionString = _configService.GetConfig("DatabaseConnectionString");
             optionsBuilder.UseNpgsql(connectionString);
         }
