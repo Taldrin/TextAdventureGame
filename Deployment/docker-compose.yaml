@@ -43,6 +43,7 @@ services:
       - "5000"
     networks:
       - db
+      - default
     restart: unless-stopped
   furventure-site-public:
     image: "furventure-publicsite"
@@ -50,16 +51,20 @@ services:
       VIRTUAL_HOST: furventure.taldrin.co.uk
       VIRTUAL_PORT: 5007
       LETSENCRYPT_HOST: furventure.taldrin.co.uk
-      LETSENCRYPT_EMAIL: interfurcreations@gmail
+      LETSENCRYPT_EMAIL: interfurcreations@gmail.com
       ASPNETCORE_URLS: "https://furventure.taldrin.co.uk/"
     expose:
       - "5007"
     networks:
       - db
+      - default
     restart: always 
 networks:
   db:
     driver: bridge
+  default:
+    name: nginx-proxy
+    external: true
 
 volumes:
   db:

@@ -7,6 +7,8 @@ COPY ../../../ ./
 WORKDIR /source/PublicSite/PublicSite/Client
 RUN dotnet publish PublicSite.Client.csproj -c Release -o out
 
-FROM nginx:latest
+FROM nginx:alpine
 WORKDIR /app
 COPY --from=build /source/PublicSite/PublicSite/Client/out/wwwroot /usr/share/nginx/html
+COPY --from=build /source/PublicSite/PublicSite/Client/nginx.conf /etc/nginx/nginx.conf
+EXPOSE 5007
