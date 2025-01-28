@@ -21,10 +21,20 @@ namespace PublicSite.Client
             builder.RootComponents.Add<App>("app");
 
             var originalUri = new Uri(builder.HostEnvironment.BaseAddress);
+            var hostParts = originalUri.Host.Split('.').ToList();
+            if (hostParts.Count > 2)
+            {
+                hostParts[0] = "api";
+            }
+            else
+            {
+                hostParts.Insert(0, "api");
+            }
 
+            var newHost = string.Join(".", hostParts);
             var uriBuilder = new UriBuilder(originalUri)
             {
-                Host = "api." + originalUri.Host
+                Host = newHost
             };
 
             builder.Services
