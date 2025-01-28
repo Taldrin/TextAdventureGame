@@ -64,10 +64,18 @@ namespace PublicSite.Server
             services.AddHttpContextAccessor();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 
-            //services.Configure<IISServerOptions>(options =>
-            //{
-            //    options.AutomaticAuthentication = true;
-            //});
+
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigins", builder =>
+                {
+                    builder.WithOrigins(
+                        Configuration.GetValue<string>("allowedOrigins:live"),
+                        Configuration.GetValue<string>("allowedOrigins:testing")
+                        ).AllowAnyMethod().AllowAnyMethod().AllowCredentials();
+                });
+            });
 
         }
 
@@ -95,6 +103,7 @@ namespace PublicSite.Server
             app.UseRouting();
             app.UseCookiePolicy();
             app.UseAuthentication();
+            app.UseCors("AllowSpecificOrigins");
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
