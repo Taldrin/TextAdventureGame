@@ -33,9 +33,9 @@ services:
     container_name: furventure-server
     environment:
       - ASPNETCORE_URLS="http://0.0.0.0:5000"
-      - VIRTUAL_HOST=api.furventure.taldrin.co.uk
+      - VIRTUAL_HOST=api.taldrin.co.uk
       - VIRTUAL_PORT=5000
-      - LETSENCRYPT_HOST=api.furventure.taldrin.co.uk
+      - LETSENCRYPT_HOST=api.taldrin.co.uk
       - LETSENCRYPT_EMAIL=interfurcreations@gmail.com
       - ConnectionString
       - FurventureBotType=PublicSiteAlpha
