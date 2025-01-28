@@ -20,8 +20,15 @@ namespace PublicSite.Client
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
 
+            var originalUri = new Uri(builder.HostEnvironment.BaseAddress);
+
+            var uriBuilder = new UriBuilder(originalUri)
+            {
+                Host = "api." + originalUri.Host
+            };
+
             builder.Services
-                .AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) })
+                .AddTransient(sp => new HttpClient { BaseAddress = uriBuilder.Uri })
                 .AddBlazorise(options =>
                 {
 

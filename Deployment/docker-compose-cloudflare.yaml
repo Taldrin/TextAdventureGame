@@ -1,0 +1,7 @@
+services:
+  cloudflared:
+    image: ghcr.io/wisdomsky/cloudflared-web:latest
+    restart: unless-stopped
+    network_mode: host
+    ports:
+      - "14333:14333"
