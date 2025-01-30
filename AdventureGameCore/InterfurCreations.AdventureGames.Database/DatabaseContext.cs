@@ -53,12 +53,11 @@ namespace InterfurCreations.AdventureGames.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionString = "Host=postgres:5432;Database=postgres;Username=sa;password=test_password";
-            //var connectionString = _configService.GetConfig("DatabaseConnectionString");
+            var connectionString = _configService.GetConfig("PostgresDatabaseConnectionString");
             optionsBuilder.UseNpgsql(connectionString);
         }
 
-                protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AccessToken>(entity =>
             {
