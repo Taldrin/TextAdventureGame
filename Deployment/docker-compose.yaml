@@ -28,14 +28,14 @@ services:
     networks:
       - db
     restart: unless-stopped 
-  furventure-server:
-    image: "furventure-server"
+  furventure-site:
+    image: "furventure-site"
     container_name: furventure-server
     environment:
       - ASPNETCORE_URLS=http://0.0.0.0:5000
-      - VIRTUAL_HOST=api.taldrin.co.uk
+      - VIRTUAL_HOST=furventure.taldrin.co.uk
       - VIRTUAL_PORT=5000
-      - LETSENCRYPT_HOST=api.taldrin.co.uk
+      - LETSENCRYPT_HOST=furventure.taldrin.co.uk
       - LETSENCRYPT_EMAIL=interfurcreations@gmail.com
       - ConnectionString
       - FurventureBotType=PublicSiteAlpha
@@ -45,20 +45,6 @@ services:
       - db
       - default
     restart: unless-stopped
-  furventure-site-public:
-    image: "furventure-publicsite"
-    environment:
-      VIRTUAL_HOST: furventure.taldrin.co.uk
-      VIRTUAL_PORT: 5007
-      LETSENCRYPT_HOST: furventure.taldrin.co.uk
-      LETSENCRYPT_EMAIL: interfurcreations@gmail.com
-      ASPNETCORE_URLS: "https://furventure.taldrin.co.uk/"
-    expose:
-      - "5007"
-    networks:
-      - db
-      - default
-    restart: always 
 networks:
   db:
     driver: bridge

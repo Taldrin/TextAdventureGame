@@ -25,8 +25,7 @@ cd ./AdventureGameCore
 docker build -t furventure-bot-core -f InterfurCreations.AdventureGames.WorkerService/Dockerfile .
 
 cd ../
-docker build -t furventure-server -f PublicSite/PublicSite/Server/Dockerfile .
-docker build -t furventure-publicsite -f PublicSite/PublicSite/Client/Dockerfile .
+docker build -t furventure-site -f FurventureSite/FurventureSite/FurventureSite/Dockerfile .
 
 #if [[ -f "$DOCKER_COMPOSE_FILE" ]]; then
 #    log_message "Using Docker Compose"

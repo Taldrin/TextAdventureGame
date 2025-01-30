@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="Description" CONTENT="A growing selection of furry-themed text adventure games, playable in browser and on Telegram or Discord!">
+    <meta name="rating" content="adult" />
+
+    <title>Furry Text Games</title>
+
+    <link href="css/site.css" rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="_content/Blazorise.Icons.FontAwesome/v6/css/all.min.css" rel="stylesheet">
+
+    <link href="_content/Blazorise/blazorise.css?v=1.7.3.0" rel="stylesheet" />
+    <link href="_content/Blazorise.Bootstrap5/blazorise.bootstrap5.css?v=1.7.3.0" rel="stylesheet" />
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <link rel="icon" type="image/png" href="/favicon.png" />
+
+    <base href="/" />
+    <link rel="stylesheet" href="app.css" />
+    <link rel="stylesheet" href="FurventureSite.styles.css" />
+    <HeadOutlet />
+</head>
+
+@inject IJSRuntime JS
+
+<body>
+    <Routes @rendermode="new InteractiveWebAssemblyRenderMode(prerender:false)" />
+    <script src="_framework/blazor.web.js"></script>
+</body>
+</html>
+
+
+
+<script>
+    window.scrollToEnd = (elementId, speed) => {
+        var elem = document.getElementById(elementId);
+        if (elem.scrollTop >= elem.scrollHeight) return;
+        var previousScroll = elem.scrollTop;
+
+        setTimeout(function () {
+            elem.scrollTop = elem.scrollTop + speed;
+            if (elem.scrollTop >= elem.scrollHeight || elem.scrollTop == previousScroll) { return; }
+            scrollToEnd(elementId, speed);
+        }, 5);
+    }
+
+    window.loadTwitter = () => {
+        twttr.widgets.load();
+    }
+
+    function setCookie(cookieName, cookieValue, expiryDays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (expiryDays*24*60*60*1000));
+        var expires = "expires="+ d.toUTCString();
+        document.cookie = cookieName + "=" + cookieValue + ";" + expires + ";path=/";
+    }
+
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+      return "";
+    }
+</script>

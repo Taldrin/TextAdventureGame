@@ -1,0 +1,17 @@
+﻿@using FurventureSite.Client.Components.Layout
+<Router AppAssembly="typeof(Program).Assembly" AdditionalAssemblies="new[] { typeof(Client._Imports).Assembly }">
+    <Found Context="routeData">
+        <RouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)" />
+        <FocusOnNavigate RouteData="routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <div class="jumbotron" style="text-align:center">
+                <h1>OwO? Did someone do an upsy wupsy?</h1>
+                <p>
+                    It looks like the page you tried to visit doesn't exist!
+                </p>
+            </div>
+        </LayoutView>
+    </NotFound>
+</Router>
