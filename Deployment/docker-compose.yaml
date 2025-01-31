@@ -59,15 +59,15 @@ services:
     image: "furventure-site"
     container_name: furventure-server-alpha
     environment:
-      - ASPNETCORE_URLS=http://0.0.0.0:5000
+      - ASPNETCORE_URLS=http://0.0.0.0:5002
       - VIRTUAL_HOST=alpha.furrytextadventures.com
-      - VIRTUAL_PORT=5000
+      - VIRTUAL_PORT=5002
       - LETSENCRYPT_HOST=alpha.furrytextadventures.com
       - LETSENCRYPT_EMAIL=interfurcreations@gmail.com
       - ConnectionString
       - FurventureBotType=PublicSiteAlpha
     expose:
-      - "5000"
+      - "5002"
     networks:
       - db
       - default

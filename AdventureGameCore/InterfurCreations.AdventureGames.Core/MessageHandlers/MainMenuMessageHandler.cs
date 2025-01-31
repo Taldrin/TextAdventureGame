@@ -85,7 +85,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
             List<string> options = new List<string>();
             options = filteredList.Select(a => a.GameName).ToList();
             options.Add(Messages.MiniGames);
-            options.Add(Messages.AIAdventures);
+            //options.Add(Messages.AIAdventures);
             options.Add(Messages.ContactUs);
             options.Add(Messages.LoadGame);
             options.Add($"{Messages.Achievements} - ({AchievementService.CountAchievementsCompletedForGames(games, player)}/{AchievementService.CountTotalAchievements(games)})");
