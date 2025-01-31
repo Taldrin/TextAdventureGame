@@ -136,6 +136,7 @@ body {
     .background-image {
         background: url('../WebGameBackgroundMobile_MQ.jpg') no-repeat;
         background-size: 100%;
+        background-color: #2b3e4f;
     }
 }
 
@@ -143,6 +144,7 @@ body {
     .background-image {
         background: url('../WebGameBackground_MQ.jpg') no-repeat;
         background-size: 100%;
+        background-color: #2b3e4f;
     }
 }
 
