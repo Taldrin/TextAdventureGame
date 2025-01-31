@@ -48,11 +48,11 @@
             </div>
         </div>
 
-        <div class="row justify-content-md-center" style="margin:0">
-            <div class="col-lg-12" style="padding:0">
-                <a class="twitter-timeline" data-theme="dark" href="https://twitter.com/fur_inter?ref_src=twsrc%5Etfw">Tweets by Furventure Games</a>
-                @*<a class="twitter-timeline" data-chrome="nofooter noheader" data-tweet-limit="5" data-theme="dark" href="https://twitter.com/fur_inter?ref_src=twsrc%5Etfw">Tweets by Furventure Games</a>*@
-            </div>
+        <script src="https://cdn.jsdelivr.net/npm/bsky-embed/dist/bsky-embed.es.js" async></script>
+        <div >
+            <bsky-embed mode="dark" username="furventuregames.bsky.social"
+                        limit="5">
+            </bsky-embed>
         </div>
     </div>
 </div>
@@ -64,7 +64,6 @@
     protected override async Task OnInitializedAsync()
     {
         _menuService.ShowAccountButton(false);
-        await JSRuntime.InvokeVoidAsync("loadTwitter");
 
     }
 

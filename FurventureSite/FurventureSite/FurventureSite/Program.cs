@@ -66,11 +66,13 @@ app.MapRazorComponents<App>()
 
 app.MapControllers();
 
-var configService = app.Services.GetService<IConfigurationService>();
-var gameRetService = app.Services.GetService<IGameRetrieverService>();
-
-configService.SetConfig("TypeName", ConfigSetting.DynamicApplicationName);
-Log.LogMessage("Retrieving games");
-gameRetService.ListGames();
+#if !DEBUG
+    var configService = app.Services.GetService<IConfigurationService>();
+    var gameRetService = app.Services.GetService<IGameRetrieverService>();
+    
+    configService.SetConfig("TypeName", ConfigSetting.DynamicApplicationName);
+    Log.LogMessage("Retrieving games");
+    gameRetService.ListGames();
+#endif
 
 app.Run();
