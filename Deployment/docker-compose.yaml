@@ -89,6 +89,23 @@ services:
       - db
       - default
     restart: unless-stopped
+  furventure-admin:
+    image: "admin-site"
+    container_name: furventure-admin
+    environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:5004
+      - VIRTUAL_HOST=admin.furrytextadventures.com
+      - VIRTUAL_PORT=5004
+      - LETSENCRYPT_HOST=admin.furrytextadventures.com
+      - LETSENCRYPT_EMAIL=interfurcreations@gmail.com
+      - ConnectionString
+      - FurventureBotType=AdminSite
+    expose:
+      - "5004"
+    networks:
+      - db
+      - default
+    restart: unless-stopped
 networks:
   db:
     driver: bridge
