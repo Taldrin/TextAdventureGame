@@ -29,6 +29,7 @@ namespace FurventureSite
         public void ConfigureContainer(ContainerBuilder builder)
         {
             RegisterAutofac(builder);
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
         public void RegisterAutofac(ContainerBuilder builder)

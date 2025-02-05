@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Hangfire;
@@ -170,6 +170,7 @@ namespace InterfurCreations.AdminSite
                 routes.MapHangfireDashboard();
             });
 
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             SetupHangfireJobs();
         }
 
