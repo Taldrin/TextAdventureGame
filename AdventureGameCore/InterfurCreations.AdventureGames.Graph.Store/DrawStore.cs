@@ -24,16 +24,21 @@ namespace InterfurCreations.AdventureGames.Graph.Store
         public List<string> CheckForOutOfDateGames(Dictionary<DrawGame, DateTime> timeRetrievedGames)
         {
             var fileList = _service.ListFiles();
-            var outOfDateGames = timeRetrievedGames.Where(a => a.Value < fileList.FirstOrDefault(b => b.FileName == a.Key.GameName)?.LastModified);
-            var newGames = fileList.Where(a => !timeRetrievedGames.Keys.Any(b => b.GameName == a.FileName)).GroupBy(a => a.FileName).Select(a => a.First()).ToList();
+            var outOfDateGames = timeRetrievedGames.Where(a => a.Value < fileList.Where(b => b.FileName.StartsWith(a.Key.GameName)).MaxBy(b => b.LastModified)?.LastModified);
+            var newGames = fileList.Where(a => !timeRetrievedGames.Keys.Any(b => a.FileName.StartsWith(b.GameName)) && !a.FileName.Contains("_")).GroupBy(a => a.FileName).Select(a => a.First()).ToList();
             return outOfDateGames.ToList().Select(a => a.Key.GameName).ToList().Concat(newGames.Select(a => a.FileName)).ToList();
         }
 
-        public byte[] GetGame(string game)
+        public (byte[] primary, List<byte[]> additional) GetGame(string game)
         {
-            var foundGame = _service.ListFiles().Where(a => a.FileName == game).OrderByDescending(a => a.LastModified).FirstOrDefault();
-            var gameBytes = _service.DownloadFile(foundGame);
-            return gameBytes;
+            var foundGame = _service.ListFiles().Where(a => a.FileName.StartsWith(game)).GroupBy(a => a.FileName).Select(a => a.OrderByDescending(b => b.LastModified).FirstOrDefault()).ToList();
+            var primary = foundGame.MinBy(a => a.FileName.Length);
+            var primaryFileBytes = _service.DownloadFile(primary);
+            foundGame.Remove(primary);
+
+            var additionalFilesBytes = foundGame.Select(a => _service.DownloadFile(a)).ToList();
+
+            return (primaryFileBytes, additionalFilesBytes);
         }
     }
 }

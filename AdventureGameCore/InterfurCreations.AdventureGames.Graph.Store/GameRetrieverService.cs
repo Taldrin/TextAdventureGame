@@ -71,24 +71,26 @@ namespace InterfurCreations.AdventureGames.Graph.Store
                 var existingGame = TimeRetrievedGame.Keys.FirstOrDefault(a => a.GameName == gameToUpdate);
                 if (existingGame == null)
                 {
-                    var newGame = ParseGame(_gameStore.GetGame(gameToUpdate), gameToUpdate);
+                    var gameBytes = _gameStore.GetGame(gameToUpdate);
+                    var newGame = ParseGame(gameBytes.primary, gameToUpdate, gameBytes.additional);
                     if (newGame != null)
                         AddNewGame(newGame);
                 }
                 else
                 {
-                    var updatedGame = ParseGame(_gameStore.GetGame(gameToUpdate), gameToUpdate);
+                    var gameBytes = _gameStore.GetGame(gameToUpdate);
+                    var updatedGame = ParseGame(gameBytes.primary, gameToUpdate, gameBytes.additional);
                     if (updatedGame != null)
                         AddExistingGame(updatedGame, existingGame);
                 }
             }
         }
 
-        private DrawGame ParseGame(byte[] file, string gameName)
+        private DrawGame ParseGame(byte[] file, string gameName, List<byte[]> additionalFiles)
         {
             try
             {
-                var parsedGame = _parser.ParseGameFromBytes(file);
+                var parsedGame = _parser.ParseGameFromBytes(file, additionalFiles);
                 var newGame = new DrawGame { GameName = gameName, StartState = parsedGame.game, Metadata = parsedGame.metadata, GameFunctions = parsedGame.functions };
                 var stats = OptionsCountTool.Run(newGame);
                 newGame.Stats = stats;

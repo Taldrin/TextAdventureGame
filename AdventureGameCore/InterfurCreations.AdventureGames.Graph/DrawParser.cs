@@ -13,16 +13,16 @@ namespace InterfurCreations.AdventureGames.Graph
         {
             // string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"DrawFiles\" + "DrawIoTest" + ".xml");
             var bytes = File.ReadAllBytes(path);
-            return ParseGameFromBytes(bytes);
+            return ParseGameFromBytes(bytes, null);
         }
 
-        public (DrawState game, DrawMetadata metadata, List<DrawGameFunction> functions) ParseGameFromBytes(byte[] xml)
+        public (DrawState game, DrawMetadata metadata, List<DrawGameFunction> functions) ParseGameFromBytes(byte[] primaryXml, List<byte[]> additionalXml)
         {
             // string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"DrawFiles\" + "DrawIoTest" + ".xml");
             XElement rootElement = null;
             try
             {
-                using (var ms = new MemoryStream(xml))
+                using (var ms = new MemoryStream(primaryXml))
                 {
                     using (var sr = new StreamReader(ms))
                     {
@@ -31,9 +31,32 @@ namespace InterfurCreations.AdventureGames.Graph
                 }
             } catch (Exception) { Log.LogMessage("Error converting XML bytes to XElement!"); return default; }
 
-            var elements = FindRootElement(rootElement).Elements();
+            var elements = FindRootElement(rootElement).Elements().ToList();
 
-            elements = elements.Where(a => a.Name.LocalName == "mxCell" || a.Name.LocalName == "object");
+            if (additionalXml != null)
+            {
+                foreach (var xml in additionalXml)
+                {
+                    try
+                    {
+                        using (var ms = new MemoryStream(xml))
+                        {
+                            using (var sr = new StreamReader(ms))
+                            {
+                                var addXmlRootElement = XElement.Load(sr);
+                                var additionalElements = FindRootElement(addXmlRootElement).Elements();
+                                if (additionalElements != null && additionalElements.Count() > 0)
+                                {
+                                    elements.AddRange(additionalElements.ToList());
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception) { Log.LogMessage("Error converting XML bytes to XElement!"); return default; }
+                }
+            }
+
+            elements = elements.Where(a => a.Name.LocalName == "mxCell" || a.Name.LocalName == "object").ToList();
 
             var startingElement = GetStart(elements);
 
