@@ -67,7 +67,7 @@ namespace FurventureSite
             catch (Exception e)
             {
                 _reporter.ReportError($"Exception in web app controller: {e.Message} \n\n{e.StackTrace}");
-                throw e;
+                throw;
             }
         }
 
@@ -84,7 +84,7 @@ namespace FurventureSite
             catch (Exception e)
             {
                 _reporter.ReportError($"Exception in web app controller: {e.Message} \n\n{e.StackTrace}");
-                throw e;
+                throw;
             }
         }
     }
