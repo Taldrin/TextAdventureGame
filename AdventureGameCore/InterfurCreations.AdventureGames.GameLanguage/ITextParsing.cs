@@ -10,6 +10,7 @@ namespace InterfurCreations.AdventureGames.GameLanguage
         string ParseText(PlayerGameSave gameSave, string text);
         bool ResolveCommand(PlayerGameSave gameSave, string command);
         ParsedStateOption ResolveOption(PlayerGameSave gameSave, string optionText);
+        bool SetUserInput(PlayerGameSave gameSave, string playerInput, string userInputDataName);
         bool ShouldRun(string command, bool onlyRunAfterText, out string restOfCommand);
     }
 }

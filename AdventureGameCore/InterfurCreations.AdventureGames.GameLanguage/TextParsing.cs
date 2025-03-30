@@ -19,6 +19,7 @@ namespace InterfurCreations.AdventureGames.GameLanguage
     {
         private readonly IGameDataService _gameDataService;
         private readonly ImageBuildDataTracker _imageBuildTracker;
+        public const int UserInputCharacterLimit = 50;
 
         public TextParsing(IGameDataService gameDataService, ImageBuildDataTracker imageBuildTracker)
         {
@@ -523,6 +524,16 @@ namespace InterfurCreations.AdventureGames.GameLanguage
                 return true;
             return false;
 
+        }
+
+        public bool SetUserInput(PlayerGameSave gameSave, string playerInput, string userInputDataName)
+        {
+            if(!string.IsNullOrWhiteSpace(playerInput) && playerInput != "Play" && playerInput.Length < UserInputCharacterLimit)
+            {
+                _gameDataService.SaveData(gameSave, userInputDataName, playerInput);
+                return true;
+            }
+            return false;
         }
     }
 }

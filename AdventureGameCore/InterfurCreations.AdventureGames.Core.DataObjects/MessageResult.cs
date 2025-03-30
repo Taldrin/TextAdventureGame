@@ -10,5 +10,6 @@ namespace InterfurCreations.AdventureGames.Core.DataObjects
     {
         public string Message { get; set; }
         public string ImageUrl { get; set; }
+        public bool AskForInput { get; set; }
     }
 }

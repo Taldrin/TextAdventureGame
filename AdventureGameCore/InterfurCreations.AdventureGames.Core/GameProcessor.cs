@@ -17,6 +17,7 @@ namespace InterfurCreations.AdventureGames.Core
         private readonly IImagingService _imageService;
         private readonly ImageBuildDataTracker _imageBuildDataTracker;
 
+
         public GameProcessor(ITextParsing textParsing, IImagingService imageService, ImageBuildDataTracker imageBuildDataTracker)
         {
             _textParsing = textParsing;
@@ -80,6 +81,11 @@ namespace InterfurCreations.AdventureGames.Core
             return RecursivelyHandleStates(returnState, gameSave, player, game, false, true);
         }
 
+        private (List<MessageResult> Messages, DrawState EndingState, List<string> StatesVisited) HandleUserInput(string message, DrawState currentState, PlayerGameSave gameSave, Player player, DrawGame game, bool withDataChanges = true)
+        {
+            return (new List<MessageResult>() { new MessageResult { AskForInput = true } }, currentState, new List<string> { currentState.Id });
+        }
+
 
         public (List<MessageResult> Messages, DrawState EndingState, List<string> StatesVisited) RecursivelyHandleStates(DrawState currentState, PlayerGameSave gameSave, Player player, DrawGame game, bool withDataChanges = true, bool ignoreFrameShift = false)
         {
@@ -89,24 +95,30 @@ namespace InterfurCreations.AdventureGames.Core
             List<MessageResult> messages = new List<MessageResult>();
             var message = _textParsing.ParseText(gameSave, currentState.StateText);
 
-            if(message != null && message.Trim().ToLower().StartsWith("#showbuiltimage"))
+            if (message != null)
             {
-                var imageUrl =  _imageService.CreateImageAsync(_imageBuildDataTracker.GetParams()).Result;
-                messages.Add(new MessageResult
+                if (message.Trim().ToLower().StartsWith("#showbuiltimage"))
                 {
-                    ImageUrl = imageUrl
-                });
-                message = "";
-            }
-            if (message != null &&  message.Trim().ToLower().StartsWith("#function"))
-            {
-                if (ignoreFrameShift)
+                    var imageUrl = _imageService.CreateImageAsync(_imageBuildDataTracker.GetParams()).Result;
+                    messages.Add(new MessageResult
+                    {
+                        ImageUrl = imageUrl
+                    });
                     message = "";
-                else
-                    return HandleFunction(message, currentState, gameSave, player, game, withDataChanges);
+                }
+                if (message.Trim().ToLower().StartsWith("#function"))
+                {
+                    if (ignoreFrameShift)
+                        message = "";
+                    else
+                        return HandleFunction(message, currentState, gameSave, player, game, withDataChanges);
+                }
+                if (message.Trim().ToLower().Equals("#return"))
+                    return HandleFunctionReturn(message, currentState, gameSave, player, game, withDataChanges);
+                if (IsInputState(message))
+                    return HandleUserInput(message, currentState, gameSave, player, game, withDataChanges);
             }
-            if (message != null && message.Trim().ToLower().Equals("#return"))
-                return HandleFunctionReturn(message, currentState, gameSave, player, game, withDataChanges);
+
 
             if (!string.IsNullOrEmpty(message))
                 messages.Add(new MessageResult
@@ -159,17 +171,44 @@ namespace InterfurCreations.AdventureGames.Core
 
             List<MessageResult> Messages = new List<MessageResult>();
 
-           // In general, any direct transition states ~should~ be processed already in the previous execution.
-           // We'll check again here just in case.
+            if(IsInputState(currentDrawGameState.StateText))
+            {
+                var userInputDataName = currentDrawGameState.StateText.Trim().Split("#input")[1].Trim();
+                var playerInput = message;
+                var success = _textParsing.SetUserInput(playerGameData, playerInput, userInputDataName);
+
+                if (!success)
+                {
+                    HandlePermanentButtons(game, currentDrawGameState, playerGameData, player, message);
+                    var execResult = ExecutionResultHelper.SingleMessage($"Invalid input! Try entering a message again. It cannot be more than {TextParsing.UserInputCharacterLimit} characters, or be the word 'Play'", new List<string> { "Default"});
+                    execResult.IsInvalidInput = false;
+                    return execResult;
+                }
+            }
+
+            var earlyDirectlyTransitioned = false;
+            StateOption directTransition = null;
+
+            // In general, any direct transition states ~should~ be processed already in the previous execution, unless during the user input flow.
+            // We'll check again here just in case.
             for (int i = 0; i < 100; i++)
             {
                 var dResult = HandleAnyDirectTransitions(currentDrawGameState, playerGameData, player);
                 if (dResult.Item1 == null) break;
                 currentDrawGameState = dResult.Item1;
+                directTransition = dResult.optionTaken;
+                earlyDirectlyTransitioned = true;
                 Messages.Add(new MessageResult { Message = dResult.Item2 });
             }
 
             var resultOption = CalculateResultingOption(playerGameData, game, currentDrawGameState, message);
+
+            if (earlyDirectlyTransitioned && resultOption.resultState == null)
+            {
+                resultOption.resultState = currentDrawGameState;
+                resultOption.optionText = "";
+                resultOption.optionObject = directTransition;
+            }
 
             // If it's null, it's invalid. Send the current state.
             if (resultOption.resultState == null)
@@ -177,7 +216,7 @@ namespace InterfurCreations.AdventureGames.Core
                 var funcReturn = HandlePermanentButtons(game, currentDrawGameState, playerGameData, player, message);
                 if (funcReturn.resultState == null)
                 {
-                    var execResult = ExecutionResultHelper.SingleMessage(_textParsing.ParseText(playerGameData, currentDrawGameState.StateText), GetCurrentOptions(playerGameData, game, currentDrawGameState));
+                    var execResult = ExecutionResultHelper.SingleMessage(_textParsing.ParseText(playerGameData, currentDrawGameState.StateText), new List<string>());
                     execResult.IsInvalidInput = true;
                     return execResult;
                 } else
@@ -198,7 +237,8 @@ namespace InterfurCreations.AdventureGames.Core
             return new ExecutionResult {
                 MessagesToShow = result.Messages,
                 OptionsToShow = newOptions,
-                StatesVisited = result.StatesVisited
+                StatesVisited = result.StatesVisited,
+                AskForInput = result.Messages.Any(a => a.AskForInput)
             };
         }
 
@@ -223,7 +263,7 @@ namespace InterfurCreations.AdventureGames.Core
             return (null, null, null);
         }
 
-        public (DrawState, string messages) HandleAnyDirectTransitions(DrawState currentState, PlayerGameSave playerGameData, Player player)
+        public (DrawState, string messages, StateOption optionTaken) HandleAnyDirectTransitions(DrawState currentState, PlayerGameSave playerGameData, Player player)
         {
             var transitions = currentState.StateOptions.Where(a => a.IsDirectTransition).ToList();
             if (transitions.Count > 1)
@@ -232,9 +272,9 @@ namespace InterfurCreations.AdventureGames.Core
             {
                 HandleAnyAttachments(currentState, playerGameData, player, true);
                 currentState = transitions.First().ResultState;
-                return (currentState, currentState.StateText);
+                return (currentState, currentState.StateText, transitions.First());
             }
-            return (null, null);
+            return (null, null, null);
         }
 
         private void HandleAnyAttachments(DrawState state, PlayerGameSave playerGameData, Player player, bool afterMessage)
@@ -296,9 +336,14 @@ namespace InterfurCreations.AdventureGames.Core
             var currentFunction = playerGameData.FrameStack?.OrderByDescending(a => a.Id).LastOrDefault()?.FunctionName;
             if (game.Metadata.PermanentButtons != null)
                 returnList.AddRange(game.Metadata.PermanentButtons?.Where(a => a.Function.FunctionName != currentFunction).Select(
-                    a => (a.ButtonText, (DrawState)null, new StateOption {Id = a.ButtonText }) ));
+                    a => (a.ButtonText, (DrawState)null, new StateOption { Id = a.ButtonText })));
 
             return returnList;
+        }
+
+        public bool IsInputState(string message)
+        {
+            return message.Trim().ToLower().StartsWith("#input");
         }
     }
 }
