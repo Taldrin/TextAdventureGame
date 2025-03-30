@@ -1,8 +1,7 @@
-﻿using System;
+using System;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Hangfire;
-using Hangfire.SqlServer;
 using InterfurCreations.AdminSite.Core;
 using InterfurCreations.AdminSite.Core.Interfaces;
 using InterfurCreations.AdminSite.BackgroundTasks.Tasks;
@@ -29,6 +28,7 @@ using InterfurCreations.AdventureGames.Core.Interface;
 using InterfurCreations.AdventureGames.Core;
 using InterfurCreations.AdventureGames.GameLanguage;
 using InterfurCreations.AdminSite.BackgroundTasks;
+using Hangfire.PostgreSql;
 
 namespace InterfurCreations.AdminSite
 {
@@ -66,15 +66,10 @@ namespace InterfurCreations.AdminSite
 
 
             var config = new AppSettingsConfigurationService(Configuration);
-            //var connectionString = "Server=localhost;Database=AdventureBot;Trusted_Connection=True";
-            var connectionString = config.GetConfig("DatabaseConnectionString");
-            services.AddHangfire(config => config.UseSqlServerStorage(connectionString, new SqlServerStorageOptions
+            //var connectionString = "Host=127.0.0.1:5332;Database=postgres;Username=sa;password=test_password";
+            var connectionString = config.GetConfig("PostgresDatabaseConnectionString");
+            services.AddHangfire(config => config.UsePostgreSqlStorage(connectionString, new PostgreSqlStorageOptions
             {
-                CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
-                SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
-                QueuePollInterval = TimeSpan.Zero,
-                UseRecommendedIsolationLevel = true,
-                DisableGlobalLocks = true
             }));
 
             services.AddHangfireServer();
@@ -127,9 +122,9 @@ namespace InterfurCreations.AdminSite
             builder.RegisterType<AwsImageStore>().As<IImageStore>().SingleInstance();
             builder.RegisterType<DrawStore>().As<IGameStore>().SingleInstance();
 
-            builder.RegisterType<AchievementStatisticsBuildTask>().InstancePerLifetimeScope();
-            builder.RegisterType<BackupTask>().InstancePerLifetimeScope();
-            builder.RegisterType<GameTestingTask>().InstancePerLifetimeScope();
+            //builder.RegisterType<AchievementStatisticsBuildTask>().InstancePerLifetimeScope();
+            //builder.RegisterType<BackupTask>().InstancePerLifetimeScope();
+            //builder.RegisterType<GameTestingTask>().InstancePerLifetimeScope();
 
             builder.Populate(services);
 
@@ -175,6 +170,7 @@ namespace InterfurCreations.AdminSite
                 routes.MapHangfireDashboard();
             });
 
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             SetupHangfireJobs();
         }
 
@@ -184,7 +180,7 @@ namespace InterfurCreations.AdminSite
             RecurringJob.AddOrUpdate<GameTestingTask>(a => a.Run(), Cron.MinuteInterval(12));
             RecurringJob.AddOrUpdate<ImageStoreCleanupTask>(a => a.ClearImages(), Cron.HourInterval(2));
             RecurringJob.AddOrUpdate<GamesByPlayerCountStatisticsBuildTask>(a => a.Run(), Cron.HourInterval(12));
-            RecurringJob.AddOrUpdate<BackupTask>(a => a.Run(), Cron.DayInterval(1));
+            //RecurringJob.AddOrUpdate<BackupTask>(a => a.Run(), Cron.DayInterval(1));
         }
     }
 }

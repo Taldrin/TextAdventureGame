@@ -7,6 +7,6 @@ namespace InterfurCreations.AdventureGames.Graph.Store
     public interface IGameStore
     {
         List<string> CheckForOutOfDateGames(Dictionary<DrawGame, DateTime> timeRetrievedGames);
-        byte[] GetGame(string game);
+        (byte[] primary, List<byte[]> additional) GetGame(string game);
     }
 }

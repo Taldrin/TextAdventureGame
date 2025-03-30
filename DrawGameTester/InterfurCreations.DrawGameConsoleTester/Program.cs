@@ -3,6 +3,7 @@ using InterfurCreations.AdventureGames.Configuration;
 using InterfurCreations.AdventureGames.Core;
 using InterfurCreations.AdventureGames.Core.Interface;
 using InterfurCreations.AdventureGames.GameLanguage;
+using InterfurCreations.AdventureGames.GameTesting;
 using InterfurCreations.AdventureGames.Graph;
 using InterfurCreations.AdventureGames.Graph.Store;
 using InterfurCreations.AdventureGames.Logging;
@@ -10,7 +11,6 @@ using InterfurCreations.AdventureGames.Services;
 using InterfurCreations.AdventureGames.Services.ImageStore;
 using InterfurCreations.AdventureGames.Services.Interfaces;
 using InterfurCreations.AdventureGames.SlackReporter;
-using InterfurCreations.AdventureGames.Tester.DrawIOTest;
 using InterfurCreations.DrawGameConsoleTester;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -31,6 +31,7 @@ namespace DrawGameTester
             builder.RegisterType<TextParsing>().As<ITextParsing>().InstancePerLifetimeScope();
             builder.RegisterType<GameDataService>().As<IGameDataService>().InstancePerLifetimeScope();
             builder.RegisterType<GameProcessor>().As<IGameProcessor>().InstancePerLifetimeScope();
+            builder.RegisterType<GameRetrieverService>().As<IGameRetrieverService>().SingleInstance();
             builder.RegisterType<DrawStore>().As<IGameStore>().SingleInstance();
             builder.RegisterType<ConfigSettingsGoogleDriveAuthenticator>().As<IGoogleDriveAuthenticator>().SingleInstance();
             builder.RegisterType<GoogleDriveService>().As<IGoogleDriveService>().SingleInstance();
@@ -74,7 +75,7 @@ namespace DrawGameTester
 
                 using (var scope = Container.BeginLifetimeScope())
                 {
-                    var drawStore = scope.Resolve<IGameStore>();
+                    var drawStore = scope.Resolve<IGameRetrieverService>();
                     var testExecutor = scope.Resolve<DrawGameTestExecutor>();
                     var reporter = scope.Resolve<IReporter>();
                     var spellChecker = scope.Resolve<ISpellChecker>();
@@ -129,28 +130,16 @@ namespace DrawGameTester
 
                     Console.WriteLine("Running test....");
 
-                    var results = await testExecutor.RunTestAsync(gameToTest, finishTime, actionsPerRun, stateId);
-                    Console.WriteLine("A total of: " + results.totalActionsDone + " actions were made in the test");
+                    var dataStore = new GameTestDataStore();
+                    await testExecutor.RunTestAsync(gameToTest, finishTime, actionsPerRun, dataStore, startingStateId: stateId);
+                    Console.WriteLine("A total of: " + dataStore.OptionVisits.Count() + " actions were made in the test");
 
                     Console.WriteLine("### Errors ###");
-                    results.errors.ForEach(a => { Console.WriteLine(a); Console.WriteLine(); });
+                    dataStore.ErrorMessages.ToList().ForEach(a => { Console.WriteLine(a.Value); Console.WriteLine(gameToTest.FindStateById(a.GameSave.StateId).StateText); });
                     Console.WriteLine("### Warnings ###");
-                    results.warnings.ForEach(a => { Console.WriteLine(a); Console.WriteLine(); });
-
-                    reporter.ReportMessage("--- Test report for game: " + gameToTest.GameName + " ---");
-                    reporter.ReportMessage("~~~~~~~~~ ERRORS ~~~~~~~~~");
-                    results.errors.ForEach(a => { reporter.ReportMessage(a); });
-                    reporter.ReportMessage("~~~~~~~~~ WARNINGS ~~~~~~~~~");
-                    results.warnings.ForEach(a => { reporter.ReportMessage(a); });
-                    reporter.ReportMessage("~~~~~~~~~ End of report ~~~~~~~~~");
-                    reporter.ReportMessage("A total of: " + results.totalActionsDone + " actions were made in the test");
-
-                    Console.WriteLine("Check spelling? (Y/N): ");
-                    if (Console.ReadLine().ToLower() == "y")
-                    {
-                        Console.WriteLine("Running spell checks on: " + results.allText.Count + " messages");
-                        await RunSpellingAsync(results.allText, spellChecker, reporter);
-                    }
+                    dataStore.WarningMessages.ToList().ForEach(a => { Console.WriteLine(a.Value); Console.WriteLine(gameToTest.FindStateById(a.GameSave.StateId).StateText); });
+                    Console.WriteLine("### End States ###");
+                    dataStore.PotentialEndStates.ToList().ForEach(a => { Console.WriteLine(a.Value); Console.WriteLine(gameToTest.FindStateById(a.GameSave.StateId).StateText); ; });
 
                     Console.WriteLine("Finished!");
                     Console.ReadLine();

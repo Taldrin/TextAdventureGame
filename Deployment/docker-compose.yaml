@@ -1,0 +1,117 @@
+services:
+  db:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: sa
+      POSTGRES_PASSWORD: test_password
+      PGDATA: /data/postgres
+      POSTGRES_DB: bank
+    volumes:
+      - db:/data/postgres
+    ports:
+      - "5332:5432"
+    networks:
+      - db
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d postgres" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  furventure-bot-telegram-alpha:
+    image: furventure-bot-core
+    container_name: furventure-bot-telegram-alpha
+    environment:
+      - ConnectionString
+      - FurventureBotType=Telegram Alpha
+    networks:
+      - db
+    restart: unless-stopped
+  furventure-bot-telegram-live:
+    image: furventure-bot-core
+    container_name: furventure-bot-telegram-live
+    environment:
+      - ConnectionString
+      - FurventureBotType=Telegram Live
+    networks:
+      - db
+    restart: unless-stopped
+  furventure-bot-discord-alpha:
+    image: furventure-bot-core
+    container_name: furventure-bot-discord-alpha
+    environment:
+      - ConnectionString
+      - FurventureBotType=Discord Alpha
+    networks:
+      - db
+    restart: unless-stopped
+  furventure-bot-discord-live:
+    image: furventure-bot-core
+    container_name: furventure-bot-discord-live
+    environment:
+      - ConnectionString
+      - FurventureBotType=Discord Live
+    networks:
+      - db
+    restart: unless-stopped 
+  furventure-site-alpha:
+    image: "furventure-site"
+    container_name: furventure-server-alpha
+    environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:5002
+      - VIRTUAL_HOST=alpha.furrytextadventures.com
+      - VIRTUAL_PORT=5002
+      - LETSENCRYPT_HOST=alpha.furrytextadventures.com
+      - LETSENCRYPT_EMAIL=interfurcreations@gmail.com
+      - ConnectionString
+      - FurventureBotType=PublicSiteAlpha
+    expose:
+      - "5002"
+    networks:
+      - db
+      - default
+    restart: unless-stopped
+  furventure-site-live:
+    image: "furventure-site"
+    container_name: furventure-server-live
+    environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:5000
+      - VIRTUAL_HOST=furrytextadventures.com
+      - VIRTUAL_PORT=5000
+      - LETSENCRYPT_HOST=furrytextadventures.com
+      - LETSENCRYPT_EMAIL=interfurcreations@gmail.com
+      - ConnectionString
+      - FurventureBotType=PublicSiteLive
+    expose:
+      - "5000"
+    networks:
+      - db
+      - default
+    restart: unless-stopped
+  furventure-admin:
+    image: "admin-site"
+    container_name: furventure-admin
+    environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:5004
+      - VIRTUAL_HOST=admin.furrytextadventures.com
+      - VIRTUAL_PORT=5004
+      - LETSENCRYPT_HOST=admin.furrytextadventures.com
+      - LETSENCRYPT_EMAIL=interfurcreations@gmail.com
+      - ConnectionString
+      - FurventureBotType=AdminSite
+    expose:
+      - "5004"
+    networks:
+      - db
+      - default
+    restart: unless-stopped
+networks:
+  db:
+    driver: bridge
+  default:
+    name: nginx-proxy
+    external: true
+
+volumes:
+  db:
