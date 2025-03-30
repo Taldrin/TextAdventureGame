@@ -258,15 +258,18 @@ else
         {
             if (!string.IsNullOrEmpty(a.ImageUrl))
             {
-            // Issue retrieving HTTPS images from FA
-            if (a.ImageUrl.StartsWith("https"))
+                // Issue retrieving HTTPS images from FA
+                if (a.ImageUrl.StartsWith("https"))
                     a.ImageUrl = a.ImageUrl.Replace("https", "http");
                 Messages.Add(new SavedMessage { Message = a.ImageUrl, ImageUrl = true });
             }
             else
             {
-                a.Message = a.Message.Replace("\n", "<br \\>");
-                Messages.Add(new SavedMessage { Message = a.Message, PlayerMessage = false });
+                if(!string.IsNullOrWhiteSpace(a.Message)) 
+                {
+                    a.Message = a.Message.Replace("\n", "<br \\>");
+                    Messages.Add(new SavedMessage { Message = a.Message, PlayerMessage = false });
+                }
             }
         });
         CurrentButtons = result.OptionsToShow;
