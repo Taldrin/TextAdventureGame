@@ -183,6 +183,9 @@ namespace InterfurCreations.AdventureGames.Core
                     var execResult = ExecutionResultHelper.SingleMessage($"Invalid input! Try entering a message again. It cannot be more than {TextParsing.UserInputCharacterLimit} characters, or be the word 'Play'", new List<string> { "Default"});
                     execResult.IsInvalidInput = false;
                     return execResult;
+                } else
+                {
+                    message = currentDrawGameState.StateOptions.FirstOrDefault().StateText ?? string.Empty;
                 }
             }
 

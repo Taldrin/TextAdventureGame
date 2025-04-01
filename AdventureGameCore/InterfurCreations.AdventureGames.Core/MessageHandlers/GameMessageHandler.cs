@@ -56,7 +56,7 @@ namespace InterfurCreations.AdventureGames.Core.MessageHandlers
             }
 
             var messageResult = _gameProcessor.ProcessMessage(message, gameSave, gameBeingPlayed, player);
-            if (messageResult.OptionsToShow.Count == 0)
+            if (messageResult.OptionsToShow.Count == 0 && !messageResult.AskForInput)
             {
                 messageResult.OptionsToShow.Add(Messages.Restart);
                 messageResult.OptionsToShow.Add(Messages.MainMenu);
