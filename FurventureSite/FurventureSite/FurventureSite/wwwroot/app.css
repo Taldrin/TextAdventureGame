@@ -1,4 +1,4 @@
-/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
 a.navbar-brand {
@@ -175,3 +175,89 @@ body {
         transform: none;
     }
 }
+
+@keyframes furryBurstGradient {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0;
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(2.5);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(3);
+        opacity: 0;
+    }
+}
+
+@keyframes furryBurstPaw {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5) rotate(0deg);
+        opacity: 0;
+    }
+
+    30% {
+        transform: translate(-50%, -50%) scale(1.5) rotate(20deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(2) rotate(40deg);
+        opacity: 0;
+    }
+}
+
+.fantasy-button {
+    position: relative;
+    overflow: hidden;
+}
+
+    /* Gradient fur surge */
+    .fantasy-button::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(200, 140, 80, 0.9) 0%, transparent 75%);
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    /* Paw print overlay */
+    .fantasy-button::after {
+        content: '🐾';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 3rem;
+        color: rgba(255, 200, 100, 0.9);
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    /* Class-based animation trigger */
+    .fantasy-button.animate::before {
+        animation: furryBurstGradient 0.8s ease-out;
+    }
+
+    .fantasy-button.animate::after {
+        animation: furryBurstPaw 0.8s ease-out;
+    }
+
+    /* Reset animations when not animating */
+    .fantasy-button::before,
+    .fantasy-button::after {
+        animation-fill-mode: forwards;
+    }
+
+    /* Optional: Prevent rapid re-triggering */
+    .fantasy-button.animate {
+        pointer-events: none;
+    }

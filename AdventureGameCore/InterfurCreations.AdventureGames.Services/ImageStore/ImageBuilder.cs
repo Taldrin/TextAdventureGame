@@ -40,7 +40,7 @@ namespace InterfurCreations.AdventureGames.Services.ImageStore
         {
             var memoryStream = new MemoryStream();
             _image.Mutate(a => a.Resize(new ResizeOptions { Mode = ResizeMode.Max, Size = new Size(1400, 1400) }));
-            _image.SaveAsJpeg(memoryStream, new SixLabors.ImageSharp.Formats.Jpeg.JpegEncoder { Quality = 70 });
+            _image.SaveAsJpeg(memoryStream, new SixLabors.ImageSharp.Formats.Jpeg.JpegEncoder { Quality = 72 });
             return memoryStream;
         }
     }

@@ -42,6 +42,8 @@
 
 
 <script>
+    const container = document;
+
     window.scrollToEnd = (elementId, speed) => {
         var elem = document.getElementById(elementId);
         if (elem.scrollTop >= elem.scrollHeight) return;
@@ -80,4 +82,18 @@
         }
       return "";
     }
+
+        container.addEventListener('click', function(evt) {
+      const btn = evt.target;
+      if (!btn.classList.contains('fantasy-button')) return;
+
+      if (btn.classList.contains('animate')) return;
+
+      btn.classList.add('animate');
+
+      setTimeout(() => {
+        btn.classList.remove('animate');
+        btn.style.pointerEvents = 'auto';
+      }, 800);
+    });
 </script>
