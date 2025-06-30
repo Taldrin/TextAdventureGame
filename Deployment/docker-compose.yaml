@@ -28,6 +28,10 @@ services:
     networks:
       - db
     restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /home/furventure/docker-shared
+        target: /data
   furventure-bot-telegram-live:
     image: furventure-bot-core
     container_name: furventure-bot-telegram-live
@@ -37,6 +41,10 @@ services:
     networks:
       - db
     restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /home/furventure/docker-shared
+        target: /data
   furventure-bot-discord-alpha:
     image: furventure-bot-core
     container_name: furventure-bot-discord-alpha
@@ -46,6 +54,10 @@ services:
     networks:
       - db
     restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /home/furventure/docker-shared
+        target: /data
   furventure-bot-discord-live:
     image: furventure-bot-core
     container_name: furventure-bot-discord-live
@@ -54,7 +66,11 @@ services:
       - FurventureBotType=Discord Live
     networks:
       - db
-    restart: unless-stopped 
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /home/furventure/docker-shared
+        target: /data
   furventure-site-alpha:
     image: "furventure-site"
     container_name: furventure-server-alpha
@@ -72,6 +88,10 @@ services:
       - db
       - default
     restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /home/furventure/docker-shared
+        target: /data
   furventure-site-live:
     image: "furventure-site"
     container_name: furventure-server-live
@@ -89,23 +109,27 @@ services:
       - db
       - default
     restart: unless-stopped
-  furventure-admin:
-    image: "admin-site"
-    container_name: furventure-admin
-    environment:
-      - ASPNETCORE_URLS=http://0.0.0.0:5004
-      - VIRTUAL_HOST=admin.furrytextadventures.com
-      - VIRTUAL_PORT=5004
-      - LETSENCRYPT_HOST=admin.furrytextadventures.com
-      - LETSENCRYPT_EMAIL=interfurcreations@gmail.com
-      - ConnectionString
-      - FurventureBotType=AdminSite
-    expose:
-      - "5004"
-    networks:
-      - db
-      - default
-    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /home/furventure/docker-shared
+        target: /data
+  # furventure-admin:
+    # image: "admin-site"
+    # container_name: furventure-admin
+    # environment:
+      # - ASPNETCORE_URLS=http://0.0.0.0:5004
+      # - VIRTUAL_HOST=admin.furrytextadventures.com
+      # - VIRTUAL_PORT=5004
+      # - LETSENCRYPT_HOST=admin.furrytextadventures.com
+      # - LETSENCRYPT_EMAIL=interfurcreations@gmail.com
+      # - ConnectionString
+      # - FurventureBotType=AdminSite
+    # expose:
+      # - "5004"
+    # networks:
+      # - db
+      # - default
+    # restart: unless-stopped
 networks:
   db:
     driver: bridge
