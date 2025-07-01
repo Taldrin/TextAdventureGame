@@ -219,7 +219,7 @@ namespace InterfurCreations.AdventureGames.Core
                 var funcReturn = HandlePermanentButtons(game, currentDrawGameState, playerGameData, player, message);
                 if (funcReturn.resultState == null)
                 {
-                    var execResult = ExecutionResultHelper.SingleMessage(_textParsing.ParseText(playerGameData, currentDrawGameState.StateText), GetCurrentOptions(playerGameData, game, currentDrawGameState);
+                    var execResult = ExecutionResultHelper.SingleMessage(_textParsing.ParseText(playerGameData, currentDrawGameState.StateText), GetCurrentOptions(playerGameData, game, currentDrawGameState));
                     execResult.IsInvalidInput = true;
                     return execResult;
                 } else
