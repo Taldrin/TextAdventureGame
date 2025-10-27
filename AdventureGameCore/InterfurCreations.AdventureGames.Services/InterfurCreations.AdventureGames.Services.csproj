@@ -20,6 +20,7 @@
     <ProjectReference Include="..\InterfurCreations.AdventureGames.Graph\InterfurCreations.AdventureGames.Graph.csproj" />
     <ProjectReference Include="..\InterfurCreations.AdventureGames.LanguageTool\InterfurCreations.AdventureGames.LanguageTool.csproj" />
     <ProjectReference Include="..\InterfurCreations.AdventureGames.Logging\InterfurCreations.AdventureGames.Logging.csproj" />
+    <ProjectReference Include="..\InterfurCreations.AdventureGames.OpenAI\InterfurCreations.AdventureGames.OpenAI.csproj" />
   </ItemGroup>
 
 </Project>

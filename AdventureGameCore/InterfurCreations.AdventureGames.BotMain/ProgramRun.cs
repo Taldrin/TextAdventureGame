@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Autofac.Extensions.DependencyInjection;
 using InterfurCreations.AdventureGames.Ollama;
+using InterfurCreations.AdventureGames.OpenAI;
 
 namespace InterfurCreations.AdventureGames.BotMain
 {
@@ -82,6 +83,14 @@ namespace InterfurCreations.AdventureGames.BotMain
 
                 var configService = scope.Resolve<IConfigurationService>();
 
+                // TESTING - REMOVE
+
+                //var tester = scope.Resolve<OpenRouterTester>();
+                //tester.TestClient();
+
+                //return;
+                //
+
 #if !TelegramDev
                     Log.EnableReporting(scope.Resolve<IReporter>());
 #endif
@@ -134,8 +143,10 @@ namespace InterfurCreations.AdventureGames.BotMain
             builder.RegisterType<PlayerDatabaseController>().As<IPlayerDatabaseController>().InstancePerLifetimeScope();
             builder.RegisterType<DrawStore>().As<IGameStore>().SingleInstance();
             builder.RegisterType<GameRetrieverService>().As<IGameRetrieverService>().SingleInstance();
+            builder.RegisterType<AIStateService>().SingleInstance();
 
             builder.RegisterType<ImageStoreCleanupTask>().InstancePerLifetimeScope();
+            builder.RegisterType<OpenRouterClientProvider>().InstancePerLifetimeScope();
 
 
             builder.RegisterAssemblyTypes(typeof(IMessageHandler).Assembly)

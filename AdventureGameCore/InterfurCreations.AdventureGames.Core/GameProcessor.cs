@@ -1,13 +1,20 @@
 ﻿using InterfurCreations.AdventureGames.Core.DataObjects;
 using InterfurCreations.AdventureGames.Core.Interface;
 using InterfurCreations.AdventureGames.Database;
+using InterfurCreations.AdventureGames.Database.AI;
 using InterfurCreations.AdventureGames.Exceptions;
 using InterfurCreations.AdventureGames.GameLanguage;
 using InterfurCreations.AdventureGames.Graph;
+using InterfurCreations.AdventureGames.OpenAI;
+using InterfurCreations.AdventureGames.Services;
 using InterfurCreations.AdventureGames.Services.ImageStore;
+using Microsoft.Extensions.Options;
+using OpenAI.Chat;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Numerics;
 
 namespace InterfurCreations.AdventureGames.Core
 {
@@ -16,13 +23,17 @@ namespace InterfurCreations.AdventureGames.Core
         private readonly ITextParsing _textParsing;
         private readonly IImagingService _imageService;
         private readonly ImageBuildDataTracker _imageBuildDataTracker;
+        private readonly OpenRouterClientProvider _AIClientProvider;
+        private readonly AIStateService _AIStateServce;
 
 
-        public GameProcessor(ITextParsing textParsing, IImagingService imageService, ImageBuildDataTracker imageBuildDataTracker)
+        public GameProcessor(ITextParsing textParsing, IImagingService imageService, OpenRouterClientProvider AIClientProvider, ImageBuildDataTracker imageBuildDataTracker, AIStateService stateService)
         {
             _textParsing = textParsing;
             _imageService = imageService;
             _imageBuildDataTracker = imageBuildDataTracker;
+            _AIClientProvider = AIClientProvider;
+            _AIStateServce = stateService;
         }
 
         private (DrawState resultState, string optionText, StateOption optionObject) HandlePermanentButtons(DrawGame game, DrawState state, PlayerGameSave save, Player player, string message)
@@ -44,6 +55,88 @@ namespace InterfurCreations.AdventureGames.Core
             }
 
             return (null, null, null);
+        }
+
+        private (List<MessageResult> Messages, DrawState EndingState, List<string> options) HandleAI(string message, DrawState currentState, PlayerGameSave gameSave, Player player, DrawGame game, bool withDataChanges = true)
+        {
+            var existingState = _AIStateServce.GetAIState(gameSave.SaveId.ToString());
+            if (existingState == null)
+            {
+                var aiDetails = message.Trim().Substring(3, message.Trim().Length - 4);
+
+                var aiInstructions = aiDetails.Split("#", StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                string aiSystemInstruction = "";
+                List<(string entityName, string message)> conversation = new List<(string entityName, string message)>();
+                foreach (var instruction in aiInstructions)
+                {
+                    if (instruction.Trim().ToLower().StartsWith("instruct"))
+                    {
+                        aiSystemInstruction = instruction.Trim().Split("instruct = ")[1];
+                        aiSystemInstruction = _textParsing.ParseText(gameSave, aiSystemInstruction);
+                    }
+                    if (instruction.Trim().ToLower().StartsWith("assistant"))
+                    {
+                        var msg = instruction.Trim().Split("assistant = ")[1];
+                        msg = _textParsing.ParseText(gameSave, msg);
+                        conversation.Add(("assistant", msg));
+                    }
+                    if (instruction.Trim().ToLower().StartsWith("user"))
+                    {
+                        var msg = instruction.Trim().Split("user = ")[1];
+                        msg = _textParsing.ParseText(gameSave, msg);
+                        conversation.Add(("user", msg));
+                    }
+                }
+                existingState = new Database.AI.AIState
+                {
+                    Conversation = conversation,
+                    Instruction = aiSystemInstruction
+                };
+                _AIStateServce.SaveNewState(gameSave.SaveId.ToString(), existingState);
+            }
+
+            var client = _AIClientProvider.BuildClient();
+
+            if (message.Trim().ToLower() == "end the scene")
+            {
+                existingState.Conversation.Add(("user", "Please wrap the scene up naturally, and do not provide me any further options"));
+
+                ChatCompletion completeResult = client.CompleteChat(existingState.Conversation.ToChat(existingState.Instruction));
+                var completionText = completeResult.Content[0].Text;
+
+                if (_AIStateServce.GetAIState(gameSave.SaveId.ToString()) != null)
+                {
+                    _AIStateServce.DeleteAIState(gameSave.SaveId.ToString());
+                }
+
+                return (new List<MessageResult>() { new MessageResult { Message = completionText } }, currentState, null);
+            }
+
+            if (existingState.CurrentOptions != null && existingState.CurrentOptions.Select(a => a.Trim().ToLower()).Contains(message.Trim().ToLower()))
+            {
+                existingState.Conversation.Add(("user", message.Trim()));
+            }
+
+            var messages = existingState.Conversation.ToChat(existingState.Instruction);
+            ChatCompletion result = client.CompleteChat(messages);
+            var completedText = result.Content[0].Text;
+
+            var processingResult = AIProcessingHelper.GetOrRequestNewOptions(completedText, client, existingState.Conversation, existingState.Instruction);
+
+            existingState.Conversation.Add(("assistant", processingResult.message));
+
+            var completionMessage = AIProcessingHelper.IsComplete(client, existingState.Conversation, existingState.Instruction);
+            if(completionMessage != null)
+            {
+                existingState.Conversation.RemoveAt(existingState.Conversation.Count - 1);
+                existingState.Conversation.Add(("assistant", completionMessage));
+                message = completionMessage;
+            }
+
+            existingState.CurrentOptions = processingResult.options;
+
+            return (new List<MessageResult>() { new MessageResult { Message = processingResult.message } }, currentState, completionMessage == null ? existingState.CurrentOptions : null);
         }
 
         private (List<MessageResult> Messages, DrawState EndingState, List<string> StatesVisited) HandleFunction(string message, DrawState currentState, PlayerGameSave gameSave, Player player, DrawGame game, bool withDataChanges = true)
@@ -113,6 +206,12 @@ namespace InterfurCreations.AdventureGames.Core
                     else
                         return HandleFunction(message, currentState, gameSave, player, game, withDataChanges);
                 }
+                if (message.Trim().ToLower().StartsWith("#ai"))
+                {
+
+                    return HandleAI(message, currentState, gameSave, player, game, withDataChanges);
+
+                }
                 if (message.Trim().ToLower().Equals("#return"))
                     return HandleFunctionReturn(message, currentState, gameSave, player, game, withDataChanges);
                 if (IsInputState(message))
@@ -170,8 +269,9 @@ namespace InterfurCreations.AdventureGames.Core
             var currentDrawGameState = game.FindStateById(playerGameData.StateId);
 
             List<MessageResult> Messages = new List<MessageResult>();
+            List<MessageResult> AIEndMessage = null;
 
-            if(IsInputState(currentDrawGameState.StateText))
+            if (IsInputState(currentDrawGameState.StateText))
             {
                 var userInputDataName = currentDrawGameState.StateText.Trim().Split("#input")[1].Trim();
                 var playerInput = message;
@@ -180,12 +280,31 @@ namespace InterfurCreations.AdventureGames.Core
                 if (!success)
                 {
                     HandlePermanentButtons(game, currentDrawGameState, playerGameData, player, message);
-                    var execResult = ExecutionResultHelper.SingleMessage($"Invalid input! Try entering a message again. It cannot be more than {TextParsing.UserInputCharacterLimit} characters, or be the word 'Play'", new List<string> { "Default"});
+                    var execResult = ExecutionResultHelper.SingleMessage($"Invalid input! Try entering a message again. It cannot be more than {TextParsing.UserInputCharacterLimit} characters, or be the word 'Play'", new List<string> { "Default" });
                     execResult.IsInvalidInput = false;
                     return execResult;
-                } else
+                }
+                else
                 {
                     message = currentDrawGameState.StateOptions.FirstOrDefault().StateText ?? string.Empty;
+                }
+            }
+            else if (IsAIState(currentDrawGameState.StateText))
+            {
+                var aiResult = HandleAI(message, currentDrawGameState, playerGameData, player, game);
+                if(aiResult.options == null)
+                {
+                    AIEndMessage = aiResult.Messages;
+                    // Continue with normal execution
+                } else
+                {
+                    aiResult.options.Add("End the scene");
+
+                    return new ExecutionResult
+                    {
+                        MessagesToShow = aiResult.Messages,
+                        OptionsToShow = aiResult.options,
+                    };
                 }
             }
 
@@ -231,6 +350,8 @@ namespace InterfurCreations.AdventureGames.Core
             player.Actions.Add(new PlayerAction { ActionName = resultOption.optionObject.Id, GameName = game.GameName, Player = player, Time = DateTime.UtcNow });
 
             var result = RecursivelyHandleStates(resultOption.resultState, playerGameData, player, game);
+            if (AIEndMessage != null && AIEndMessage.Any())
+                result.Messages.AddRange(AIEndMessage);
             result.Messages.Reverse();
 
             var newOptions = GetCurrentOptions(playerGameData, game, result.EndingState);
@@ -321,6 +442,11 @@ namespace InterfurCreations.AdventureGames.Core
         {
             if(currentDrawGameState == null)
                 currentDrawGameState = game.FindStateById(playerGameData.StateId);
+            if(IsAIState(currentDrawGameState.StateText))
+            {
+                var currentAiState = _AIStateServce.GetAIState(playerGameData.SaveId.ToString());
+                return currentAiState.CurrentOptions.Select(a => (a, currentDrawGameState, (StateOption)null)).ToList();
+            }
             var parsedOptions = currentDrawGameState.StateOptions.Select(a => (resultState: a, messageResult: _textParsing.ResolveOption(playerGameData, a.StateText))).Where(a => a.messageResult.text != null);
             if (!parsedOptions.Any(a => a.messageResult.OptionType == OptionType.Normal)) {
                 var fallbackOption = parsedOptions.SingleOrDefault(a => a.messageResult.OptionType == OptionType.Fallback);
@@ -347,6 +473,11 @@ namespace InterfurCreations.AdventureGames.Core
         public bool IsInputState(string message)
         {
             return message.Trim().ToLower().StartsWith("#input");
+        }
+
+        public bool IsAIState(string message)
+        {
+            return message.Trim().ToLower().StartsWith("#ai");
         }
     }
 }
