@@ -102,7 +102,7 @@ namespace InterfurCreations.AdventureGames.Core
             {
                 existingState.Conversation.Add(("user", "Please wrap the scene up naturally, and do not provide me any further options"));
 
-                ChatCompletion completeResult = client.CompleteChat(existingState.Conversation.ToChat(existingState.Instruction));
+                ChatCompletion completeResult = client.CompleteChat(existingState.Conversation.ToChat(existingState.Instruction), new ChatCompletionOptions { Temperature = 1.02f, TopP = 0.95f });
                 var completionText = completeResult.Content[0].Text;
 
                 if (_AIStateServce.GetAIState(gameSave.SaveId.ToString()) != null)
@@ -119,7 +119,7 @@ namespace InterfurCreations.AdventureGames.Core
             }
 
             var messages = existingState.Conversation.ToChat(existingState.Instruction);
-            ChatCompletion result = client.CompleteChat(messages);
+            ChatCompletion result = client.CompleteChat(messages, new ChatCompletionOptions { Temperature = 1.02f, TopP = 0.95f});
             var completedText = result.Content[0].Text;
 
             var processingResult = AIProcessingHelper.GetOrRequestNewOptions(completedText, client, existingState.Conversation, existingState.Instruction);
